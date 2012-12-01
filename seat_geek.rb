@@ -193,7 +193,7 @@ class Tickets
 
   def all_available
     available = []
-    doc = Nokogiri::XML(open("http://www.ticketsnow.com/NBA/InventoryBrowse/Golden-State-Warriors-Tickets-at-ORACLE-Arena-in-Oakland-11-29-2012?PID=1310047"))
+    doc = Nokogiri::HTML(open(best_game_url))
     seats= doc.css('div[id="ucTicketList_divTicketListContainer"] script[type="text/javascript"]').to_s.split('SECTION SEATING')
     seats[1..-1].each_with_index do |seat,i|
       entry = seat.split(',')[1..5]
@@ -263,13 +263,31 @@ class Arena
   end
 
   def get_best_ticket(min_price)
-    @tickets.all_available.each do |seat|
-      if seat[-1] == (best_ticket(min_price))
-        return seat
-      end
+    best = best_ticket(min_price)
+    @tickets.all_available.each_with_index do |seat, i|
+        if seat[-1] == best[0]
+          return seat
+        end
     end
+  end
+
+  def best_ticket_full_info(min_price)
+    game = TeamGames.new("Golden State Warriors").best_game
+    ticket = get_best_ticket(min_price)
+    "date: #{game.date}\n
+    opponent: #{game.opponent}\n
+    price: #{ticket[0]}\n
+    quantity: #{ticket[1]}\n
+    section: #{ticket[2]}\n
+    row: #{ticket[3]}\n"
   end
 
 end
 
-
+tickets = Tickets.new("Golden State Warriors")
+puts Arena.new(tickets, $oracle_arena_hash).best_ticket_full_info(25)
+# 165
+# 2
+# 115
+# 2
+# ticket_id_408
