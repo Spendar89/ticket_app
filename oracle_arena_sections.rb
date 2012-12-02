@@ -44,15 +44,15 @@
  @section_111 = @section_118
  @section_112 = @section_117
 
- @section_214 = @section_111 + 20
- @section_215 = @section_113 + 20
- @section_216 = @section_114 + 20
- @section_217 = @section_115 + 20
- @section_218 = @section_116 + 20
+ @section_214 = @section_111 + 30
+ @section_215 = @section_113 + 30
+ @section_216 = @section_114 + 30
+ @section_217 = @section_115 + 30
+ @section_218 = @section_116 + 30
  @section_219 = @section_214
- @section_220 = @section_118 + 20
- @section_221 = @section_119 + 20
- @section_222 = @section_120 + 20
+ @section_220 = @section_118 + 30
+ @section_221 = @section_119 + 30
+ @section_222 = @section_120 + 30
  @section_223 = @section_222
  @section_224 = @section_222
  @section_225 = @section_224
