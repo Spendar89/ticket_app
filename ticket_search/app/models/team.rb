@@ -1,4 +1,3 @@
 class Team < ActiveRecord::Base
-  attr_accessor :best_game_id
-  attr_accessible :name
+  attr_accessible :best_game_id, :name
 end
