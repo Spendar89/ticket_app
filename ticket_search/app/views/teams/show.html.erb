@@ -1,1 +1,10 @@
-<%= @best_ticket %>
+<h1>Your Result: </h1>
+
+<h2><%= @best_ticket[0][:game_info].gsub("Tickets", "") %></h2>
+
+<p>Price: $<%= @best_ticket[0][:price] %></p>
+<p>Section: <%= @best_ticket[0][:section] %></p>
+<p>Row: <%= @best_ticket[0][:row] %></p>
+<p>Quantity: <%= @best_ticket[0][:quantity] %></p>
+<p><b>Buy From: </b></p>
+<p><%= link_to image_tag('stubhub_logo.gif'), @best_ticket[0][:url], :target => 'blank' %></p>
