@@ -15,24 +15,24 @@
  @section_27 = 10
  @section_28 = 5
 
- @section_113 = 10 + @section_13
- @section_114 = 10 + @section_14
- @section_115 = 10 + @section_15
- @section_116 = 10 + @section_16
+ @section_113 = 20 + @section_13
+ @section_114 = 20 + @section_14
+ @section_115 = 20 + @section_15
+ @section_116 = 20 + @section_16
  @section_117 = 20 + @section_19
  @section_118 = 20 + @section_19
- @section_119 = 10 + @section_19
+ @section_119 = 20 + @section_19
  @section_120 = 20 + @section_21
- @section_121 = 10 + @section_21
- @section_122 = 10 + @section_22
+ @section_121 = 20 + @section_21
+ @section_122 = 20 + @section_22
  @section_123 = @section_120
  @section_124 = @section_119
  @section_124 = @section_118
  @section_126 = @section_117
- @section_127 = 10 + @section_27
- @section_128 = 10 + @section_28
- @section_101 = 10 + @section_1
- @section_102 = 10 + @section_2
+ @section_127 = 20 + @section_27
+ @section_128 = 20 + @section_28
+ @section_101 = 20 + @section_1
+ @section_102 = 20 + @section_2
  @section_103 = @section_117
  @section_104 = @section_118
  @section_105 = @section_119
@@ -43,7 +43,7 @@
  @section_110 = @section_124
  @section_111 = @section_118
  @section_112 = @section_117
-
+ @sectiom_201 = @section_216
  @section_214 = @section_111 + 30
  @section_215 = @section_113 + 30
  @section_216 = @section_114 + 30
@@ -63,7 +63,6 @@
  @section_230 = @section_219
  @section_231 = @section_218
  @section_232 = @section_217
- @sectiom_201 = @section_216
  @section_202 = @section_215
  @section_203 = @section_214
  @section_204 = @section_220
@@ -79,5 +78,10 @@
 
 $oracle_arena_hash = {}
 240.times do |i|
-  $oracle_arena_hash.merge!({i.to_s=>instance_variable_get('@section_' + "#{i}")})
+  $oracle_arena_hash.merge!({i.to_s=>instance_variable_get('@section_' + "#{i}")}) unless instance_variable_get('@section_' + "#{i}").nil?
 end
+
+$oracle_arena_hash = $oracle_arena_hash.merge!({"201"=>40})
+
+puts $oracle_arena_hash
+

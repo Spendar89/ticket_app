@@ -157,9 +157,21 @@ module TicketHelper
       test.sort_by{|key, value| value}
     end
 
+    def average_value_index
+      sorted_tickets.inject(0){|total, value| total + value[1]}/sorted_tickets.length
+    end
+
+    def standard_deviation
+      variance = []
+      sorted_tickets.each do |pair|
+        variance << (pair[1] - average_value_index)**2
+      end
+      Math.sqrt(variance.inject(0){|total, value| total + value}/variance.length)
+    end
+
     def best_ticket
       best = sorted_tickets.last
-      best_all_available.each{ |seat| return seat if seat[0][:ticket_id] == best[0] }
+      best_all_available.each{ |seat| return seat << [(best[1]*100).to_i, (average_value_index*100).to_i] if seat[0][:ticket_id] == best[0] }
     end
 
   end
