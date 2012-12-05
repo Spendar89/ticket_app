@@ -83,5 +83,4 @@ end
 
 $oracle_arena_hash = $oracle_arena_hash.merge!({"201"=>40})
 
-puts $oracle_arena_hash
 
