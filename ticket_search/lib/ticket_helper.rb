@@ -5,24 +5,28 @@ module TicketHelper
   class Tickets
     attr_accessor :team_name
 
-    def initialize(team_name, set_game_id = false, price_min = 1, price_max = 10000, arena_hash = $oracle_arena_hash)
+    def initialize(team_name, set_game = false, price_min = 1, price_max = 10000, arena_hash = $oracle_arena_hash)
       @team_name = team_name
       @price_min = price_min
       @price_max = price_max
       @team_name_url = team_name.gsub(' ', '-')
       @arena_hash = arena_hash
-      @set_game_id = set_game_id
+      @set_game = set_game
       @doc = Nokogiri::HTML(open("http://www.stubhub.com/#{@team_name_url}-tickets/"))
     end
 
 
     def urls
       array = []
-      new_array =[]
       @doc.css('td[class="eventName"]').each do |node|
         array << node.elements.css("a").attr("href")
       end
       array
+    end
+
+    def self.team_url(team_name)
+      team_name_url = team_name.gsub(' ', '-')
+      doc = "http://www.stubhub.com/#{team_name_url}-tickets/"
     end
 
     def best_game_id
@@ -30,8 +34,18 @@ module TicketHelper
         best_game_date = Team.new(@team_name).best_game.date
         urls.each{ |url| return url.to_s.split("-")[-1][0...-1] if /#{best_game_date}/.match(url) }
       else
-        return @set_game_id.to_s
+        return @set_game.stubhub_id
       end
+    end
+
+    def self.game_id(game)
+      game_date = game[:date]
+      team_url = Nokogiri::HTML(open(game.team.url))
+      all_game_urls = []
+      team_url.css('td[class="eventName"]').each do |node|
+      all_game_urls << node.elements.css("a").attr("href")
+      end
+      all_game_urls.each{ |url| return url.to_s.split("-")[-1][0...-1] if /#{game_date}/.match(url) }
     end
 
     def best_json_data
@@ -44,11 +58,20 @@ module TicketHelper
       game_data = best_json_data
       tickets_array = []
       game_data[:data].each do |ticket|
-        if ticket["cp"].to_i >= @price_min && ticket["cp"].to_i < @price_max
-          tickets_array << [{:game_info => game_data[:game_info], :url => "http://www.stubhub.com/#{@team_name_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket['id']}", :ticket_id => ticket["id"], :price => ticket["cp"].to_i,:row => ticket["rd"], :quantity => ticket["qt"], :section => ticket["st"].scan(/(\d{1,3}|A\d)/)[0][0].to_i,:seats => ticket["se"]}]
+        if ticket["cp"].to_i >= @price_min && ticket["cp"].to_i < @price_max && !ticket["st"].scan(/(\d{1,3}|A\d)/)[0].nil?
+          tickets_array << [{:game_info => game_data[:game_info], :url => "http://www.stubhub.com/#{@team_name_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket['id']}",
+          :ticket_id => ticket["id"], :price => ticket["cp"].to_i,:row => ticket["rd"],
+          :quantity => ticket["qt"], :section => get_section(ticket["st"]), :seats => ticket["se"]}]
         end
       end
       tickets_array
+    end
+
+    def get_section(hash_data)
+      relevent = hash_data.scan(/(\d{1,3}|A\d)/)
+      puts relevent[0][0].inspect
+      return relevent[0][0].to_i
+      # return relevent[0].to_i unless relevent.nil?
     end
 
     def sections_available
@@ -117,3 +140,4 @@ module TicketHelper
     end
 
   end
+end

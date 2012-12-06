@@ -5,16 +5,16 @@ class TeamsController < ApplicationController
 
   def create
     @team = Team.new(params[:team])
+    @team.url = @team.get_url
     @team.save
+    @team.make_games.each{ |game_info| @team.games.new.set_attributes(game_info) }
+    @team.games.each{ |game| game.determine_relatives }
     redirect_to @team
   end
 
   def show
     @team = Team.find(params[:id])
-    @games = []
-    @team.test_games.each do |game_info|
-      @games << @team.games.new.set_attributes(game_info)
-    end
+    @games = @team.games
   end
 
     # @best_ticket = TicketHelper::Tickets.new(@team.name, @team.best_game_id.to_s, @@min.to_i, @@max.to_i).best_ticket

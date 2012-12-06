@@ -1,3 +1,11 @@
-<h1>Your Result: </h1>
-<%= @games.inspect  %>
+<h1><%= @team.name %> Tickets </h1>
+<% @games.each do |game|  %>
+  <% if game.home %>
+    <p><b>Opponent</b>: <%= game[:opponent]%></p>
+    <p><b>Date: </b><%= game[:date] %></p>
+    <p><b>Average Ticket Price: </b><%= game[:average_price]%></p>
+    <p><b>stubhub_id: </b> <%= game[:stubhub_id]%> </p>
+    <%= link_to "click for best_ticket", game.best_ticket(100, 200)[0][:url] %><br/>
+  <% end %>
+<% end %>
 

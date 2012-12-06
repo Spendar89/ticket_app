@@ -1,14 +1,18 @@
 class Team < ActiveRecord::Base
-  attr_accessible :best_game_id, :name, :arena_image
-  has_many :games
+  attr_accessible :best_game_id, :name, :arena_image, :games, :url
+  has_many :games, :inverse_of => :team
 
 
-  def test_games
-    array =[]
+  def make_games
+    array = []
     SeatGeek::Connection.events({:q => self.name, :per_page => 15})['events'].each do |game_info|
       array << game_info
     end
     array
+  end
+
+  def get_url
+    TicketHelper::Tickets.team_url(self.name)
   end
 
   def home_average_price
@@ -30,7 +34,7 @@ class Team < ActiveRecord::Base
   def home_average_popularity
     pop_array = []
     home_games.each do |game|
-      pop_array << game.average_popularity
+      pop_array << game.popularity
     end
     pop_array.inject(0){|sum, result| sum+result}/(pop_array.length) unless pop_array.length == 0
   end
@@ -38,7 +42,7 @@ class Team < ActiveRecord::Base
   def home_standard_deviation
     array = []
     home_games.each do |game|
-      array << (home_average_popularity - game.average_popularity) **2
+      array << (home_average_popularity - game.popularity) **2
     end
     Math.sqrt(array.inject(0){|sum, result| sum+result}/(array.length)) unless array.length == 0
   end
