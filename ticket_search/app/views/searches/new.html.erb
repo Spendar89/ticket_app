@@ -1,0 +1,25 @@
+<table>
+	<%= form_for @search, :method => 'get'  do |f| %>
+	<tr>
+		<td>Team:</td>
+		<td><%= f.text_field :team %></td>
+	</tr>
+	<tr>
+		<td>Date Range Start: </td>
+		<td ><%= f.text_field :date_start, :class => 'datepicker'%></td>
+	</tr>
+	<tr>
+		<td>Date Range End: </td>
+		<td ><%= f.text_field :date_end, :class => 'datepicker'%></td>
+	</tr>
+	<tr>
+		<td>Price Min: </td>
+		<td ><%= f.text_field :price_min %></td>
+	</tr>
+	<tr>
+		<td>Price Max: </td>
+		<td ><%= f.text_field :price_max %></td>
+	</tr>
+	  <tr><td><%= f.submit %></td></tr>
+	<% end %>
+</table>

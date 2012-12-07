@@ -69,9 +69,7 @@ module TicketHelper
 
     def get_section(hash_data)
       relevent = hash_data.scan(/(\d{1,3}|A\d)/)
-      puts relevent[0][0].inspect
       return relevent[0][0].to_i
-      # return relevent[0].to_i unless relevent.nil?
     end
 
     def sections_available

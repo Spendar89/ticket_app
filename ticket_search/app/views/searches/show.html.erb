@@ -1,0 +1,16 @@
+<h1><%= @team.name %> Tickets </h1>
+<% @games.each do |game|  %>
+  <% if game.home %>
+	<div class="game_tickets">
+	    <p><b>Opponent</b>: <%= game[:opponent]%></p>
+	    <p><b>Date: </b><%= game[:date] %></p>
+	    <p><b>Average Ticket Price: </b><%= game[:average_price]%></p>
+	    <p><b>stubhub_id: </b> <%= game[:stubhub_id]%> </p>
+	    <%= link_to "click for best_ticket", game.best_ticket(@price_min, @price_max)[0][:url], :target => 'blank' %><br/>
+
+	</div>
+  <% end %>
+<% end %>
+
+	<%= image_tag @team.arena_image %>
+
