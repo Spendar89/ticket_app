@@ -14,5 +14,14 @@
  */
 
 *{
-	font-family: sans-serif;
+    font-family: sans-serif;
+}
+.ui-slider{
+    width: 200px;
+}
+
+#show_price_max{
+   position: relative;
+   float: left;
+   left: -85px;
 }

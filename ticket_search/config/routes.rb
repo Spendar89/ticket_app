@@ -1,13 +1,12 @@
 TicketSearch::Application.routes.draw do
-  resources :searches, :only => [:new, :show]
-  get '/searches', :to => 'searches#show'
-  
+  match "/teams" => "teams#create"
   resources :teams do
-    collection do
-      get :get_games
-    end
     resources :games
   end
+
+  resources :searches, :only => [:new, :show]
+  get '/searches', :to => 'searches#show'
+
 
   root :to => 'searches#new'
 

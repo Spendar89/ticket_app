@@ -2,10 +2,10 @@ class SearchesController < ApplicationController
   def new
     @search = Search.new
   end
-  
+
   def show
     if Team.find_by_name(params[:search][:team]).nil?
-      redirect_to team_create_path(params[:search][:team])
+      redirect_to teams_path(:search => params[:search])
     else
       date_start = params[:search][:date_start]
       date_end = params[:search][:date_end]
@@ -16,5 +16,5 @@ class SearchesController < ApplicationController
       @team.games.each { |game| @games << game if game[:date] > date_start && game[:date] < date_end }
     end
   end
-  
+
 end
