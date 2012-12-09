@@ -134,7 +134,7 @@ module TicketHelper
 
     def best_ticket
       best = sorted_tickets.last
-      best_all_available.each{ |seat| return seat << [(best[1]*100).to_i, (average_value_index*100).to_i] if seat[0][:ticket_id] == best[0] }
+      best_all_available.each{ |seat| return seat[0].merge(:ticket_rating => (best[1]*100).to_i) if seat[0][:ticket_id] == best[0] }
     end
 
   end

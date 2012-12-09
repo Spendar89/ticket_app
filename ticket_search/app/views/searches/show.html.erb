@@ -1,12 +1,35 @@
 <h1><%= @team.name %> Tickets </h1>
+<h4>Date Range: <%= @date_start %> until <%= @date_end %></h2>
+<h4>Price Range: $<%= @price_min %> - $<%= @price_max %></h2>
+
 <% @games.each do |game|  %>
-  <% if game.home %>
+
+<% game[:opponent] %>
+
+<% best_ticket = game.best_ticket(@price_min, @price_max)%>
+
   <div class="game_tickets">
-      <p><b>Opponent</b>: <%= game[:opponent]%></p>
-      <p><b>Date: </b><%= game[:date] %></p>
-      <p><b>Average Ticket Price: </b>$<%= game[:average_price]%></p>
-      <%= link_to "Click For Best Ticket", game.best_ticket(@price_min, @price_max)[0][:url], :target => 'blank', :class => "btn btn-success" %>
-  </div><br/>
-  <% end %>
+      <div class = top>
+        <div class = "date">
+         <%= game[:date] %>
+        </div>
+        <div class = opponent>
+          <%= image_tag "#{game[:opponent].gsub(" ", "_")}.png", :width => "100px", :height => "110px" %>
+        </div>
+         <div class="ticket_rating">
+           <%= best_ticket[:ticket_rating] %>
+         </div>
+      </div>
+      <div class = middle>
+        <%= link_to "Purchase Ticket", best_ticket[:url], :target => 'blank', :class => "purchase_link" %>
+      </div>
+        <div class = "ticket_info">
+          <div><%= best_ticket[:section]%></div>
+          <div><%= best_ticket[:row]%></div>
+          <div><%= best_ticket[:quantity]%></div>
+          <div>$<%= best_ticket[:price]%></div>
+        </div>
+  </div>
 <% end %>
+
 

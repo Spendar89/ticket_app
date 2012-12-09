@@ -1,7 +1,6 @@
 class TeamsController < ApplicationController
   def create
       @team = Team.new(:name => params[:search][:team])
-      puts @team.name
       @team.url = @team.get_url
       @team.save
       @team.make_games.each{ |game_info| @team.games.new.set_attributes(game_info) }

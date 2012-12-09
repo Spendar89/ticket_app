@@ -26,7 +26,11 @@ class Game < ActiveRecord::Base
     end
 
     def determine_relatives
-      self.update_attributes(:relative_popularity => relative_popularity, :relative_price => relative_price)
+      if !self.home
+        self.destroy
+      else
+        self.update_attributes(:relative_popularity => relative_popularity, :relative_price => relative_price)
+      end
     end
 
     def average_price

@@ -20,8 +20,75 @@
     width: 200px;
 }
 
-#show_price_max{
-   position: relative;
-   float: left;
-   left: -85px;
+
+.game_tickets{
+  width: 300px;
+  height: 600px;
+  float: left;
+  background: url('ticket.png');
+  background-size: 100% 100%;
+  background-position: left;
+  background-repeat: no-repeat;
+  margin: 20px;
 }
+
+.top{
+  float: left;
+  margin-top: 50px;
+  height: 320px;
+  width: 100%;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.opponent{
+  margin-top: 30px;
+  margin-right: 15px;
+  float:right;
+  width: 110px;
+  height: 110px;
+}
+
+.middle{
+  height: 100px;
+  width: 100%;
+  float: left;
+}
+
+.purchase_link{
+  width: 50%;
+  position: relative;
+  margin-left: 35px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.ticket_info{
+  margin-left: 18px;
+  height: 150px;
+  width: 100%;
+}
+
+.ticket_info>div{
+  float: left;
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.ticket_rating{
+  margin-top: 200px;
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+  color: #329930;
+}
+
+.main_content{
+  background: url('dust.png');
+  margin-top: -20px;
+  min-height: 1000px;
+  padding: 20px;
+}
+

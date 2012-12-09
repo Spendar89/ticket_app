@@ -1,26 +1,13 @@
 <table>
   <%= form_for @search, :method => 'get'  do |f| %>
   <tr>
-    <td>Team:</td>
-    <td><%= f.text_field :team %></td>
-  </tr>
-  <tr>
-    <td>Date Range Start: </td>
-    <td ><%= f.text_field :date_start, :class => 'datepicker'%></td>
-  </tr>
-  <tr>
-    <td>Date Range End: </td>
-    <td ><%= f.text_field :date_end, :class => 'datepicker'%></td>
-  </tr>
-  <tr>
-    <td>Price Range: </td>
-    <td ><div class = "slider"></div></td>
+    <td><%= f.text_field :team, :placeholder => "Team Name" %></td>
     <%= f.hidden_field :price_min, :id => "price_min" %>
     <%= f.hidden_field :price_max, :id => "price_max" %>
-  </tr>
-  <tr>
-    <td></td>
-    <td id="show_price_min">min: $</td><td id="show_price_max">max: $</td>
+    <td ><%= f.text_field :date_start, :class => 'datepicker', :placeholder => "Start Date"%></td>
+    <td ><%= f.text_field :date_end, :class => 'datepicker', :placeholder => "End Date"%></td>
+    <td ></td>
+    <td id="show_price_min"><div class = "slider"></div><div id="amount" style="text-align: center; color: grey; margin-top: 2px;"></div></td>
   </tr>
     <tr><td><%= f.submit "Find Tickets", :class => 'btn btn-primary' %></td></tr>
   <% end %>
