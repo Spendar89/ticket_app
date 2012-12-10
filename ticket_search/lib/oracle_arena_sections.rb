@@ -15,24 +15,24 @@
  @section_27 = 10
  @section_28 = 5
 
- @section_113 = 20 + @section_13
- @section_114 = 20 + @section_14
- @section_115 = 20 + @section_15
- @section_116 = 20 + @section_16
- @section_117 = 20 + @section_19
- @section_118 = 20 + @section_19
- @section_119 = 20 + @section_19
- @section_120 = 20 + @section_21
- @section_121 = 20 + @section_21
- @section_122 = 20 + @section_22
+ @section_113 = 60 + @section_13
+ @section_114 = 60 + @section_14
+ @section_115 = 60 + @section_15
+ @section_116 = 60 + @section_16
+ @section_117 = 60 + @section_19
+ @section_118 = 60 + @section_19
+ @section_119 = 60 + @section_19
+ @section_120 = 60 + @section_21
+ @section_121 = 60 + @section_21
+ @section_122 = 60 + @section_22
  @section_123 = @section_120
  @section_124 = @section_119
  @section_125 = @section_118
  @section_126 = @section_117
- @section_127 = 20 + @section_27
- @section_128 = 20 + @section_28
- @section_101 = 20 + @section_1
- @section_102 = 20 + @section_2
+ @section_127 = 60 + @section_27
+ @section_128 = 60 + @section_28
+ @section_101 = 60 + @section_1
+ @section_102 = 60 + @section_2
  @section_103 = @section_117
  @section_104 = @section_118
  @section_105 = @section_119
@@ -44,15 +44,15 @@
  @section_111 = @section_118
  @section_112 = @section_117
  @sectiom_201 = @section_216
- @section_214 = @section_111 + 30
- @section_215 = @section_113 + 30
- @section_216 = @section_114 + 30
- @section_217 = @section_115 + 30
- @section_218 = @section_116 + 30
+ @section_214 = @section_111 + 120
+ @section_215 = @section_113 + 120
+ @section_216 = @section_114 + 120
+ @section_217 = @section_115 + 120
+ @section_218 = @section_116 + 120
  @section_219 = @section_214
- @section_220 = @section_118 + 30
- @section_221 = @section_119 + 30
- @section_222 = @section_120 + 30
+ @section_220 = @section_118 + 120
+ @section_221 = @section_119 + 120
+ @section_222 = @section_120 + 120
  @section_223 = @section_222
  @section_224 = @section_222
  @section_225 = @section_224
@@ -81,6 +81,18 @@ $oracle_arena_hash = {}
   $oracle_arena_hash.merge!({i.to_s=>instance_variable_get('@section_' + "#{i}")}) unless instance_variable_get('@section_' + "#{i}").nil?
 end
 
-$oracle_arena_hash = $oracle_arena_hash.merge!({"201"=>40})
+$oracle_arena_hash = $oracle_arena_hash.merge!({"201"=>180})
+# puts $oracle_arena_hash
+# average = $oracle_arena_hash.values.inject(0){|x, y| x +y}/$oracle_arena_hash.values.length
+# variance = []
+# $oracle_arena_hash.values.each do |value|
+#   variance << (((100 - value) - (100 -average))**2)
+# end
+#
+# variance = variance.inject(0){|x, y| x+y }
+# standard_deviation = Math.sqrt(variance/(100-average))
+#
+# puts standard_deviation
+# puts average
 
 

@@ -1,5 +1,6 @@
 require 'open-uri'
 require_relative 'oracle_arena_sections'
+require 'nokogiri'
 
 module TicketHelper
   class Tickets
@@ -34,7 +35,7 @@ module TicketHelper
         best_game_date = Team.new(@team_name).best_game.date
         urls.each{ |url| return url.to_s.split("-")[-1][0...-1] if /#{best_game_date}/.match(url) }
       else
-        return @set_game.stubhub_id
+        return @set_game[:stubhub_id]
       end
     end
 
@@ -81,7 +82,7 @@ module TicketHelper
     end
 
     def find_seat_value(section, row)
-        section_value = section.to_i
+        section_value = @set_game.team[:section_averages][section]
         row_value = ""
         case row_value
           when row == "AA"; -5
@@ -93,13 +94,13 @@ module TicketHelper
           else
             row_value = row.to_i
         end
-        100-(section_value + row_value)
+       section_value - (row_value)
     end
 
     def converted_seats
       converted_seats = []
       best_all_available.each do |seat|
-        converted_seats << [{:ticket_id => seat[0][:ticket_id], :price => seat[0][:price],  :value => find_seat_value(@arena_hash[seat[0][:section].to_s], seat[0][:row])}]
+        converted_seats << [{:ticket_id => seat[0][:ticket_id], :price => seat[0][:price],  :value => find_seat_value(seat[0][:section].to_i, seat[0][:row])}]
       end
       converted_seats
     end
@@ -134,8 +135,22 @@ module TicketHelper
 
     def best_ticket
       best = sorted_tickets.last
-      best_all_available.each{ |seat| return seat[0].merge(:ticket_rating => (best[1]*100).to_i) if seat[0][:ticket_id] == best[0] }
+      best_all_available.each{ |seat| return seat[0].merge(:ticket_rating => (best[1]*25).to_i) if seat[0][:ticket_id] == best[0] }
+    end
+
+    def section_averages
+      test_hash = {}
+      best_all_available.sort!{|x, y| x[0][:price] <=> y[0][:price]}.each do |seat|
+        if test_hash.has_key?(seat[0][:section])
+          test_hash[seat[0][:section]][:price] += seat[0][:price] if seat[0][:price]/2 < (test_hash[seat[0][:section]][:price]/test_hash[seat[0][:section]][:number])
+          test_hash[seat[0][:section]][:number] += 1
+        else
+          test_hash.merge!(seat[0][:section] => {:price => seat[0][:price], :number => 1})
+        end
+      end
+      test_hash
     end
 
   end
 end
+

@@ -4,8 +4,6 @@
 
 <% @games.each do |game|  %>
 
-<% game[:opponent] %>
-
 <% best_ticket = game.best_ticket(@price_min, @price_max)%>
 
   <div class="game_tickets">
@@ -17,7 +15,12 @@
           <%= image_tag "#{game[:opponent].gsub(" ", "_")}.png", :width => "100px", :height => "110px" %>
         </div>
          <div class="ticket_rating">
-           <%= best_ticket[:ticket_rating] %>
+           <table>
+             <tr><td>AGP: $<%= game[:average_price] %></td></tr>
+             <tr><td>GR: <%= game[:relative_popularity] %></td></tr>
+             <tr><td>SR: <%= best_ticket[:ticket_rating] %></td></tr>
+             <tr><td>Overall: <%= (best_ticket[:ticket_rating] * game[:popularity_multiplier]).to_i %></td></tr>
+          </table>
          </div>
       </div>
       <div class = middle>

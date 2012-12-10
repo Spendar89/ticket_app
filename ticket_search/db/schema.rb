@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121207010035) do
+ActiveRecord::Schema.define(:version => 20121210061830) do
 
   create_table "games", :force => true do |t|
     t.integer  "team_id"
@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(:version => 20121207010035) do
     t.string   "stubhub_id"
     t.string   "date"
     t.integer  "average_price"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
     t.boolean  "home"
     t.string   "venue"
     t.integer  "latitude"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20121207010035) do
     t.integer  "popularity"
     t.integer  "relative_popularity"
     t.integer  "relative_price"
+    t.decimal  "popularity_multiplier"
   end
 
   create_table "searches", :force => true do |t|
@@ -48,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20121207010035) do
     t.integer  "home_price_standard_deviation"
     t.integer  "away_price_standard_deviation"
     t.string   "url"
+    t.text     "section_averages"
   end
 
 end

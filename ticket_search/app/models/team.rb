@@ -1,6 +1,7 @@
 class Team < ActiveRecord::Base
-  attr_accessible :best_game_id, :name, :arena_image, :games, :url
+  attr_accessible :best_game_id, :name, :arena_image, :games, :url, :section_averages
   has_many :games, :inverse_of => :team
+  serialize :section_averages, Hash
 
 
   def make_games
@@ -87,6 +88,31 @@ class Team < ActiveRecord::Base
     end
     games.each_pair{|key, value| array << value}
     games.key(array.sort[-1])
+  end
+
+  def get_section_averages
+    section_array = []
+    section_games = []
+    self.games.each do |game|
+      if game.home
+        section_games << game
+      end
+    end
+    section_games.each { |game| section_array << game.section_averages }
+    new_hash = {}
+    section_array.each do |hash|
+      hash.each do |key, value|
+        if new_hash.has_key?(key)
+          new_hash[key][:price] += value[:price]
+          new_hash[key][:number] += value[:number]
+        else
+          new_hash.merge!(key => value)
+        end
+      end
+    end
+    final_hash = {}
+    new_hash.each { |key, value| final_hash.merge!({key => value[:price]/value[:number]}) }
+    final_hash
   end
 
 end

@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  attr_accessible :popularity, :average_price, :date, :opponent, :stubhub_id, :team_id, :game_hash, :other_games, :relative_popularity, :relative_price
+  attr_accessible :popularity, :average_price, :date, :opponent, :stubhub_id, :team_id, :game_hash, :other_games, :relative_popularity, :relative_price, :popularity_multiplier
   belongs_to :team, :inverse_of => :games
 
   before_save :fill_in_attributes
@@ -25,11 +25,15 @@ class Game < ActiveRecord::Base
       TicketHelper::Tickets.new(self.team.name, self, price_min, price_max).best_ticket
     end
 
+    def section_averages
+      TicketHelper::Tickets.new(self.team.name, self, 1, 1000).section_averages
+    end
+
     def determine_relatives
       if !self.home
         self.destroy
       else
-        self.update_attributes(:relative_popularity => relative_popularity, :relative_price => relative_price)
+        self.update_attributes(:relative_popularity => relative_popularity, :relative_price => relative_price, :popularity_multiplier => popularity_multiplier)
       end
     end
 
@@ -68,14 +72,14 @@ class Game < ActiveRecord::Base
 
     def relative_popularity
       if self.team.home_standard_deviation != 0
-        z_score =((self.popularity - self.team.home_average_popularity)/(self.team.home_standard_deviation))
+        z_score =((self.popularity - self.team.home_average_popularity)/(self.team.home_standard_deviation)).to_f
         20*z_score + 40
       end
     end
 
     def relative_price
       if self.team.home_price_standard_deviation != 0
-        z_score = ((average_price - self.team.home_average_price)/self.team.home_price_standard_deviation)
+        z_score = ((average_price - self.team.home_average_price)/self.team.home_price_standard_deviation).to_f
         20*z_score + 40
       end
     end
@@ -84,4 +88,14 @@ class Game < ActiveRecord::Base
       (relative_popularity/relative_price)*50
     end
 
+    def popularity_multiplier
+      if self.team.home_standard_deviation != 0
+        z_score =((self.popularity - self.team.home_average_popularity)/(self.team.home_standard_deviation)).to_f
+        ((z_score + 4)/3).to_f
+      end
+    end
+
+
 end
+
+
