@@ -8,7 +8,9 @@ class Team < ActiveRecord::Base
   def make_games
     array = []
     SeatGeek::Connection.events({:q => self.name, :per_page => 15})['events'].each do |game_info|
-      array << game_info
+      game_info["performers"].each do |team|
+           array << game_info  if team["name"] == self.name && team["home_team"] == true
+      end
     end
     array
   end
@@ -19,23 +21,15 @@ class Team < ActiveRecord::Base
 
   def home_average_price
     average_price = []
-    home_games.each do |game|
-        average_price << game.average_price
-    end
-    return average_price.inject(0){|result, sum| sum + result}/(average_price.length)
-  end
-
-  def away_average_price
-    average_price = []
-    away_games.each do |game|
-        average_price << game.average_price
+    self.games.each do |game|
+        average_price << game[:average_price]
     end
     return average_price.inject(0){|result, sum| sum + result}/(average_price.length)
   end
 
   def home_average_popularity
     pop_array = []
-    home_games.each do |game|
+    games.each do |game|
       pop_array << game.popularity
     end
     pop_array.inject(0){|sum, result| sum+result}/(pop_array.length) unless pop_array.length == 0
@@ -43,48 +37,24 @@ class Team < ActiveRecord::Base
 
   def home_standard_deviation
     array = []
-    home_games.each do |game|
-      array << (home_average_popularity - game.popularity) **2
+    games.each do |game|
+      array << (home_average_popularity - game[:popularity]) **2
     end
     Math.sqrt(array.inject(0){|sum, result| sum+result}/(array.length)) unless array.length == 0
   end
 
   def home_price_standard_deviation
     array = []
-    home_games.each do |game|
-      array << (home_average_price - game.average_price) **2
+   self.games.each do |game|
+      array << (home_average_price - game[:average_price]) **2
     end
     Math.sqrt(array.inject(0){|sum, result| sum+result}/(array.length)) unless array.length == 0
-  end
-
-  def away_price_standard_deviation
-    array = []
-    away_games.each do |game|
-      array << (away_average_price - game.average_price) **2
-    end
-    Math.sqrt(array.inject(0){|sum, result| sum+result}/(array.length))
-  end
-
-  def home_games
-    home_games = []
-    self.games.each do |game|
-      home_games <<  game unless game.home == false
-    end
-    return home_games
-  end
-
-  def away_games
-    away_games = []
-    self.games.each do |game|
-      away_games <<  game unless game.home == true
-    end
-    return away_games
   end
 
   def best_game
     games ={}
     array = []
-    home_games.each do |game|
+    games.each do |game|
       games.merge!( game => game.affordability_index )
     end
     games.each_pair{|key, value| array << value}
@@ -93,13 +63,7 @@ class Team < ActiveRecord::Base
 
   def get_section_averages
     section_array = []
-    section_games = []
-    self.games.each do |game|
-      if game.home
-        section_games << game
-      end
-    end
-    section_games.each { |game| section_array << game.section_averages }
+    self.games.each { |game| section_array << game.section_averages }
     new_hash = {}
     section_array.each do |hash|
       hash.each do |key, value|
@@ -115,16 +79,10 @@ class Team < ActiveRecord::Base
     new_hash.each { |key, value| final_hash.merge!({key => value[:price]/value[:number]}) }
     final_hash
   end
-  
+
   def get_section_standard_deviations
     section_array = []
-    section_games = []
-    self.games.each do |game|
-      if game.home
-        section_games << game
-      end
-    end
-    section_games.each { |game| section_array << game.section_standard_deviations }
+    self.games.each { |game| section_array << game.section_standard_deviations }
     new_hash = {}
     section_array.each do |hash|
       hash.each do |key, value|

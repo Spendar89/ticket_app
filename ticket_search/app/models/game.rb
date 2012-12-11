@@ -1,7 +1,6 @@
 class Game < ActiveRecord::Base
   attr_accessible :popularity, :average_price, :date, :opponent, :stubhub_id, :team_id, :game_hash, :other_games, :relative_popularity, :relative_price, :popularity_multiplier
   belongs_to :team, :inverse_of => :games
-
   before_save :fill_in_attributes
 
     def set_attributes(game_hash)
@@ -11,9 +10,7 @@ class Game < ActiveRecord::Base
 
     def fill_in_attributes
       self.popularity = popularity
-      self.average_price = average_price
       self.date = date
-      self.home = home?
       self.opponent = opponent
       self.latitude = latitude
       self.longitude = longitude
@@ -26,28 +23,26 @@ class Game < ActiveRecord::Base
     end
 
     def section_averages
-      TicketHelper::Tickets.new(self.team.name, self, 1, 1000).section_averages
+      TicketHelper::Tickets.new(self.team.name, self, 1, 5000).section_averages
     end
-    
+
     def section_standard_deviations
       TicketHelper::Tickets.new(self.team.name, self, 1, 1000).section_standard_deviations
     end
 
     def determine_relatives
-      if !self.home
-        self.destroy
-      else
-        self.update_attributes(:relative_popularity => relative_popularity, :relative_price => relative_price, :popularity_multiplier => popularity_multiplier)
+      self.update_attributes(:relative_popularity => relative_popularity, :relative_price => relative_price, :popularity_multiplier => popularity_multiplier)
+    end
+
+    def set_average_price
+      hash = TicketHelper::Tickets.new(self.team.name, self, 1, 5000).section_averages
+      prices = []
+      numbers = []
+      hash.values.each do |seat|
+        prices << seat[:price]
+        numbers << seat[:number]
       end
-    end
-
-    def average_price
-      @game_hash["stats"]["average_price"]
-    end
-
-    def home?
-      @game_hash["performers"].each{ |team| return true  if team["name"] == self.team.name && team["home_team"] == true }
-      false
+      self.update_attributes(:average_price => prices.inject(0){|x,y| x + y}/numbers.inject(0){|x,y| x + y})
     end
 
     def opponent
