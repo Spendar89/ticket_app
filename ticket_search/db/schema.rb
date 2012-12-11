@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121210061830) do
+ActiveRecord::Schema.define(:version => 20121210115023) do
 
   create_table "games", :force => true do |t|
     t.integer  "team_id"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(:version => 20121210061830) do
     t.integer  "away_price_standard_deviation"
     t.string   "url"
     t.text     "section_averages"
+    t.text     "section_standard_deviations"
   end
 
 end

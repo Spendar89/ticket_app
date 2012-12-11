@@ -94,7 +94,7 @@ module TicketHelper
           else
             row_value = row.to_i
         end
-       section_value - (row_value)
+       {:value => section_value - (row_value), :standard_deviation => @set_game.team[:section_standard_deviations][section]}
     end
 
     def converted_seats
@@ -108,7 +108,7 @@ module TicketHelper
     def value_index
       values = {}
       converted_seats.each do |seat|
-        values.merge!(seat[0][:ticket_id] => {:price => seat[0][:price], :index => seat[0][:value].to_f/seat[0][:price].to_f})
+        values.merge!(seat[0][:ticket_id] => {:price => seat[0][:price], :index => 100 - (((seat[0][:price].to_f - seat[0][:value][:value].to_f)/seat[0][:value][:standard_deviation].to_f * 16.5) + 50) })
       end
       values
     end
@@ -135,7 +135,7 @@ module TicketHelper
 
     def best_ticket
       best = sorted_tickets.last
-      best_all_available.each{ |seat| return seat[0].merge(:ticket_rating => (best[1]*25).to_i) if seat[0][:ticket_id] == best[0] }
+      best_all_available.each{ |seat| return seat[0].merge(:ticket_rating => (best[1]).to_i) if seat[0][:ticket_id] == best[0] }
     end
 
     def section_averages
@@ -146,6 +146,19 @@ module TicketHelper
           test_hash[seat[0][:section]][:number] += 1
         else
           test_hash.merge!(seat[0][:section] => {:price => seat[0][:price], :number => 1})
+        end
+      end
+      test_hash
+    end
+    
+    def section_standard_deviations
+      test_hash = {}
+      best_all_available.sort!{|x, y| x[0][:price] <=> y[0][:price]}.each do |seat|
+        if test_hash.has_key?(seat[0][:section])
+          test_hash[seat[0][:section]][:variance] += (seat[0][:price] - @set_game.team.section_averages[seat[0][:section]])**2 if ((seat[0][:price] - @set_game.team.section_averages[seat[0][:section]])**2)/2 <  (test_hash[seat[0][:section]][:variance])/(test_hash[seat[0][:section]][:number])
+          test_hash[seat[0][:section]][:number] += 1
+        else
+          test_hash.merge!(seat[0][:section] => {:variance => (seat[0][:price] - @set_game.team.section_averages[seat[0][:section]])**2, :number => 1})
         end
       end
       test_hash

@@ -28,6 +28,10 @@ class Game < ActiveRecord::Base
     def section_averages
       TicketHelper::Tickets.new(self.team.name, self, 1, 1000).section_averages
     end
+    
+    def section_standard_deviations
+      TicketHelper::Tickets.new(self.team.name, self, 1, 1000).section_standard_deviations
+    end
 
     def determine_relatives
       if !self.home
