@@ -11,27 +11,39 @@
         <div class = "date">
          <%= game[:date] %>
         </div>
-        <div class = opponent>
-          <%= image_tag "#{game[:opponent].gsub(" ", "_")}.png", :width => "100px", :height => "110px" %>
+        <div class = "home_logo">
+          <%= image_tag "#{game.team.name.gsub(" ", "_")}.png", :width => "120px", :height => "120px" %>
+        </div>
+        <div class = "opponent_logo">
+          <%= image_tag "#{game[:opponent].gsub(" ", "_")}.png", :width => "120px", :height => "120px" %>
         </div>
          <div class="ticket_rating">
-           <table>
-             <tr><td>AGP: $<%= game[:average_price] %></td></tr>
-             <tr><td>GR: <%= game[:relative_popularity] %></td></tr>
-             <tr><td>SR: <%= best_ticket[:ticket_rating] %></td></tr>
-             <tr><td>Overall: <%= (best_ticket[:ticket_rating] * game[:popularity_multiplier]).to_i %></td></tr>
-          </table>
+             <div><b>Average Ticket Price:</b> $<%= game[:average_price] %></div>
+             <div><b>Game Rating:</b> <%= game[:relative_popularity] %></div>
+             <div><b>Seat Rating:</b> <%= best_ticket[:ticket_rating] %></div>
+             <div><b>Overall Rating:</b> <%= (best_ticket[:ticket_rating] * game[:popularity_multiplier]).to_i %></div>
          </div>
       </div>
-      <div class = middle>
-        <%= link_to "Purchase Ticket", best_ticket[:url], :target => 'blank', :class => "purchase_link" %>
+      <div class = "middle">
+        <table class="ticket_info">
+          <tr class = "ticket_info_values">
+            <td><%= best_ticket[:section]%></td>
+            <td><%= best_ticket[:row]%></td>
+            <td><%= best_ticket[:quantity]%></td>
+            <td>$<%= best_ticket[:price]%></td>
+          </tr>
+          <tr class="ticket_info_desc">
+            <td>SEC</td>
+            <td>ROW</td>
+            <td>AVAIL</td>
+            <td>PRICE</td>
+          </tr>
+        </table>
+
       </div>
-        <div class = "ticket_info">
-          <div><%= best_ticket[:section]%></div>
-          <div><%= best_ticket[:row]%></div>
-          <div><%= best_ticket[:quantity]%></div>
-          <div>$<%= best_ticket[:price]%></div>
-        </div>
+      <div class = "bottom">
+         <%= link_to "Purchase Ticket", best_ticket[:url], :target => 'blank', :class => " purchase btn btn-large btn-block btn-primary" %>
+      </div>
   </div>
 <% end %>
 
