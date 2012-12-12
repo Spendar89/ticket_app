@@ -23,7 +23,7 @@ $(document).ready(function(){
 
   // var img = '<h1>yo dude</h1>';
   // $("#seat_view_button").popover({ title: 'Seat View', content: img });​​​
-
+$('.popover-with-html').on('click', function(e) {e.preventDefault(); return true;});
 $('.popover-with-html').popover({ html : true });
 
 
