@@ -17,4 +17,12 @@ class SearchesController < ApplicationController
     end
   end
 
+  def seat_view
+    @seat_view_image = params[:seat_view_image]
+    @link_id = params[:id]
+    respond_to do |format|
+      format.js {render 'seat_view.js.erb'}
+    end
+  end
+
 end

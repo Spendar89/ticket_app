@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121210115023) do
+ActiveRecord::Schema.define(:version => 20121212025910) do
 
   create_table "games", :force => true do |t|
     t.integer  "team_id"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20121210115023) do
     t.string   "url"
     t.text     "section_averages"
     t.text     "section_standard_deviations"
+    t.text     "seat_views"
   end
 
 end

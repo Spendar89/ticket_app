@@ -1,8 +1,9 @@
 class Team < ActiveRecord::Base
-  attr_accessible :best_game_id, :name, :arena_image, :games, :url, :section_averages, :section_standard_deviations
+  attr_accessible :best_game_id, :name, :arena_image, :games, :url, :section_averages, :section_standard_deviations, :seat_views
   has_many :games, :inverse_of => :team
   serialize :section_averages, Hash
   serialize :section_standard_deviations, Hash
+  serialize :seat_views, Hash
 
 
   def make_games
@@ -61,6 +62,7 @@ class Team < ActiveRecord::Base
     games.key(array.sort[-1])
   end
 
+
   def get_section_averages
     section_array = []
     self.games.each { |game| section_array << game.section_averages }
@@ -97,6 +99,26 @@ class Team < ActiveRecord::Base
     final_hash = {}
     new_hash.each { |key, value| final_hash.merge!({key => Math.sqrt(value[:variance]/value[:number]).to_i}) }
     final_hash
+  end
+
+  def get_seat_views
+    sections_array = TicketHelper::Tickets.new(self.name, self.games.first).sections_available
+    seat_views_hash = {}
+    game = self.games.first
+    sections_array.each do |section|
+      seat_views_hash.merge!("#{section.to_i}" => image_url(game[:venue], section))
+    end
+    self.update_attributes(:seat_views => seat_views_hash)
+  end
+
+  def image_url(venue, section)
+    url = open("http://api.avf.ms/venue.php?jsoncallback=?key=33970eb4232b8bd273dd548da701abd2&venue=#{URI.escape(venue)}&section=#{section}").read
+    hash = JSON.parse("{#{url.scan(/"image":"\w+-\d+.jpg"/)[0]}}")
+    if !hash['image'].nil?
+      "http://aviewfrommyseat.com/wallpaper/#{hash['image']}"
+    else
+      false
+    end
   end
 
 end

@@ -76,7 +76,7 @@ module TicketHelper
     def sections_available
       sections = []
       best_all_available.each do |available|
-        sections << available[2].to_i unless sections.include?(available[2].to_i)
+        sections << available[0][:section] unless sections.include?(available[0][:section])
       end
       sections
     end

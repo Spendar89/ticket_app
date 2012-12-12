@@ -8,6 +8,7 @@ class TeamsController < ApplicationController
       @team.games.each{ |game| game.determine_relatives }
       @team.update_attributes(:section_averages => @team.get_section_averages)
       @team.update_attributes(:section_standard_deviations => @team.get_section_standard_deviations)
+      @team.get_seat_views
       redirect_to searches_path(:search => params[:search])
   end
 

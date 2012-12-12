@@ -1,0 +1,8 @@
+$('#'+ "<%= @link_id %>").popover({
+        placement : 'bottom', //placement of the popover. also can use top, bottom, left or right
+        title : '<div style="text-align:center; color:red; text-decoration:underline; font-size:14px;"> Muah ha ha</div>', //this is the top title bar of the popover. add some basic css
+        html: 'true', //needed to show html of course
+        content : '"<%= image_tag @seat_view_image, :width => "200px", :height => "200px", :class => "img-rounded" %>"'
+  });
+
+

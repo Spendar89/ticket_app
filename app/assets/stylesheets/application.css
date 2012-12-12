@@ -32,7 +32,7 @@
   margin: 20px;
   box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);
   overflow: hidden;
-  padding: 5px;
+  padding: 10px;
   border-radius: 10px;
 }
 
@@ -100,7 +100,6 @@ margin-top: 10px;
   font-size: 20px;
   float: left;
   width: 100%;
-  margin-left: 40px;
 }
 
 .ticket_rating > div{
@@ -115,4 +114,33 @@ margin-top: 10px;
   min-height: 1000px;
   padding: 20px;
 }
+
+
+.popover.fade{
+  width: 300px;
+  height: 280px;
+}
+
+.popover-inner{
+  width: 300px;
+  height: 280px;
+
+
+}
+.popover-content{
+  width: 275px;
+  height: 220px;
+}
+
+.img-rounded{
+  width: 100%;
+  height: 100%;
+}
+
+.popover-with-html{
+  float: right;
+
+}
+
+
 
