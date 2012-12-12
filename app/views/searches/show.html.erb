@@ -22,7 +22,7 @@
              <div><b>Game Rating:</b> <%= game[:relative_popularity] %></div>
              <div><b>Seat Rating:</b> <%= best_ticket[:ticket_rating] %></div>
              <div><b>Overall Rating:</b> <%= (best_ticket[:ticket_rating] * game[:popularity_multiplier]).to_i %></div>
-             <div class= "seat_view_div"><%= link_to('Seat View', '#', :class => "popover-with-html", :title => "<b>Seat View</b>", "data-placement" => "top", "data-content" => "#{image_tag(@team[:seat_views][best_ticket[:section].to_s], :width => "400px", :height => "300px", :class => "img-rounded")}") %></div>
+             <div class= "seat_view_div"><%= link_to( image_tag('binoculars.png', :width => '20px'), '#', :class => "popover-with-html", :title => "<b>Seat View</b>", "data-placement" => "top", "data-content" => "#{image_tag(@team[:seat_views][best_ticket[:section].to_s], :width => "400px", :height => "300px", :class => "img-rounded")}") %></div>
 
          </div>
       </div>
