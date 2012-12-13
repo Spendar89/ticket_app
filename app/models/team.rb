@@ -1,5 +1,5 @@
 class Team < ActiveRecord::Base
-  attr_accessible :best_game_id, :name, :arena_image, :games, :url, :section_averages, :section_standard_deviations, :seat_views
+  attr_accessible :best_game_id, :name, :arena_image, :games, :url, :section_averages, :section_standard_deviations, :seat_views, :venue_name, :venue_address, :division, :last_5, :conference, :record
   has_many :games, :inverse_of => :team
   serialize :section_averages, Hash
   serialize :section_standard_deviations, Hash
@@ -18,6 +18,39 @@ class Team < ActiveRecord::Base
 
   def get_url
     TicketHelper::Tickets.team_url(self.name)
+  end
+
+  def set_attributes
+    venue_info = get_venue_info['venue']
+    self.update_attributes(:venue_name => venue_info['name'], :venue_address => "#{venue_info['address']}, #{venue_info['city']}, #{venue_info['state']}",
+                            :conference => get_team_stats[:conference], :division => get_team_stats[:division])
+    update_team_stats
+  end
+
+  def update_team_stats
+    self.update_attributes(:record => get_team_stats[:record], :last_5 => get_team_stats[:last_5])
+  end
+
+  def get_venue_info
+    SeatGeek::Connection.events({:q => self.name, :per_page => 15})['events'].each do |game_info|
+      game_info["performers"].each do |team|
+           return game_info if team["name"] == self.name && team["home_team"] == true
+      end
+    end
+  end
+
+  def get_team_stats
+    standings_hash = JSON.parse(open('http://erikberg.com/nba/standings.json').read)['standing']
+    wins = standings_hash.select{|f| self.name.include?(f["last_name"])}[0]['won']
+    losses = standings_hash.select{|f| self.name.include?(f["last_name"])}[0]['lost']
+    conference = standings_hash.select{|f| self.name.include?(f["last_name"])}[0]['conference'].downcase
+    division = standings_hash.select{|f| self.name.include?(f["last_name"])}[0]['division'].downcase
+    last_5 = standings_hash.select{|f| self.name.include?(f["last_name"])}[0]['last_five']
+    { :record => "#{wins}-#{losses}", :conference => conference, :division => division, :last_5 => last_5 }
+  end
+
+  def get_team_record
+    get_team_stats[:record]
   end
 
   def home_average_price

@@ -1,14 +1,43 @@
-<table>
-  <%= form_for @search, :method => 'get'  do |f| %>
-  <tr>
-    <td><%= f.text_field :team, :placeholder => "Team Name" %></td>
-    <%= f.hidden_field :price_min, :id => "price_min" %>
-    <%= f.hidden_field :price_max, :id => "price_max" %>
-    <td ><%= f.text_field :date_start, :class => 'datepicker', :placeholder => "Start Date"%></td>
-    <td ><%= f.text_field :date_end, :class => 'datepicker', :placeholder => "End Date"%></td>
-    <td ></td>
-    <td id="show_price_min"><div class = "slider"></div><div id="amount" style="text-align: center; color: grey; margin-top: 2px;"></div></td>
-  </tr>
-    <tr><td><%= f.submit "Find Tickets", :class => 'btn btn-primary' %></td></tr>
-  <% end %>
-</table>
+<div class = "logo" style="float: left;">
+ <%= image_tag 'ticket_bird_logo.png', :height => '200px', :width => '200px'%>
+</div>
+<div class = "search_form_div span9" style="float: left;" >
+<h2>Find a Ticket: </h2>
+    <%= form_for @search, :method => 'get', :remote => true, :html => {:class => "form-inline"} do |f| %>
+ <div class="control-group">
+      <div class="controls">
+ <%= f.text_field :team, :placeholder => "Team Name", :class => "span6" %>
+ </div>
+ </div>
+ <div class="control-group">
+   <div class="control"s>
+      <%= f.hidden_field :price_min, :id => "price_min" %>
+      <%= f.hidden_field :price_max, :id => "price_max" %>
+      <%= f.text_field :date_start, :class => 'datepicker span3', :placeholder => "Start Date", :style =>"margin-right: 17px;" %>
+      <%= f.text_field :date_end, :class => 'datepicker span3', :placeholder => "End Date"%>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label id="slider_div">
+        <div class = "slider"></div>
+        <div id="amount_min"></div>
+        <div id="amount_max"></div>
+      </label>
+    </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <%= f.submit "Find Tickets", :class => 'btn btn-primary', :style => "float: left;" %>
+        <% end %>
+        <div class="progress">
+          <div class="bar" style="width: 0%;"></div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<div class = "results">
+</div>
+

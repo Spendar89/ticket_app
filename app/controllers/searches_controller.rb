@@ -14,6 +14,9 @@ class SearchesController < ApplicationController
       @price_min = params[:search][:price_min].to_i
       @price_max = params[:search][:price_max].to_i
       @team.games.each { |game| @games << game if game[:date] >= @date_start && game[:date] <= @date_end }
+      respond_to do |format|
+        format.js {render 'show.js.erb'}
+      end
     end
   end
 

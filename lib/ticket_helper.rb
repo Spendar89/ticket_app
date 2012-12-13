@@ -85,7 +85,7 @@ module TicketHelper
         section_value = @set_game.team[:section_averages][section]
         row_value = ""
         case row_value
-          when row == "AA"; -5
+          when row == "AA"; 0
           when row == "A1"; 1
           when row == "A2"; 2
           when row == "A3"; 3
@@ -182,7 +182,7 @@ module TicketHelper
         if test_hash.has_key?(seat[0][:section])
           variance = test_hash[seat[0][:section]][:variance]
           number = test_hash[seat[0][:section]][:number]
-          test_hash[seat[0][:section]][:variance] += (price - average)**2 if ((price - average)**2)/2 <  variance/number
+          test_hash[seat[0][:section]][:variance] += (price - average)**2 if ((price - average)**2)/4 <  variance/number
           test_hash[seat[0][:section]][:number] += 1
         else
           test_hash.merge!(seat[0][:section] => {:variance => (price - average)**2, :number => 1})

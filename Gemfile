@@ -26,6 +26,8 @@ end
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
 gem 'twitter-bootstrap-rails'
+gem 'typhoeus'
+gem 'whenever', :require => false
 
 
 # To use ActiveModel has_secure_password

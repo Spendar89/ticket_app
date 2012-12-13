@@ -1,0 +1,62 @@
+<div class="team_info_div span6">
+  <table class="table table-bordered" style="background: white; box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);">
+    <tr><td>Name: </td><td><%= @team.name %></td></tr>
+    <tr><td>Conference:</td><td><%= @team.conference %></td></tr>
+    <tr><td>Division: </td><td><%= @team.division %></td></tr>
+    <tr><td>Record: </td><td><%= @team.record %></td></tr>
+    <tr><td>Last Five Games: </td><td><%= @team.last_5 %></td></tr>
+    <tr><td>Venue: </td><td><%= @team.venue_name %></td></tr>
+    <tr><td>Address: </td><td><%= @team.venue_address %></td></tr>
+
+  </table>
+</div>
+
+<div class ="tickets span6">
+<% @games.each_with_index do |game, i|  %>
+
+<% best_ticket = game.best_ticket(@price_min, @price_max)%>
+  <div class="game_tickets">
+
+      <div class = top>
+        <div class = "date">
+         <%= game[:date] %>
+        </div>
+        <div class= "seat_view_div"><%= link_to( image_tag('binoculars.png', :width => '20px'), '#', :class => "popover-with-html", :title => "<b>Seat View</b>", "data-placement" => "bottom", "data-content" => "#{image_tag(@team[:seat_views][best_ticket[:section].to_s], :width => "400px", :height => "300px", :class => "img-rounded")}") unless @team[:seat_views][best_ticket[:section].to_s].instance_of? FalseClass %></div>
+        <div class = "home_logo">
+          <%= image_tag "#{game.team.name.gsub(" ", "_")}.png", :width => "60px", :height => "60px" %>
+        </div>
+        <div class = "opponent_logo">
+          <%= image_tag "#{game[:opponent].gsub(" ", "_")}.png", :width => "60px", :height => "60px" %>
+        </div>
+         <div class="ticket_rating">
+             <div><b>Average Ticket Price:</b> $<%= game[:average_price] %></div>
+             <div><b>Game Rating:</b> <%= game[:relative_popularity] %></div>
+             <div><b>Seat Rating:</b> <%= best_ticket[:ticket_rating] %></div>
+             <div><b>Overall Rating:</b> <%= (best_ticket[:ticket_rating] * game[:popularity_multiplier]).to_i %></div>
+         </div>
+      </div>
+      <div class = "middle">
+        <table class="ticket_info">
+          <tr class = "ticket_info_values">
+            <td><%= best_ticket[:section]%></td>
+            <td><%= best_ticket[:row]%></td>
+            <td><%= best_ticket[:quantity]%></td>
+            <td>$<%= best_ticket[:price]%></td>
+          </tr>
+          <tr class="ticket_info_desc">
+            <td>SEC</td>
+            <td>ROW</td>
+            <td>AVAIL</td>
+            <td>PRICE</td>
+          </tr>
+        </table>
+
+      </div>
+      <div class = "bottom">
+         <%= link_to "Purchase Ticket", best_ticket[:url], :target => 'blank', :class => "purchase btn btn-medium btn-block" %>
+      </div>
+  </div>
+<% end %>
+</div>
+
+
