@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  best_game_id: 1
+  get_stubhub_id: 1
 
 two:
   name: MyString
-  best_game_id: 1
+  get_stubhub_id: 1
