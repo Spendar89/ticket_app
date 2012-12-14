@@ -48,7 +48,7 @@ module TicketHelper
     end
 
     def relative_popularity
-      z_score =((self.popularity - @other_games.home_average_popularity)/@other_games.home_standard_deviation)
+      z_score =((self.popularity - @other_games.average_popularity)/@other_games.popularity_standard_deviation)
       20*z_score + 40
     end
 
@@ -86,7 +86,7 @@ module TicketHelper
       array
     end
 
-    def best_game_id
+    def get_stubhub_id
       if @set_game_id == false
         best_game_date = Team.new(@team_name).best_game.date
         urls.each{ |url| return url.to_s.split("-")[-1][0...-1] if /#{best_game_date}/.match(url) }
@@ -95,14 +95,14 @@ module TicketHelper
       end
     end
 
-    def best_json_data
-      url = open("http://www.stubhub.com/ticketAPI/restSvc/event/#{best_game_id}").read
+    def json_data
+      url = open("http://www.stubhub.com/ticketAPI/restSvc/event/#{get_stubhub_id}").read
       json_data = JSON.parse(url)['eventTicketListing']
       return {:game_info => json_data['event']['seoTitle'], :url => json_data['eventUrlPath'], :data => json_data['eventTicket']}
     end
 
-    def best_all_available
-      game_data = best_json_data
+    def all_available
+      game_data = json_data
       tickets_array = []
       game_data[:data].each do |ticket|
         if ticket["cp"].to_i >= @price_min && ticket["cp"].to_i < @price_max
@@ -114,7 +114,7 @@ module TicketHelper
 
     def sections_available
       sections = []
-      best_all_available.each do |available|
+      all_available.each do |available|
         sections << available[2].to_i unless sections.include?(available[2].to_i)
       end
       sections
@@ -138,7 +138,7 @@ module TicketHelper
 
     def converted_seats
       converted_seats = []
-      best_all_available.each do |seat|
+      all_available.each do |seat|
         converted_seats << [{:ticket_id => seat[0][:ticket_id], :price => seat[0][:price],  :value => find_seat_value(@arena_hash[seat[0][:section].to_s], seat[0][:row])}]
       end
       converted_seats
@@ -174,7 +174,7 @@ module TicketHelper
 
     def best_ticket
       best = sorted_tickets.last
-      best_all_available.each{ |seat| return seat << [(best[1]*100).to_i, (average_value_index*100).to_i] if seat[0][:ticket_id] == best[0] }
+      all_available.each{ |seat| return seat << [(best[1]*100).to_i, (average_value_index*100).to_i] if seat[0][:ticket_id] == best[0] }
     end
 
   end
@@ -213,7 +213,7 @@ module TicketHelper
       return average_price.inject(0){|result, sum| sum + result}/(average_price.length)
     end
 
-    def home_average_popularity
+    def average_popularity
       pop_array = []
       home_games.each do |game|
         pop_array << game.popularity
@@ -221,10 +221,10 @@ module TicketHelper
       pop_array.inject(0){|sum, result| sum+result}/(pop_array.length)
     end
 
-    def home_standard_deviation
+    def popularity_standard_deviation
       array = []
       home_games.each do |game|
-        array << (home_average_popularity - game.popularity) **2
+        array << (average_popularity - game.popularity) **2
       end
       Math.sqrt(array.inject(0){|sum, result| sum+result}/(array.length))
     end

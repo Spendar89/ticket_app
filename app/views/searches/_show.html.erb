@@ -15,13 +15,18 @@
 <% @games.each_with_index do |game, i|  %>
 
 <% best_ticket = game.best_ticket(@price_min, @price_max)%>
+<% best_ticket = game.best_ticket(@price_min, @price_max) %>
+<% best_ticket_game = game.tickets.find(best_ticket[0]) %>
+<% best_ticket_value = best_ticket[1] %>
   <div class="game_tickets">
 
       <div class = top>
         <div class = "date">
          <%= game[:date] %>
         </div>
-        <div class= "seat_view_div"><%= link_to( image_tag('binoculars.png', :width => '20px'), '#', :class => "popover-with-html", :title => "<b>Seat View</b>", "data-placement" => "bottom", "data-content" => "#{image_tag(@team[:seat_views][best_ticket[:section].to_s], :width => "400px", :height => "300px", :class => "img-rounded")}") unless @team[:seat_views][best_ticket[:section].to_s].instance_of? FalseClass %></div>
+        <div class= "seat_view_div">
+        <%= link_to( image_tag('binoculars.png', :width => '20px'), '#', :class => "popover-with-html", :title => "<b>Seat View</b>", "data-placement" => "bottom", "data-content" => "#{image_tag(@team[:seat_views][best_ticket[:section].to_s], :width => "400px", :height => "300px", :class => "img-rounded")}") unless @team[:seat_views][best_ticket[:section].to_s].instance_of? FalseClass %>
+        </div>
         <div class = "home_logo">
           <%= image_tag "#{game.team.name.gsub(" ", "_")}.png", :width => "60px", :height => "60px" %>
         </div>

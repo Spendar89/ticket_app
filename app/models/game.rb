@@ -2,10 +2,13 @@ class Game < ActiveRecord::Base
   attr_accessible :popularity, :average_price, :date, :opponent, :stubhub_id, :team_id, :game_hash, :other_games, :relative_popularity, :relative_price, :popularity_multiplier
   belongs_to :team, :inverse_of => :games
   before_save :fill_in_attributes
+  has_many :tickets
+
 
     def set_attributes(game_hash)
       @game_hash = game_hash
       self.save
+      self.destroy if self[:stubhub_id].length > 12
     end
 
     def fill_in_attributes
@@ -22,27 +25,8 @@ class Game < ActiveRecord::Base
       TicketHelper::Tickets.new(self.team.name, self, price_min, price_max).best_ticket
     end
 
-    def section_averages
-      TicketHelper::Tickets.new(self.team.name, self, 1, 5000).section_averages
-    end
-
-    def section_standard_deviations
-      TicketHelper::Tickets.new(self.team.name, self, 1, 1000).section_standard_deviations
-    end
-
     def determine_relatives
-      self.update_attributes(:relative_popularity => relative_popularity, :relative_price => relative_price, :popularity_multiplier => popularity_multiplier)
-    end
-
-    def set_average_price
-      hash = TicketHelper::Tickets.new(self.team.name, self, 1, 5000).section_averages
-      prices = []
-      numbers = []
-      hash.values.each do |seat|
-        prices << seat[:price]
-        numbers << seat[:number]
-      end
-      self.update_attributes(:average_price => prices.inject(0){|x,y| x + y}/numbers.inject(0){|x,y| x + y})
+      self.update_attributes(:relative_popularity => relative_popularity, :popularity_multiplier => popularity_multiplier)
     end
 
     def opponent
@@ -70,31 +54,39 @@ class Game < ActiveRecord::Base
     end
 
     def relative_popularity
-      if self.team.home_standard_deviation != 0
-        z_score =((self.popularity - self.team.home_average_popularity)/(self.team.home_standard_deviation)).to_f
+      if self.team.popularity_standard_deviation != 0
+        z_score =((self.popularity - self.team.average_popularity)/(self.team.popularity_standard_deviation)).to_f
         20*z_score + 40
       end
-    end
-
-    def relative_price
-      if self.team.home_price_standard_deviation != 0
-        z_score = ((average_price - self.team.home_average_price)/self.team.home_price_standard_deviation).to_f
-        20*z_score + 40
-      end
-    end
-
-    def affordability_index
-      (relative_popularity/relative_price)*50
     end
 
     def popularity_multiplier
-      if self.team.home_standard_deviation != 0
-        z_score =((self.popularity - self.team.home_average_popularity)/(self.team.home_standard_deviation)).to_f
+      if self.team.popularity_standard_deviation != 0
+        z_score =((self.popularity - self.team.average_popularity)/(self.team.popularity_standard_deviation)).to_f
         ((z_score + 4)/3).to_f
       end
     end
 
+    def refresh_tickets
+      updated_tickets = TicketHelper::Tickets.new(self.team.name, self, 1, 2000).all_available
+      updated_tickets.each do |ticket|
+        section_id = self.team.sections.find_by_name(ticket[0][:section]).id unless self.team.sections.find_by_name(ticket[0][:section]).nil?
+        self.tickets.create(:price => ticket[0][:price], :quantity => ticket[0][:quantity], :row => ticket[0][:row],
+                            :section_id => section_id, :stubhub_id => ticket[0][:stubhub_id], :url => ticket[0][:url])
+      end
+    end
 
+    def best_ticket(price_min, price_max)
+      tickets_array = {}
+      self.tickets.each do |ticket|
+        tickets_array.merge!(ticket.id => ticket.seat_value.to_f) unless ticket.seat_value.to_s.to_i == 0 || ticket.price > price_max || ticket.price < price_min
+      end
+      tickets_array.sort_by{|key, value| value}[0]
+    end
+
+    def destroy_outliers
+      self.tickets.each{|ticket| ticket.destroy_if_outlier }
+    end
 end
 
 

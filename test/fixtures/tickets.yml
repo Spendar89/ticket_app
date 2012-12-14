@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_id: 1
+  url: MyString
+  stubhub_id: 1
+  price: 1
+  row: 1
+  quantity: 1
+  section_id: 1
+
+two:
+  game_id: 1
+  url: MyString
+  stubhub_id: 1
+  price: 1
+  row: 1
+  quantity: 1
+  section_id: 1
