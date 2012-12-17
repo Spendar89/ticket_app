@@ -1,6 +1,4 @@
-$('.results').html("<%= j(render :partial => 'show', :locals => {:team => @team, :date_start => @date_start, :date_end => @date_end, :price_min => @price_min, :price_max => @price_max, :games => @games}) %>");
-
-
+$('.new_search').html("<%= j(render :partial => 'show', :locals => {:search => @search, :team => @team, :price_min => @price_min, :price_max => @price_max, :games => @games}) %>");
 $('.popover-with-html').on('click', function(e) {e.preventDefault(); return true;});
 $('.popover-with-html').popover({ html : true });
 

@@ -28,6 +28,8 @@ gem 'jquery-rails'
 gem 'twitter-bootstrap-rails'
 gem 'typhoeus'
 gem 'whenever', :require => false
+gem 'activerecord-import'
+gem 'colorize'
 
 
 # To use ActiveModel has_secure_password

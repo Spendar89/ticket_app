@@ -13,13 +13,13 @@ module TicketHelper
       @team_name_url = team_name.gsub(' ', '-')
       @arena_hash = arena_hash
       @set_game = set_game
-      @doc = Nokogiri::HTML(open("http://www.stubhub.com/#{@team_name_url}-tickets/"))
     end
 
 
     def urls
+      doc =  Nokogiri::HTML(open("http://www.stubhub.com/#{@team_name_url}-tickets/"))
       array = []
-      @doc.css('td[class="eventName"]').each do |node|
+      doc.css('td[class="eventName"]').each do |node|
         array << node.elements.css("a").attr("href")
       end
       array
@@ -59,10 +59,10 @@ module TicketHelper
       game_data = json_data
       tickets_array = []
       game_data[:data].each do |ticket|
-        if ticket["cp"].to_i >= @price_min && ticket["cp"].to_i < @price_max && !ticket["st"].scan(/(\d{1,3}|A\d)/)[0].nil?
+        if ticket["cp"].to_i >= @price_min && ticket["cp"].to_i < @price_max && !ticket["va"].scan(/(\d{1,3}|A\d)/)[0].nil?
           tickets_array << [{:game_info => game_data[:game_info], :url => "http://www.stubhub.com/#{@team_name_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket['id']}",
           :stubhub_id => ticket["id"], :price => ticket["cp"].to_i,:row => ticket["rd"],
-          :quantity => ticket["qt"], :section => ticket["st"], :seats => ticket["se"]}]
+          :quantity => ticket["qt"], :section => ticket["va"].downcase, :seats => ticket["se"]}]
         end
       end
       tickets_array

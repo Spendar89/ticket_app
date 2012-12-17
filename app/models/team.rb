@@ -1,11 +1,9 @@
 class Team < ActiveRecord::Base
-  attr_accessible :get_stubhub_id, :name, :arena_image, :games, :url, :section_averages, :section_standard_deviations, :seat_views, :venue_name, :venue_address, :division, :last_5, :conference, :record
+  attr_accessible :get_stubhub_id, :name, :arena_image, :games, :url, :venue_name, :venue_address, :division, :last_5, :conference, :record, :average_popularity, :pop_std_dev
   has_many :games, :inverse_of => :team
   has_many :sections
-  serialize :section_averages, Hash
-  serialize :section_standard_deviations, Hash
-  serialize :seat_views, Hash
-
+  validates :url, :presence => true, :uniqueness => true
+  
   def make_games
     array = []
     SeatGeek::Connection.events({:q => self.name, :per_page => 15})['events'].each do |game_info|
@@ -53,22 +51,12 @@ class Team < ActiveRecord::Base
     get_team_stats[:record]
   end
 
-  def average_popularity
-    pop_array = []
-    games.each do |game|
-      pop_array << game.popularity
-    end
-    pop_array.inject(0){|sum, result| sum+result}/(pop_array.length) unless pop_array.length == 0
+  def set_pop_std_dev
+    average = self.games.average(:popularity)
+    squared = self.games.pluck(:popularity).collect{ |pop| (pop - average)**2 }
+    std_dev = Math.sqrt(squared.inject(0){|x, y| x + y }/self.games.length).to_i unless self.games.length < 1
+    self.update_attributes(:average_popularity => average, :pop_std_dev => std_dev)
   end
-
-  def popularity_standard_deviation
-    array = []
-    games.each do |game|
-      array << (average_popularity - game[:popularity]) **2
-    end
-    Math.sqrt(array.inject(0){|sum, result| sum+result}/(array.length)) unless array.length == 0
-  end
-
 
   def best_game
     games ={}
@@ -82,19 +70,15 @@ class Team < ActiveRecord::Base
 
 
   def get_seat_views
-    sections_array = TicketHelper::Tickets.new(self.name, self.games.first).sections_available
-    seat_views_hash = {}
-    game = self.games.first
-    sections_array.each do |section|
-      seat_views_hash.merge!("#{section.to_i}" => image_url(game[:venue], section))
+    self.sections.all.each do |section|
+      update_attributes(:seat_view_url => image_url(self[:venue_name], section[:name].scan(/\d{1,3}/)[-1]))
     end
-    self.update_attributes(:seat_views => seat_views_hash)
   end
 
   def image_url(venue, section)
     url = open("http://api.avf.ms/venue.php?jsoncallback=?key=33970eb4232b8bd273dd548da701abd2&venue=#{URI.escape(venue)}&section=#{section}").read
     hash = JSON.parse("{#{url.scan(/"image":"\w+-\d+.jpg"/)[0]}}")
-    if !hash['image'].nil?
+    unless hash['image'].nil?
       "http://aviewfrommyseat.com/wallpaper/#{hash['image']}"
     else
       false
@@ -103,17 +87,18 @@ class Team < ActiveRecord::Base
 
   def get_sections
     tickets = []
-    self.games.each do |game|
+    self.games.find_each do |game|
       tickets << TicketHelper::Tickets.new(self.name, game, 1, 5000).all_available
     end
-
     tickets.each do |all_tickets|
       all_tickets.each do |ticket|
         self.sections.create(:name => ticket[0][:section])
       end
     end
-
   end
+  
+
+  
 
 
 

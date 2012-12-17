@@ -1,43 +1,13 @@
-<div class = "logo" style="float: left;">
- <%= image_tag 'ticket_bird_logo.png', :height => '200px', :width => '200px'%>
+<div class="new_search">
+<div class="row-fluid">
+  <div class="span9 offset3"><%= form_for @search, :method => 'get', :remote => true, :html => {:class => "form-search"} do |f| %>
+<div class="control-group">
+	<div class="controls">
+	<%= f.text_field :team, :placeholder => "Enter a Team Name to Begin", :class => "input-xxlarge search-query", :style => "height: 50px; font-size: 30px; line-height: 36px;" %>
+	</div>
 </div>
-<div class = "search_form_div span9" style="float: left;" >
-<h2>Find a Ticket: </h2>
-    <%= form_for @search, :method => 'get', :remote => true, :html => {:class => "form-inline"} do |f| %>
- <div class="control-group">
-      <div class="controls">
- <%= f.text_field :team, :placeholder => "Team Name", :class => "span6" %>
- </div>
- </div>
- <div class="control-group">
-   <div class="control"s>
-      <%= f.hidden_field :price_min, :id => "price_min" %>
-      <%= f.hidden_field :price_max, :id => "price_max" %>
-      <%= f.text_field :date_start, :class => 'datepicker span3', :placeholder => "Start Date", :style =>"margin-right: 17px;" %>
-      <%= f.text_field :date_end, :class => 'datepicker span3', :placeholder => "End Date"%>
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="controls">
-      <label id="slider_div">
-        <div class = "slider"></div>
-        <div id="amount_min"></div>
-        <div id="amount_max"></div>
-      </label>
-    </div>
-    </div>
-    <div class="control-group">
-      <div class="controls">
-        <%= f.submit "Find Tickets", :class => 'btn btn-primary', :style => "float: left;" %>
-        <% end %>
-        <div class="progress">
-          <div class="bar" style="width: 0%;"></div>
-        </div>
-      </div>
-    </div>
-
+	<%= f.submit "Find Tickets!", :class => 'btn btn-inverse', :style => "float: left;" %>
+<% end %></div>
 </div>
-
-<div class = "results">
 </div>
 

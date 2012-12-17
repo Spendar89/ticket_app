@@ -1,0 +1,51 @@
+<div class ="tickets span12">
+	<h2>After analyzing <%= @total_tickets %> tickets, we determined that the following are the best: </h2>
+<% @games.each do |game|  %>
+<% game_data = game.view_game_data(@price_min, @price_max) %>
+  <div class="game_tickets">
+
+      <div class = top>
+        <div class = "date">
+         <%= game[:date] %>
+        </div>
+        <div class= "seat_view_div">
+        <%= link_to(image_tag('binoculars.png', :width => '20px', :height => '20px'), '#', :class => "popover-with-html", :title => "<b>Seat View</b>", "data-placement" => "bottom", "data-content" => "#{image_tag(game_data[:best_ticket].section[:seat_view_url], :width => '400px', :height => '300px', :class => 'img-rounded')}") %>
+        </div>
+        <div class = "home_logo">
+          <%= image_tag "#{game.team[:name].gsub(" ", "_")}.png", :width => "60px", :height => "60px" %>
+        </div>
+        <div class = "opponent_logo">
+          <%= image_tag "#{game[:opponent].gsub(" ", "_")}.png", :width => "60px", :height => "60px" %>
+        </div>
+         <div class="ticket_rating">
+             <div><b>Average Ticket Price:</b> $<%= game_data[:average_ticket_price] %></div>
+             <div><b>Game Rating:</b> <%= game_data[:game_rating] %></div>
+             <div><b>Seat Rating:</b> <%= game_data[:seat_rating] %></div>
+             <div><b>Overall Rating:</b> <%= game_data[:overall_rating] %></div>
+         </div>
+      </div>
+      <div class = "middle">
+        <table class="ticket_info">
+          <tr class = "ticket_info_values">
+            <td><%= game_data[:best_ticket].section[:name].scan(/\d{1,3}/)[-1] %></td>
+            <td><%= game_data[:best_ticket][:row] %></td>
+            <td><%= game_data[:best_ticket][:quantity]%></td>
+            <td>$<%= game_data[:best_ticket][:price]%></td>
+          </tr>
+          <tr class="ticket_info_desc">
+            <td>SEC</td>
+            <td>ROW</td>
+            <td>AVAIL</td>
+            <td>PRICE</td>
+          </tr>
+        </table>
+
+      </div>
+      <div class = "bottom">
+         <%= link_to "Purchase Ticket", game_data[:best_ticket][:url], :target => 'blank', :class => "btn btn-large btn-block btn-inverse", :style => "margin-top: 5px;" %>
+      </div>
+  </div>
+<% end %>
+</div>
+
+

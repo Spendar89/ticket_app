@@ -1,14 +1,12 @@
 class Game < ActiveRecord::Base
   attr_accessible :popularity, :average_price, :date, :opponent, :stubhub_id, :team_id, :game_hash, :other_games, :relative_popularity, :relative_price, :popularity_multiplier
   belongs_to :team, :inverse_of => :games
-  before_save :fill_in_attributes
   has_many :tickets
-
+  validates :stubhub_id, :format => { :with => /^\d{7}$/}, :uniqueness => true
 
     def set_attributes(game_hash)
       @game_hash = game_hash
-      self.save
-      self.destroy if self[:stubhub_id].length > 12
+      fill_in_attributes
     end
 
     def fill_in_attributes
@@ -19,6 +17,7 @@ class Game < ActiveRecord::Base
       self.longitude = longitude
       self.venue = venue
       self.stubhub_id = TicketHelper::Tickets.game_id(self)
+      self.save
     end
 
     def best_ticket(price_min, price_max)
@@ -28,6 +27,7 @@ class Game < ActiveRecord::Base
     def determine_relatives
       self.update_attributes(:relative_popularity => relative_popularity, :popularity_multiplier => popularity_multiplier)
     end
+    
 
     def opponent
        @game_hash["performers"].each{ |team| return team["name"] if team["name"] != self.team.name}
@@ -50,42 +50,55 @@ class Game < ActiveRecord::Base
     end
 
     def popularity
-       @game_hash["score"]*100
+      @game_hash["score"]*100
     end
 
     def relative_popularity
-      if self.team.popularity_standard_deviation != 0
-        z_score =((self.popularity - self.team.average_popularity)/(self.team.popularity_standard_deviation)).to_f
-        20*z_score + 40
+      if self.team[:pop_std_dev] != 0
+        z_score = ((self[:popularity] - self.team[:average_popularity])/(self.team[:pop_std_dev])).to_f
+        (z_score*16.5 + 50).to_f
       end
     end
 
     def popularity_multiplier
-      if self.team.popularity_standard_deviation != 0
-        z_score =((self.popularity - self.team.average_popularity)/(self.team.popularity_standard_deviation)).to_f
-        ((z_score + 4)/3).to_f
+      if self.team[:pop_std_dev] != 0
+        z_score = ((self[:popularity] - self.team[:average_popularity])/(self.team[:pop_std_dev])).to_f
+        ((z_score + 4)/4).to_f
       end
     end
 
     def refresh_tickets
-      updated_tickets = TicketHelper::Tickets.new(self.team.name, self, 1, 2000).all_available
-      updated_tickets.each do |ticket|
-        section_id = self.team.sections.find_by_name(ticket[0][:section]).id unless self.team.sections.find_by_name(ticket[0][:section]).nil?
-        self.tickets.create(:price => ticket[0][:price], :quantity => ticket[0][:quantity], :row => ticket[0][:row],
-                            :section_id => section_id, :stubhub_id => ticket[0][:stubhub_id], :url => ticket[0][:url])
+      updated_tickets = TicketHelper::Tickets.new(self.team[:name], self, 1, 2000).all_available
+      puts "received tickets array for #{self.team[:name]} against #{self[:opponent]}".blue
+      updated_tickets.map! do |ticket|
+        section_id = self.team.sections.find_by_name(ticket[0][:section]).id unless self.team.sections.find_by_name(ticket[0][:section].downcase).nil?
+        self.tickets.new(:price => ticket[0][:price], :quantity => ticket[0][:quantity], :row => ticket[0][:row],
+                            :section_id => section_id, :stubhub_id => ticket[0][:stubhub_id].to_i, :url => ticket[0][:url])
       end
+      puts "beginning import...".yellow
+      self.tickets.import updated_tickets
+      puts "import complete".green
     end
 
     def best_ticket(price_min, price_max)
       tickets_array = {}
       self.tickets.each do |ticket|
-        tickets_array.merge!(ticket.id => ticket.seat_value.to_f) unless ticket.seat_value.to_s.to_i == 0 || ticket.price > price_max || ticket.price < price_min
+        tickets_array.merge!(ticket[:id] => ticket.seat_value.to_f) unless ticket.seat_value.to_s.to_i == 0 || ticket[:price] > price_max || ticket[:price] < price_min
       end
-      tickets_array.sort_by{|key, value| value}[0]
+      tickets_array.sort_by{|key, value| value}[-1]
     end
 
     def destroy_outliers
-      self.tickets.each{|ticket| ticket.destroy_if_outlier }
+      self.tickets.find_each{|ticket| ticket.destroy_if_outlier }
+    end
+    
+    def view_game_data(price_min, price_max)
+      game_info = {}
+      best_ticket_hash = best_ticket(price_min, price_max)
+      best_ticket = self.tickets.find(best_ticket_hash[0])   
+      {:best_ticket => best_ticket, :average_ticket_price => self.tickets.average(:price).to_i, 
+      :seat_rating => best_ticket_hash[1].to_i, :game_rating => self[:relative_popularity], 
+      :overall_rating => ((best_ticket_hash[1]/2) + (self[:relative_popularity]/2)).to_i }     
     end
 end
 

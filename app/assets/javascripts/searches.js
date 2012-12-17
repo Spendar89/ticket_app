@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ajaxSuccess(function(){
     $(".datepicker").datepicker({dateFormat: "m-d-yy"} );
     $(".slider").slider({
             range: true,
