@@ -8,7 +8,7 @@ class Section < ActiveRecord::Base
   def update_std_dev
     average = self.tickets.average(:price).to_f
     squared = self.tickets.pluck(:price).collect{ |price| (price - average)**2 }
-    std_dev = Math.sqrt(squared.inject(0){|x, y| x + y }/self.tickets.length).to_f unless self.tickets.length < 1
+    std_dev = Math.sqrt((squared.inject(0){|x, y| x + y }/self.tickets.length).to_f).to_f unless self.tickets.length < 1
     self.update_attributes(:average_price => average, :std_dev => std_dev)
   end
 end

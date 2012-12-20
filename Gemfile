@@ -30,6 +30,7 @@ gem 'typhoeus'
 gem 'whenever', :require => false
 gem 'activerecord-import'
 gem 'colorize'
+gem 'lazy_high_charts'
 
 
 # To use ActiveModel has_secure_password

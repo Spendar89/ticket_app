@@ -1,4 +1,5 @@
 $(document).ajaxSuccess(function(){
+	//calendar 
     $(".datepicker").datepicker({dateFormat: "m-d-yy"} );
     $(".slider").slider({
             range: true,
@@ -13,13 +14,18 @@ $(document).ajaxSuccess(function(){
             }
    });
 
+	//price-range slider
+	$( "#amount_min" ).html( "$" + $( ".slider" ).slider( "values", 0 ));
+	$( "#amount_max" ).html( "$" + $( ".slider" ).slider( "values", 1 ));
 
-   $( "#amount_min" ).html( "$" + $( ".slider" ).slider( "values", 0 ));
-   $( "#amount_max" ).html( "$" + $( ".slider" ).slider( "values", 1 ));
+	//ticket border color-setter
+	$('.green').css('border', '4pt solid #76996B');
+	$('.yellow').css('border', '4pt solid #CDDE7D');
+	$('.red').css('border', '4pt solid #E66360');
 
-
+	//loading bar
   $('.bar').ajaxStart(function(){
-    $(this).css('width', '0px');
+    $(this).css('width', '0px');  
     $('.progress').fadeIn();
     $(this).animate({width: '+=100%'}, 9000);
   }).ajaxStop(function(){

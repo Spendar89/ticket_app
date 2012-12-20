@@ -13,6 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//= require jquery.ui.all
+//= require jquery.ui.datepicker
+//= require jquery.ui.slider
 //= require twitter/bootstrap
+//= require highcharts
 //= require_tree .

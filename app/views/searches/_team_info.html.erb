@@ -1,11 +1,3 @@
-<div class="team_info_div">
-	<h1 style="font-size: 50px;"><%= @team[:name] %></h1>
-  <table class="table-condensed" style="font-size: 20px;">
-    <tr><td>Conference:</td><td><%= @team[:conference] %></td></tr>
-    <tr><td>Division: </td><td><%= @team[:division] %></td></tr>
-    <tr><td>Record: </td><td><%= @team[:record] %></td></tr>
-    <tr><td>Last Five: </td><td><%= @team[:last_5] %></td></tr>
-    <tr><td>Venue: </td><td><%= @team[:venue_name] %></td></tr>
-    <tr><td>Address: </td><td><%= @team[:venue_address] %></td></tr>
-  </table>
+<div id="price_chart" class="span12" style="height: 400px;">
+	<%= high_chart("price_chart", @h) %>
 </div>

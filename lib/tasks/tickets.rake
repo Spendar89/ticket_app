@@ -13,9 +13,11 @@ end
 namespace :games do
   task :refresh => :environment do
     Team.all.each do |team|
-      team.games.find_each{ |game| game.destroy if Date.strptime(game[:date], '%m-%d-%Y') < Date.current }
+      puts "finding games for #{team.name}...".blue
       team.make_games.each{ |game_info| team.games.new.set_attributes(game_info)} 
+      team.games.find_each{ |game| game.destroy if Date.strptime(game[:date], '%m-%d-%Y') < Date.current }
       team.set_pop_std_dev
+      puts "determining_relatives....".yellow
       team.games.each{ |game| game.determine_relatives }
     end
   end
@@ -31,7 +33,8 @@ namespace :tickets do
   task :refresh => :environment do
     Game.all.each do |game|
       game.refresh_tickets
-      game.destroy_outliers 
+      game.destroy_outliers
+      game.destroy if game.tickets.length < 100 
     end
     Team.all.each do |team| 
       team.sections.each do |section| 

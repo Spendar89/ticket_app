@@ -1,4 +1,30 @@
 $('.new_search').html("<%= j(render :partial => 'show', :locals => {:search => @search, :team => @team, :price_min => @price_min, :price_max => @price_max, :games => @games}) %>");
 $('.popover-with-html').on('click', function(e) {e.preventDefault(); return true;});
 $('.popover-with-html').popover({ html : true });
-
+// 
+// // makePriceChart(<%= @price_labels %>, <%= @price_data %>)
+// 
+// 
+// $(document).ajaxSuccess(function() {
+//       chart1 = new Highcharts.Chart({
+//          chart: {
+//             renderTo: 'price_chart',
+//             type: 'line'
+//          },
+//          title: {
+//             text: 'Fruit Consumption'
+//          },
+//          xAxis: {
+//             categories: <%=j @price_labels.to_json %>
+//          },
+//          yAxis: {
+//             title: {
+//                text: 'Fruit eaten'
+//             }
+//          },
+//          series: [ {
+//             name: 'John',
+//             data: <%= @price_data %>
+//          }]
+//       });
+//    });

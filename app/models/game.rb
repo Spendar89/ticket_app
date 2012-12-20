@@ -25,7 +25,7 @@ class Game < ActiveRecord::Base
     end
 
     def determine_relatives
-      self.update_attributes(:relative_popularity => relative_popularity, :popularity_multiplier => popularity_multiplier)
+      self.update_attributes(:relative_popularity => relative_popularity)
     end
     
 
@@ -55,7 +55,7 @@ class Game < ActiveRecord::Base
 
     def relative_popularity
       if self.team[:pop_std_dev] != 0
-        z_score = ((self[:popularity] - self.team[:average_popularity])/(self.team[:pop_std_dev])).to_f
+        z_score = ((self[:popularity] - self.team[:average_popularity])/self.team[:pop_std_dev]).to_f
         (z_score*16.5 + 50).to_f
       end
     end

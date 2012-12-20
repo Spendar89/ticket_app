@@ -17,12 +17,12 @@
     font-family: sans-serif;
 }
 .ui-slider{
-    width: 95%;
+    width: 100%;
 }
 
 
 #slider_div{
-  width: 95%;
+  width: 100%;
   height: 15px;
 }
 
@@ -39,7 +39,7 @@
   color: grey;
   position: relative;
   top: -20px;
-  margin-right: 5%;
+  margin-right: 5px;
 }
 
 .team_info_div{
@@ -47,28 +47,18 @@
 }
 
 .tickets{
-  margin-top: -10px;
+  margin-top: -10px; 
 }
 
 .game_tickets{
-  width: 200px;
-  height: 320px;
-  float: left;
-  background-size: 100% 100%;
-  background-position: left;
-  background-repeat: no-repeat;
-  margin: 10px;
-  box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);
-  overflow: hidden;
-  padding: 10px;
-  border-radius: 4px;
-background: white;
-}
-
-.top{
-  float: left;
-  height: 200px;
-  width: 100%;
+	background-size:  100% 100%;
+	background-position: left;
+	background-repeat: no-repeat;
+	box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);
+	padding: 10px;
+	border-radius: 4px;
+	background: #D0D6CE url('ricepaper.png');
+	max-width: 250px;
 }
 
 .seat_view_div{
@@ -78,75 +68,18 @@ background: white;
 .date{
   font-size: 25px;
   text-align: center;
-  margin-top: 10px;
-  font-weight: bold;
-  width: 150px;
-  float: left;
-}
-
-.home_logo{
-  margin-top: 30px;
-  margin-left: 5px;
-  float: left;
-  width: 60px;
-  height: 60px;
-}
-
-.opponent_logo{
-  margin-top: 30px;
-  margin-right: 5px;
-  float:right;
-  width: 60px;
-  height: 60px;
-}
-
-.bottom{
-  width: 100%;
-  float: left;
-}
-
-.middle{
-  margin-top: 10px;
-  width: 100%;
-  float: left;
-}
-
-.purchase{
-margin-top: 5px;
-}
-
-.ticket_info{
-  width: 100%;
-  margin-left: 10px;
-  margin-top: 25px;
-}
-
-.ticket_info> td{
-  margin: 5px;
-  text-align: center;
-}
-
-.ticket_info_desc>td{
   font-weight: bold;
 }
 
 
-.ticket_rating{
-  margin-top: 10px;
-  font-size: 12px;
-  float: left;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.ticket_rating > div{
-  float: left;
-  width: 100%;
-  padding: 2px;
+.inner{
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 10px;
 }
 
 body{
-  background: url('dust.png');
+	background: url('background.jpg');
+	background-size: 105%;
 }
 
 
@@ -184,22 +117,13 @@ body{
 
 .search_form_div{
 	box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);
-	padding: 20px;
+	padding: 10px;
 	background: url('debut_dark.png');
 	color: white;
 }
 
 .results{
   margin-top: 25px;
-}
-
-.ticket_info_values{
-  font-size: 14px;
-
-}
-
-.ticket_info_desc{
-  font-size: 14px;
 }
 
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121216001624) do
+ActiveRecord::Schema.define(:version => 20121219041846) do
 
   create_table "games", :force => true do |t|
     t.integer  "team_id"
@@ -68,8 +68,8 @@ ActiveRecord::Schema.define(:version => 20121216001624) do
     t.string   "venue_address"
     t.string   "division"
     t.string   "last_5"
-    t.integer  "pop_std_dev"
-    t.integer  "average_popularity"
+    t.decimal  "pop_std_dev"
+    t.decimal  "average_popularity"
   end
 
   create_table "tickets", :force => true do |t|

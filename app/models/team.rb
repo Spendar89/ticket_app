@@ -53,9 +53,14 @@ class Team < ActiveRecord::Base
 
   def set_pop_std_dev
     average = self.games.average(:popularity)
+    puts "average: #{average}".yellow
     squared = self.games.pluck(:popularity).collect{ |pop| (pop - average)**2 }
-    std_dev = Math.sqrt(squared.inject(0){|x, y| x + y }/self.games.length).to_i unless self.games.length < 1
-    self.update_attributes(:average_popularity => average, :pop_std_dev => std_dev)
+    puts "squared-sum: #{squared.inject(0){|x, y| x + y }}".yellow
+    std_dev = Math.sqrt(squared.inject(0){|x, y| x + y }/self.games.length).to_f unless self.games.length < 1
+    puts "std_dev: #{std_dev}".yellow
+    self.update_attribute(:average_popularity, average)
+    self.update_attribute(:pop_std_dev, std_dev)
+    puts "updated std_dev and average_popularity".green
   end
 
   def best_game
