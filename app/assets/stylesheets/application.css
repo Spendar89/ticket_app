@@ -58,7 +58,7 @@
 	padding: 10px;
 	border-radius: 4px;
 	background: #D0D6CE url('ricepaper.png');
-	max-width: 250px;
+	width: 400px;
 }
 
 .seat_view_div{
@@ -116,10 +116,10 @@ body{
 }
 
 .search_form_div{
-	box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);
 	padding: 10px;
-	background: url('debut_dark.png');
-	color: white;
+	background: transparent;
+	color: #202020;
+	margin-top: -75px;
 }
 
 .results{

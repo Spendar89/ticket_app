@@ -8,6 +8,8 @@
 
 .navbar-inner {
 border-radius: 0px;
+background: url('dust.png');
+border: none;
 }
 
 #brand_text{
@@ -19,4 +21,19 @@ border-radius: 0px;
 
 ul.game_tickets{
 	width: 20%;
+}
+
+.badge-success{
+	background-color: #76996B;
+	color: #E7E7E7;
+}
+
+.badge-important{
+	background-color: #E66360;
+	color: #E7E7E7;
+}
+
+.badge-warning{
+	background-color: #CDDE7D;
+	color: #E7E7E7;
 }

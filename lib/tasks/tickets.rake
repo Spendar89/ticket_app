@@ -1,6 +1,15 @@
 namespace :teams do
   task :set => :environment do
-    nba_teams = ["Los Angeles Lakers", "Golden State Warriors", "New York Knicks"]
+    nba_teams = ["Atlanta Hawks", "Boston Celtics", "Charlotte Bobcats", 
+                "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", 
+                "Denver Nuggets", "Detroit Pistons", "Golden State Warriors", 
+                "Houston Rockets", "Indiana Pacers", "Los Angeles Clippers", 
+                "Los Angeles Lakers", "Memphis Grizzlies", "Miami Heat", 
+                "Milwaukee Bucks", "Minnesota Timberwolves", "Brooklyn Nets", 
+                "New Orleans Hornets", "New York Knicks", "Oklahoma City Thunder", 
+                "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns", 
+                "Portland Trail Blazers", "Sacramento Kings", "San Antonio Spurs", 
+                "Toronto Raptors", "Utah Jazz", "Washington Wizards"] 
     nba_teams.each do |team_name|
       team = Team.new(:name => team_name)
       team.url = team.get_url

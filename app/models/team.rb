@@ -2,6 +2,7 @@ class Team < ActiveRecord::Base
   attr_accessible :get_stubhub_id, :name, :arena_image, :games, :url, :venue_name, :venue_address, :division, :last_5, :conference, :record, :average_popularity, :pop_std_dev
   has_many :games, :inverse_of => :team
   has_many :sections
+  has_many :stars
   validates :url, :presence => true, :uniqueness => true
   
   def make_games
@@ -91,6 +92,7 @@ class Team < ActiveRecord::Base
   end
 
   def get_sections
+    puts "setting sections for #{self[:name]}".blue
     tickets = []
     self.games.find_each do |game|
       tickets << TicketHelper::Tickets.new(self.name, game, 1, 5000).all_available

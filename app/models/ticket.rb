@@ -6,7 +6,7 @@ class Ticket < ActiveRecord::Base
   validates :url, :section_id, :presence => true
 
   def z_score
-    if !self.price.nil? && !self.section[:average_price].nil? && self.section[:std_dev] > 0
+    if !self[:price].nil? && !self.section[:average_price].nil? && self.section[:std_dev] > 0
       row = converted_row(self[:row]) * 2
       section = self.section
       price_difference = (self.price.to_f + row) - section[:average_price]

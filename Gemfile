@@ -31,6 +31,7 @@ gem 'whenever', :require => false
 gem 'activerecord-import'
 gem 'colorize'
 gem 'lazy_high_charts'
+gem 'thin'
 
 
 # To use ActiveModel has_secure_password
