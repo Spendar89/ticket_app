@@ -9,13 +9,11 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require jquery.ui.all
+ *= require jquery.ui.slider
+ *= require jquery.ui.datepicker
  *= require_tree .
  */
 
-*{
-    font-family: sans-serif;
-}
 .ui-slider{
     width: 100%;
 }
@@ -46,9 +44,6 @@
   font-size: 16pt;
 }
 
-.tickets{
-  margin-top: -10px; 
-}
 
 .game_tickets{
 	background-size:  100% 100%;
@@ -58,7 +53,7 @@
 	padding: 10px;
 	border-radius: 4px;
 	background: #D0D6CE url('ricepaper.png');
-	width: 400px;
+	margin-left: 0px;
 }
 
 .seat_view_div{
@@ -66,20 +61,15 @@
 }
 
 .date{
-  font-size: 25px;
   text-align: center;
   font-weight: bold;
 }
 
-
-.inner{
-	background: rgba(255, 255, 255, 0.9);
-	border-radius: 10px;
-}
-
 body{
 	background: url('background.jpg');
-	background-size: 105%;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	min-height: 1000px;
 }
 
 
@@ -116,15 +106,83 @@ body{
 }
 
 .search_form_div{
-	padding: 10px;
 	background: transparent;
 	color: #202020;
-	margin-top: -75px;
 }
 
-.results{
-  margin-top: 25px;
+.results_header{
+ 	background: rgba(255, 255, 255, 0.9);
+	box-shadow: 0px 0px 6px rgba(50, 50, 50, 1);
+	padding: 20px;
+	margin-bottom: 3%;
 }
 
+.results_refine{
+	background: rgba(255, 255, 255, 0.9);
+	box-shadow: 0px 0px 6px rgba(50, 50, 50, 1);
+	margin-bottom: 3%;
+}
 
+.results_refine form{
+	margin-top: 1%;
+}
 
+.results_tickets{
+}
+
+.team_info{
+	background: rgba(255, 255, 255, 0.9);
+	box-shadow: 0px 0px 6px rgba(50, 50, 50, 1);
+}
+
+.team_header{
+	height: 102%;
+	background: rgba(255, 255, 255, 0.9);
+	box-shadow: 0px 0px 6px rgba(50, 50, 50, 1);
+	text-align: center;
+	padding-top: 1%;
+}
+
+.team_header img{
+	margin-bottom: 1%;
+}
+
+.next_button{
+	margin-top: 50%;
+	border: none;
+	background: url('ticket_icon/next_arrow.png');
+	background-size: 70% 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.previous_button{
+	margin-top: 50%;
+	border: none;
+	background: url('ticket_icon/previous_arrow.png');
+	background-size: 70% 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#new_team_loader_div{	
+	position: absolute;
+	background: rgba(1, 1, 1, 0.7);
+	display: none;
+	text-align: center;
+	margin-left: 0px;
+	z-index: 1000;
+	height: 100%;
+	width: 100%;
+}
+
+.update_tickets_loader_div{
+	position: absolute;
+	margin-top: -5%;
+	background: rgba(1, 1, 1, 0.7);
+	display: none;
+	text-align: center;
+	z-index: 1000;
+	width: 80%;
+	height: 100%;
+}

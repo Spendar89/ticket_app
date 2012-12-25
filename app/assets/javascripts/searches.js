@@ -1,6 +1,33 @@
-$(document).ajaxSuccess(function(){
+var flipper = function(){
+	$('.flip_button').click(function(e){
+		e.preventDefault();
+		$(this).parents('.ticket_partial_div').css('overflow', 'visible');
+		$(this).parents('.flip-container').toggleClass('flip-container-clicked');		
+	});
+}
+
+var seatView = function(){
+	$('.popover-with-html').on('click', function(e) {e.preventDefault(); return true;});
+	$('.popover-with-html').popover({ html : true });
+}
+
+var colorBorders = function(){
+	$('.green').css('border', '4pt solid #76996B');
+	$('.yellow').css('border', '4pt solid #CDDE7D');
+	$('.red').css('border', '4pt solid #E66360');
+}
+
+$(document).ready(function(){
+		
+	$(".update_team_button" ).click(function(){
+		$('#new_team_loader_div').fadeIn('slow');
+		$('#new_team_loader_div').height($(document).height());
+		
+	})
+	
 	//calendar 
     $(".datepicker").datepicker({dateFormat: "m-d-yy"} );
+	//ui_slider
     $(".slider").slider({
             range: true,
             min: 10,
@@ -12,28 +39,26 @@ $(document).ajaxSuccess(function(){
                 $('#price_min').val(ui.values[0]);
                 $('#price_max').val(ui.values[1]);
             }
-   });
-
+   });	
+	
 	//price-range slider
 	$( "#amount_min" ).html( "$" + $( ".slider" ).slider( "values", 0 ));
 	$( "#amount_max" ).html( "$" + $( ".slider" ).slider( "values", 1 ));
 
-	//ticket border color-setter
-	$('.green').css('border', '4pt solid #76996B');
-	$('.yellow').css('border', '4pt solid #CDDE7D');
-	$('.red').css('border', '4pt solid #E66360');
+	colorBorders();
+	flipper();
+	seatView();
+});
 
-	//loading bar
-  $('.bar').ajaxStart(function(){
-    $(this).css('width', '0px');  
-    $('.progress').fadeIn();
-    $(this).animate({width: '+=100%'}, 9000);
-  }).ajaxStop(function(){
-    $(this).stop();
-    $(this).animate({width: '+=100%'}, 100);
-    $('.progress').fadeOut();
-  });
+$(document).ajaxSuccess(function(){
+	colorBorders();
+	flipper();
+	seatView();
+	$('.update_tickets_loader_div').fadeOut('fast');	
+});
 
+$(document).ajaxStart(function(){
+	$('.update_tickets_loader_div').fadeIn('slow');
 });
 
 

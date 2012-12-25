@@ -104,6 +104,39 @@ class Team < ActiveRecord::Base
     end
   end
   
+  def date_range?(game, date_start, date_end)
+    converted_game_date = converted_date(game[:date])
+    true if  converted_game_date >= converted_date(date_start) &&  converted_game_date <= converted_date(date_end)
+  end
+  
+  def converted_date(date)
+    Date.strptime(date, "%m-%d-%Y")  
+  end
+  
+  def filtered_games(date_start, date_end)
+    games = []
+    total_tickets = 0
+    self.games.find_each do |game| 
+      games << game if date_range?(game, date_start, date_end)
+      total_tickets += game.tickets.count 
+    end
+    {:games => games, :total_tickets => total_tickets}
+  end
+  
+  def price_chart(price_data, rating_data)
+    LazyHighCharts::HighChart.new('graph') do |f|
+        f.chart!(:backgroundColor => 'transparent', :spacingRight => 40)
+        f.title(:style=>{:color => 'transparent'})
+        f.credits!({:enabled => false})
+        f.options[:legend][:enabled] = false
+        f.series(:name => 'average ticket price', :type => 'line', :data=> price_data, :xAxis => 1, :yAxis => 0, :line => {:lineWidth => 8, :color => "black"})
+        f.series(:name => 'game score', :type => 'line', :data => rating_data, :xAxis => 1, :yAxis => 1, :line => {:lineWidth => 8, :color => "orange"})
+        f.xAxis!([{:labels => {:enabled => false }}, {:labels => {:enabled => false }}])
+        f.yAxis!([{:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => false}}, 
+                  {:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => false}}])
+    end
+  end
+  
 
   
 

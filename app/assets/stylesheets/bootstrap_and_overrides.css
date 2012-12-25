@@ -7,21 +7,18 @@
   */
 
 .navbar-inner {
-border-radius: 0px;
-background: url('dust.png');
-border: none;
+	padding: 5px;
+	background: #777;
+	border: 2pt solid #494949;
+	display: none;
 }
 
 #brand_text{
 	font-weight: bold;
-	font-size: 50px;
-	color: #32547D;
-	font-family: 'Sonsie One', cursive;
+	font-size: 40px;
+	color: #F3EDFF;
 }
 
-ul.game_tickets{
-	width: 20%;
-}
 
 .badge-success{
 	background-color: #76996B;
@@ -36,4 +33,16 @@ ul.game_tickets{
 .badge-warning{
 	background-color: #CDDE7D;
 	color: #E7E7E7;
+}
+
+h1{
+	color: #666464;
+	font-family: 'Bowlby One SC', cursive;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.1);;
+	padding: 10px;
+	margin: 0px;
+	
 }

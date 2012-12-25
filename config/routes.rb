@@ -6,6 +6,7 @@ TicketSearch::Application.routes.draw do
   end
   resources :searches, :only => [:new, :show, :update]
   get '/searches', :to => 'searches#show'
+  match "/tickets/next", :to => 'tickets#next'
 
 
 

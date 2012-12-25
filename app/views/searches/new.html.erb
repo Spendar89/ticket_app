@@ -1,13 +1,18 @@
 <div class="new_search">
-<div class="row-fluid">
-  <div class="span9 offset3"><%= form_for @search, :method => 'get', :remote => true, :html => {:class => "form-search"} do |f| %>
-<div class="control-group">
-	<div class="controls">
-	<%= f.text_field :team, :placeholder => "Enter a Team Name to Begin", :class => "input-xxlarge search-query", :style => "height: 50px; font-size: 30px; line-height: 36px;" %>
+	<div class="row-fluid">
+		<div class="new_search_div">
+			<div class="span10 offset2">
+			<%= form_for @search, :method => 'get', :html => {:class => "form-search"} do |f| %>
+				<div class="span9">
+					<%= f.text_field :team, :placeholder => "Enter a Team Name to Begin", :class => "span12 search-query", :style => "height: 70px; font-size: 40px; line-height: 50px; margin-top: 20%;" %>
+					<%= f.submit "Find Tickets!", :class => "btn-large btn-inverse update_team_button", :style => "font-size: 30px; padding: 20px; margin-top:5%" %>
+				<% end %>
+				</div>
+			</div>		
+		</div>
+		<div id="ajax_loader_div" class="span5 offset3" style="text-align: center; display: none; margin-top: -10%;">
+			<h1 style="color: #3E3E3E; font-size: 50px; margin-bottom: 10%; background: transparent">Finding Tickets...</h1>
+			<%= image_tag "ajax-loader.gif" %>
+		</div>
 	</div>
 </div>
-	<%= f.submit "Find Tickets!", :class => 'btn btn-inverse', :style => "float: left;" %>
-<% end %></div>
-</div>
-</div>
-

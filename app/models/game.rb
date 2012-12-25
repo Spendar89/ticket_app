@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  attr_accessible :popularity, :average_price, :date, :opponent, :stubhub_id, :team_id, :game_hash, :other_games, :relative_popularity, :relative_price, :popularity_multiplier
+  attr_accessible :popularity, :average_price, :date, :opponent, :stubhub_id, :team_id, :other_games, :relative_popularity
   belongs_to :team, :inverse_of => :games
   has_many :tickets
   validates :stubhub_id, :format => { :with => /^\d{7}$/}, :uniqueness => true
@@ -20,12 +20,8 @@ class Game < ActiveRecord::Base
       self.save
     end
 
-    def best_ticket(price_min, price_max)
-      TicketHelper::Tickets.new(self.team.name, self, price_min, price_max).best_ticket
-    end
-
     def determine_relatives
-      self.update_attributes(:relative_popularity => relative_popularity)
+      self.update_attributes(:relative_popularity => relative_popularity, :average_price => self.tickets.average(:price))
     end
     
 
@@ -85,20 +81,32 @@ class Game < ActiveRecord::Base
       self.tickets.each do |ticket|
         tickets_array.merge!(ticket[:id] => ticket.seat_value.to_f) unless ticket.seat_value.to_s.to_i == 0 || ticket[:price] > price_max || ticket[:price] < price_min
       end
-      tickets_array.sort_by{|key, value| value}[-1]
+      sorted_tickets = tickets_array.sort_by{|key, value| value}
+      if sorted_tickets.length >= 10
+        sorted_tickets = sorted_tickets[-10..-1]
+      else
+        sorted_tickets = sorted_tickets[0..-1]
+      end
+      begin
+        sorted_tickets.reverse
+        rescue Exception => exc
+      end
+      
     end
 
     def destroy_outliers
       self.tickets.find_each{|ticket| ticket.destroy_if_outlier }
     end
     
-    def view_game_data(price_min, price_max)
-      game_info = {}
-      best_ticket_hash = best_ticket(price_min, price_max)
-      best_ticket = self.tickets.find(best_ticket_hash[0])   
-      {:best_ticket => best_ticket, :average_ticket_price => self.tickets.average(:price).to_i, 
-      :seat_rating => best_ticket_hash[1].to_i, :game_rating => self[:relative_popularity], 
-      :overall_rating => ((best_ticket_hash[1]/2) + (self[:relative_popularity]/2)).to_i }     
+    def view_game_data(price_min, price_max, number)
+        number = number - 1
+        game_info = {}
+        best_ticket_hash = best_ticket(price_min, price_max)[number]
+        return false if best_ticket_hash.nil?  
+        best_ticket = self.tickets.find(best_ticket_hash[0])
+        {:best_ticket => best_ticket, :average_ticket_price => self.tickets.average(:price).to_i, 
+        :seat_rating => best_ticket_hash[1].to_i, :game_rating => self[:relative_popularity], 
+        :overall_rating => ((best_ticket_hash[1]/2) + (self[:relative_popularity]/2)).to_i }
     end
 end
 

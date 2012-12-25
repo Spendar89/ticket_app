@@ -32,6 +32,7 @@ gem 'activerecord-import'
 gem 'colorize'
 gem 'lazy_high_charts'
 gem 'thin'
+gem 'ruby-prof'
 
 
 # To use ActiveModel has_secure_password

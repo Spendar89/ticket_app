@@ -7,20 +7,21 @@ module SearchesHelper
   end
   
   def check_overall_rating(overall_rating)
-    return ["game_tickets green span3", "badge badge-success"] if overall_rating >= 65 
-    return ["game_tickets yellow span3", "badge badge-warning"] if overall_rating < 65 && overall_rating >= 50
-    return ["game_tickets red span3", "badge badge-warning"] if overall_rating < 50
+    return ["game_tickets green span12", "badge badge-success"] if overall_rating >= 65 
+    return ["game_tickets yellow span12", "badge badge-warning"] if overall_rating < 65 && overall_rating >= 50
+    return ["game_tickets red span12", "badge badge-important"] if overall_rating < 50
   end
   
   def ticket_summary(game_data)
     ticket = game_data[:best_ticket]
     team = ticket.section.team
     game = ticket.game
+    game_tickets = game.tickets
     date = Date.strptime(game[:date], "%m-%d-%Y").strftime("%A, %B %d")
     day_of_week = date.split(',')[0]
-    average_game_price = game.tickets.average(:price)
-    min_game_price = game.tickets.minimum(:price)
-    number_tickets = game.tickets.count
+    average_game_price = game_tickets.average(:price)
+    min_game_price = game_tickets.minimum(:price)
+    number_tickets = game_tickets.count
     average_section_price = ticket.section.tickets.average(:price)
     part_1 = "The #{team.record} #{team[:name]} take on the #{game[:opponent]} at 
             #{game[:venue]} on #{date}.  
@@ -66,6 +67,6 @@ module SearchesHelper
       part_6 = ""
       part_7 = ""
     end
-    return part_1 + part_2 + part_3 + part_4  + part_5 + part_6 + part_7
+    return [part_1 + part_2 ,  part_3 + part_4  + part_5 , part_6 + part_7]
   end
 end
