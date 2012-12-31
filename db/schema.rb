@@ -11,24 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121220195901) do
+ActiveRecord::Schema.define(:version => 20121229183001) do
 
   create_table "games", :force => true do |t|
     t.integer  "team_id"
     t.string   "opponent"
-    t.string   "stubhub_id"
-    t.string   "date"
     t.integer  "average_price"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
-    t.boolean  "home"
-    t.string   "venue"
-    t.integer  "latitude"
-    t.integer  "longitude"
-    t.integer  "popularity"
-    t.integer  "relative_popularity"
-    t.integer  "relative_price"
-    t.decimal  "popularity_multiplier"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "game_rating"
+    t.date     "date"
   end
 
   create_table "searches", :force => true do |t|
@@ -46,6 +38,8 @@ ActiveRecord::Schema.define(:version => 20121220195901) do
     t.string   "seat_view_url"
   end
 
+  add_index "sections", ["name"], :name => "index_sections_on_name"
+
   create_table "stars", :force => true do |t|
     t.string   "name"
     t.decimal  "rating"
@@ -56,28 +50,18 @@ ActiveRecord::Schema.define(:version => 20121220195901) do
 
   create_table "teams", :force => true do |t|
     t.string   "name"
-    t.integer  "best_game_id"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
-    t.string   "arena_image"
-    t.integer  "home_average_price"
-    t.integer  "away_average_price"
     t.integer  "home_average_popularity"
-    t.integer  "home_standard_deviation"
-    t.integer  "home_price_standard_deviation"
     t.integer  "away_price_standard_deviation"
     t.string   "url"
-    t.text     "section_averages"
     t.text     "section_standard_deviations"
-    t.text     "seat_views"
     t.string   "conference"
     t.string   "record"
     t.string   "venue_name"
     t.string   "venue_address"
     t.string   "division"
     t.string   "last_5"
-    t.decimal  "pop_std_dev"
-    t.decimal  "average_popularity"
   end
 
   create_table "tickets", :force => true do |t|
@@ -90,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20121220195901) do
     t.integer  "section_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.decimal  "z_score"
   end
 
 end

@@ -1,3 +1,4 @@
+require 'stub_hub'
 namespace :teams do
   task :set => :environment do
     nba_teams = ["Atlanta Hawks", "Boston Celtics", "Charlotte Bobcats", 
@@ -20,38 +21,111 @@ namespace :teams do
 end
 
 namespace :games do
-  task :refresh => :environment do
-    Team.all.each do |team|
-      puts "finding games for #{team.name}...".blue
-      team.make_games.each{ |game_info| team.games.new.set_attributes(game_info)} 
-      team.games.find_each{ |game| game.destroy if Date.strptime(game[:date], '%m-%d-%Y') < Date.current }
-      team.set_pop_std_dev
-      puts "determining_relatives....".yellow
-      team.games.each{ |game| game.determine_relatives }
-    end
+  task :set => :environment do   
+    teams = Team.all
+    Parallel.each(teams, :in_threads => 30) do |team|
+      ActiveRecord::Base.connection_pool.with_connection do
+        begin
+          puts "finding games for #{team.name}...".yellow
+          team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
+          team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
+          puts "games added #{team.name}...".green
+        rescue Exception => e
+          puts "Error: #{e} trying again...".red
+          team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
+          team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
+          puts "success".green     
+        end
+      end 
+    end   
   end
 end
 
 namespace :sections do
   task :set => :environment do
-    Team.find_each{|team| team.get_sections}
+    teams = Team.all
+    Parallel.each(teams, :in_threads => 20) do |team|
+      ActiveRecord::Base.connection_pool.with_connection do
+        team.get_sections
+      end
+    end    
   end
+  
+  task :refresh => :environment do
+   sections = Section.all
+   Parallel.each(sections, :in_threads => 50) do |section|
+     ActiveRecord::Base.connection_pool.with_connection do
+       puts "updating section...".yellow
+       section.update_std_dev
+       puts "section updated".green
+     end
+   end
+ end
+end
+  
+namespace :redis do
+  task :set_teams => :environment do
+    begin
+      teams = Team.all
+      Parallel.each(teams, :in_processes => 10) do |team| 
+        ActiveRecord::Base.connection.reconnect!
+        team_stats = team.get_team_stats
+        $redis.hmset "team:#{team[:id]}", 
+          :name, team[:name], :url, team[:url], :conference, team[:conference], 
+          :record, team_stats[:record], :venue_name, team[:venue_name], 
+          :venue_address, team[:venue_address], :division, team[:division], 
+          :last_5, team_stats[:last_5]
+        $redis.sadd "teams", team[:id]  
+      end
+      rescue Timeout::Error => e
+        puts "Timeout Error: #{e}".red
+    end
+  end
+    
+  task :set_games => :environment do
+    games = Game.all
+    Parallel.each(games, :in_processes => 10) do |game|
+      $redis.del "games_for_team:#{game[:team_id]}" 
+      $redis.del "games_by_date:#{game[:team_id]}"
+      ActiveRecord::Base.connection.reconnect!
+      game_date = game[:date]
+      id = game[:id]
+      $redis.hmset "game:#{id}", 
+        :date, game_date, :opponent, game[:opponent], 
+        :team_id, game[:team_id]
+      $redis.sadd "games_for_team:#{game[:team_id]}", id
+      $redis.zadd "games_for_team:#{game[:team_id]}:by_date", game_date.to_datetime.to_i, id
+      puts "game added for #{game[:id]}".green
+    end
+     
+  end
+  
+  task :set_sections => :environment do
+    sections = Section.all
+      Parallel.each(sections, :in_processes => 10) do |section|
+        ActiveRecord::Base.connection.reconnect!
+        $redis.hmset "section:#{section[:id]}", :name, "#{section[:name]}", 
+          :team_id, section[:team_id], :average_price, "#{section[:average_price]}", :std_dev, "#{section[:std_dev]}"
+        $redis.sadd "sections_for_team:#{section[:team_id]}", section[:id]
+        $redis.zadd "sections_for_team_by_name:#{section[:team_id]}", section[:id], section[:name]
+    end
+  end
+  
+  task :update_tickets => :environment do
+    games = Game.all
+    Parallel.each(games, :in_threads=> 10) do |game|
+      game_id = game[:id]
+      team_id = game[:team_id]
+      $redis.del "tickets_for_game:#{game_id}"
+      $redis.del "tickets_for_game_by_seat_value:#{game_id}"
+      $redis.del "tickets_for_game_by_price:#{game_id}"
+      StubHub::TicketFinder.redis_tickets(team_id, game_id)
+      $redis.zadd "games:average_price", Game.average_price(game_id), game_id
+    end
+  end
+  
 end
 
-namespace :tickets do
-  task :refresh => :environment do
-    Game.all.each do |game|
-      game.refresh_tickets
-      game.destroy_outliers
-      game.destroy if game.tickets.length < 100 
-    end
-    Team.all.each do |team| 
-      team.sections.each do |section| 
-        section.update_std_dev
-      end
-    end
-  end
-end
 
 namespace :app do
   task :restart => :environment do
@@ -60,6 +134,7 @@ namespace :app do
     Rake::Task['games:refresh'].invoke
     Rake::Task['sections:set'].invoke
     Rake::Task['tickets:refresh'].invoke
-    Rake::Task['tickets:refresh'].invoke
+    Rake::Task['sections:refresh'].invoke
+    Rake::Task['tickets:z_scores'].invoke
   end
 end

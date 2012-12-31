@@ -1,6 +1,6 @@
 <div id="price_chart" class="span12">
-	<div id="line_chart_div" class="span12" style="height: 375px; overflow:hidden; position: relative;">
-		<div id="line_chart" class="span12" style="position: relative; top: -10%; height: 420px;" >
+	<div id="line_chart_div" class="span12" style="height: 375px; overflow-x:scroll; overflow-y: hidden; position: relative;">
+		<div id="line_chart" style="position: relative; top: -10%; height: 420px; width: 300%;" >
 			<%= high_chart("line_chart", @line) %>
 		</div>
 	</div>

@@ -1,22 +1,23 @@
 class Team < ActiveRecord::Base
-  attr_accessible :get_stubhub_id, :name, :arena_image, :games, :url, :venue_name, :venue_address, :division, :last_5, :conference, :record, :average_popularity, :pop_std_dev
-  has_many :games, :inverse_of => :team
+  attr_accessible :get_stubhub_id, :name, :games, :url, :venue_name, :venue_address, :division, :last_5, :conference, :record
   has_many :sections
   has_many :stars
-  validates :url, :presence => true, :uniqueness => true
+  has_many :games, :inverse_of => :team
+  validates :url, :presence => true, :uniqueness => true, :on => :create
   
   def make_games
     array = []
-    SeatGeek::Connection.events({:q => self.name, :per_page => 15})['events'].each do |game_info|
+    SeatGeek::Connection.events({:q => self[:name], :per_page => 75})['events'].each do |game_info|
       game_info["performers"].each do |team|
-           array << game_info  if team["name"] == self.name && team["home_team"] == true
+           array << game_info  if team["name"] == self[:name] && team["home_team"] == true
       end
     end
     array
   end
+  
 
   def get_url
-    TicketHelper::Tickets.team_url(self.name)
+    StubHub::TicketFinder.team_url(self.name)
   end
 
   def set_attributes
@@ -52,29 +53,6 @@ class Team < ActiveRecord::Base
     get_team_stats[:record]
   end
 
-  def set_pop_std_dev
-    average = self.games.average(:popularity)
-    puts "average: #{average}".yellow
-    squared = self.games.pluck(:popularity).collect{ |pop| (pop - average)**2 }
-    puts "squared-sum: #{squared.inject(0){|x, y| x + y }}".yellow
-    std_dev = Math.sqrt(squared.inject(0){|x, y| x + y }/self.games.length).to_f unless self.games.length < 1
-    puts "std_dev: #{std_dev}".yellow
-    self.update_attribute(:average_popularity, average)
-    self.update_attribute(:pop_std_dev, std_dev)
-    puts "updated std_dev and average_popularity".green
-  end
-
-  def best_game
-    games ={}
-    array = []
-    games.each do |game|
-      games.merge!( game => game.affordability_index )
-    end
-    games.each_pair{|key, value| array << value}
-    games.key(array.sort[-1])
-  end
-
-
   def get_seat_views
     self.sections.all.each do |section|
       update_attributes(:seat_view_url => image_url(self[:venue_name], section[:name].scan(/\d{1,3}/)[-1]))
@@ -92,21 +70,22 @@ class Team < ActiveRecord::Base
   end
 
   def get_sections
-    puts "setting sections for #{self[:name]}".blue
-    tickets = []
+    puts "setting sections for #{self[:name]}...".blue
+    tickets_array = []
     self.games.find_each do |game|
-      tickets << TicketHelper::Tickets.new(self.name, game, 1, 5000).all_available
+      tickets_array << StubHub::TicketFinder.new(self[:name], game, 1, 5000).all_available
     end
-    tickets.each do |all_tickets|
+    tickets_array.each do |all_tickets|
       all_tickets.each do |ticket|
         self.sections.create(:name => ticket[0][:section])
+        puts "section created".green
       end
     end
   end
   
   def date_range?(game, date_start, date_end)
-    converted_game_date = converted_date(game[:date])
-    true if  converted_game_date >= converted_date(date_start) &&  converted_game_date <= converted_date(date_end)
+    game_date = game.date
+    true if  game_date >= converted_date(date_start) &&  game_date <= converted_date(date_end)
   end
   
   def converted_date(date)
@@ -114,18 +93,18 @@ class Team < ActiveRecord::Base
   end
   
   def filtered_games(date_start, date_end)
-    games = []
     total_tickets = 0
+    filtered = []
     self.games.find_each do |game| 
-      games << game if date_range?(game, date_start, date_end)
-      total_tickets += game.tickets.count 
+      filtered << game if date_range?(game, date_start, date_end)
+      total_tickets += game.number_of_tickets
     end
-    {:games => games, :total_tickets => total_tickets}
+    {:games => filtered, :total_tickets => total_tickets}
   end
   
   def price_chart(price_data, rating_data)
     LazyHighCharts::HighChart.new('graph') do |f|
-        f.chart!(:backgroundColor => 'transparent', :spacingRight => 40)
+        f.chart!(:backgroundColor => 'transparent')
         f.title(:style=>{:color => 'transparent'})
         f.credits!({:enabled => false})
         f.options[:legend][:enabled] = false

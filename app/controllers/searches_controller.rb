@@ -1,6 +1,4 @@
 class SearchesController < ApplicationController
-  include ActionView::Helpers::JavaScriptHelper
-  
   def new
     @search = Search.new
   end
@@ -10,16 +8,20 @@ class SearchesController < ApplicationController
     @team = Team.find_by_name(params[:search][:team])
     @price_min = 1
     @total_tickets = 0
-    @team.games.find_each { |game| @total_tickets += game.tickets.length }
-    @price_max = 5000
     @games = @team.games
+    @price_max = 5000  
     @number = 1
     @price_data = []
     @rating_data = []
     @scatter_data = []
-    @games.each do |game| 
-      @price_data << {y: game[:average_price].to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
-      @rating_data << {y: game[:relative_popularity].to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
+    @games.each do |game|
+      total_tickets = game.number_of_tickets
+      if total_tickets < 100 
+        game.destroy
+      else      
+        @price_data << {y: game.average_price.to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
+        @rating_data << {y: game[:game_rating].to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
+      end
     end
     @line = @team.price_chart(@price_data, @rating_data)
     respond_to do |format|

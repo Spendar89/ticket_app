@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.8'
+gem 'rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+gem 'pg'
+gem 'redis'
 gem 'seatgeek'
 gem 'nokogiri'
-
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -26,13 +26,10 @@ end
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
 gem 'twitter-bootstrap-rails'
-gem 'typhoeus'
-gem 'whenever', :require => false
-gem 'activerecord-import'
 gem 'colorize'
 gem 'lazy_high_charts'
 gem 'thin'
-gem 'ruby-prof'
+gem 'parallel'
 
 
 # To use ActiveModel has_secure_password

@@ -16,7 +16,7 @@
 			}
 
 		.flip-container, .front, .back {
-			min-height: 680px;
+			height: 680px;
 		}
 
 		.flipper {

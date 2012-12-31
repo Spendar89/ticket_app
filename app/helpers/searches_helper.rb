@@ -12,19 +12,17 @@ module SearchesHelper
     return ["game_tickets red span12", "badge badge-important"] if overall_rating < 50
   end
   
-  def ticket_summary(game_data)
+  def ticket_summary(game, game_data, section)
     ticket = game_data[:best_ticket]
-    team = ticket.section.team
-    game = ticket.game
-    game_tickets = game.tickets
-    date = Date.strptime(game[:date], "%m-%d-%Y").strftime("%A, %B %d")
+    team = game.team
+    date = game[:date].strftime("%A, %B %d")
     day_of_week = date.split(',')[0]
-    average_game_price = game_tickets.average(:price)
-    min_game_price = game_tickets.minimum(:price)
-    number_tickets = game_tickets.count
-    average_section_price = ticket.section.tickets.average(:price)
+    average_game_price = game.average_price
+    min_game_price = 10
+    number_tickets = game.number_of_tickets
+    average_section_price = section[:average_price]
     part_1 = "The #{team.record} #{team[:name]} take on the #{game[:opponent]} at 
-            #{game[:venue]} on #{date}.  
+            #{team[:venue_name]} on #{date}.  
             The #{team[:name].split(' ')[-1]} are #{team.last_5} over their last five games "
     if team.last_5[0].to_i >= 3 
       part_2 = "and they look to continue their winning ways against the #{game[:opponent].split(' ')[-1]}.  " 
@@ -35,15 +33,17 @@ module SearchesHelper
               yet tickets can be found for as low as $#{min_game_price}. This ticket was reccomended 
               for a number of reasons.  On average, #{team[:name].split(' ')[-1]} tickets in this section cost 
               $#{average_section_price.to_i}.  "
-    if average_section_price > ticket[:price]
-      part_4 = "That's #{(average_section_price/ticket[:price]).round(1)} times
+    if average_section_price > ticket['price'].to_i
+      part_4 = "That's #{(average_section_price/ticket['price'].to_i).round(1)} times
                 more expensive than this ticket, "
       if game_data[:seat_rating] >= 66
         part_5 = "which makes it an especially great deal.  "
       elsif game_data[:seat_rating] >= 50 && game_data[:seat_rating] < 66
         part_5 = "which makes it a fairly good deal.  "
+      else
+        part_5 = ""
       end   
-      if game[:relative_popularity] < 50
+      if game[:game_rating] < 50
           part_6 = "It is worth noting that this game is relatively less popular than other games on the schedule, "
           if ["Friday", "Saturday", "Sunday"].include?(day_of_week)
             part_7 = "despite it being played on a weekend, so ticket prices are lower across the board."
@@ -60,7 +60,7 @@ module SearchesHelper
       end
       
     else
-       part_4 = "That is #{(average_section_price/ticket[:price]).round(1)} times
+       part_4 = "That is #{(average_section_price/ticket['price'].to_i).round(1)} times
                  less expensive than this ticket, but unforunately less expensive tickets are
                  no longer available."
       part_5 = ""

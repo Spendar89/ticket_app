@@ -49,17 +49,3 @@ $(document).ready(function(){
 	flipper();
 	seatView();
 });
-
-$(document).ajaxSuccess(function(){
-	colorBorders();
-	flipper();
-	seatView();
-	$('.update_tickets_loader_div').fadeOut('fast');	
-});
-
-$(document).ajaxStart(function(){
-	$('.update_tickets_loader_div').fadeIn('slow');
-});
-
-
-
