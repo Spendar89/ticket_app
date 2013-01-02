@@ -132,7 +132,7 @@ namespace :redis do
     begin
     start_time = Time.now
     games = Game.all
-    Parallel.each(games, :in_threads=> 15) do |game|
+    Parallel.each(games, :in_threads=> 5) do |game|
       ActiveRecord::Base.connection_pool.with_connection do
         game_id = game[:id]
         team_id = game[:team_id]
