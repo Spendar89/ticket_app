@@ -34,4 +34,6 @@ TicketSearch::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  ENV["REDISCLOUD_URL"] = 'redis://rediscloud:V3m9nbH6BL6c5qwX@redis-15726.us-east-1-4.1.ec2.garantiadata.com:15726'
 end
