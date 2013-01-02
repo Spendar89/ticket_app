@@ -78,7 +78,6 @@ namespace :sections do
 end
   
 namespace :redis do
-  include ActiveRecord::Base
   task :set_teams => :environment do
       teams = Team.all
       Parallel.each(teams, :in_threads => 10) do |team| 
