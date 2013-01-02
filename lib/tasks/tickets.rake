@@ -113,19 +113,19 @@ namespace :redis do
   end
   
   task :set_sections => :environment do
-    begin
-    sections = Section.all
-      Parallel.each(sections, :in_threads => 10) do |section|
-        ActiveRecord::Base.connection_pool.with_connection do
-          $redis.hmset "section:#{section[:id]}", :name, "#{section[:name]}", 
-            :team_id, section[:team_id], :average_price, "#{section[:average_price]}", :std_dev, "#{section[:std_dev]}"
-          $redis.sadd "sections_for_team:#{section[:team_id]}", section[:id]
-          $redis.zadd "sections_for_team_by_name:#{section[:team_id]}", section[:id], section[:name]
+      begin
+      sections = Section.all
+        Parallel.each(sections, :in_threads => 5) do |section|
+          ActiveRecord::Base.connection_pool.with_connection do
+            $redis.hmset "section:#{section[:id]}", :name, "#{section[:name]}", 
+              :team_id, section[:team_id], :average_price, "#{section[:average_price]}", :std_dev, "#{section[:std_dev]}"
+            $redis.sadd "sections_for_team:#{section[:team_id]}", section[:id]
+            $redis.zadd "sections_for_team_by_name:#{section[:team_id]}", section[:id], section[:name]
+          end
         end
-    end
-    rescue Timeout::Error => e
-       puts "Timeout Error: #{e}".red
-     end
+      rescue Timeout::Error => e
+        puts "Timeout Error: #{e}".red
+      end
   end
   
   task :update_tickets => :environment do
