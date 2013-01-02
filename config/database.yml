@@ -7,7 +7,7 @@ development:
   adapter: postgresql
   encoding: unicode
   database: ticket_app
-  pool: 35
+  pool: 19
   username: spendar89
   password:
   allow_concurrency: true
@@ -16,7 +16,7 @@ production:
   adapter: postgresql
   encoding: unicode
   database: ticket_app
-  pool: 35
+  pool: 19
   username: spendar89
   password:
   allow_concurrency: true
@@ -25,7 +25,7 @@ test:
   adapter: postgresql
   encoding: unicode
   database: ticket_app
-  pool: 35
+  pool: 19
   username: spendar89
   password:
   allow_concurrency: true
