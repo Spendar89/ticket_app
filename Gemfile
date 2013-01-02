@@ -23,6 +23,11 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :development do
+  gem 'taps'
+  gem 'sqlite3'
+end
+
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
 gem 'twitter-bootstrap-rails'
@@ -31,7 +36,6 @@ gem 'heroku'
 gem 'lazy_high_charts'
 gem 'thin'
 gem 'parallel'
-gem 'taps'
 
 
 # To use ActiveModel has_secure_password
