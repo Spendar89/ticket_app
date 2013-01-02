@@ -23,11 +23,11 @@ class Game < ActiveRecord::Base
     end
   
     def redis_tickets
-      $redis.smembers "tickets_for_game:#{self[:id]}"
+      $redis.zrange "tickets_for_game_by_price:#{self[:id]}", 0, -1
     end
     
     def self.redis_tickets(game_id)
-      $redis.smembers "tickets_for_game:#{game_id}"
+      $redis.zrange "tickets_for_game_by_price:#{game_id}", 0, -1
     end
     
     def self.number_of_tickets(game_id)

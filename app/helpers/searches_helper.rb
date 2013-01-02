@@ -1,11 +1,4 @@
-module SearchesHelper
-  def seat_view_url(venue, section)
-    url = open("http://api.avf.ms/venue.php?jsoncallback=?key=33970eb4232b8bd273dd548da701abd2&venue=#{URI.escape(venue)}&section=#{section}").read
-    hash = JSON.parse("{#{url.scan(/"image":"\w+-\d+.jpg"/)[0]}}")
-    return "http://aviewfrommyseat.com/wallpaper/#{hash['image']}" if !hash['image'].nil?
-    return false
-  end
-  
+module SearchesHelper    
   def check_overall_rating(overall_rating)
     return ["game_tickets green span12", "badge badge-success"] if overall_rating >= 65 
     return ["game_tickets yellow span12", "badge badge-warning"] if overall_rating < 65 && overall_rating >= 50

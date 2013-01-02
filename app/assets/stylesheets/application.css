@@ -65,14 +65,19 @@
   font-weight: bold;
 }
 
-body{
+#outer{
 	background: url('background.jpg');
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
-	min-height: 1000px;
+	height: 1000px;
+	overflow-y: scroll;
+	position: relative;
 }
 
 
+.popover{
+	z-index: 1;	
+}
 .popover.fade{
   width: 300px;
   height: 280px;
@@ -81,8 +86,7 @@ body{
 .popover-inner{
   width: 300px;
   height: 280px;
-
-
+  
 }
 .popover-content{
   width: 275px;
@@ -185,4 +189,31 @@ body{
 	z-index: 1000;
 	width: 80%;
 	height: 100%;
+}
+
+.flip_button{
+	background: transparent;
+	border: none;
+	width: 50px;
+}
+
+.legend{
+  font-size: 14pt;
+  color: grey;
+  border-radius: 1px;
+  padding-top: 1%;  
+}
+
+.legend_red{
+	margin-top: 10%;
+	width: 20px;
+	background: #DE3F41;
+	height: 10px;
+}
+
+.legend_blue{
+	margin-top: 10%;
+	width: 20px;
+ 	background: #3647CF;
+	height: 10px;
 }

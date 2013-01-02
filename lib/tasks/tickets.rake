@@ -50,22 +50,34 @@ namespace :sections do
       end
     end    
   end
-  
+
   task :refresh => :environment do
-   sections = Section.all
-   Parallel.each(sections, :in_threads => 50) do |section|
-     ActiveRecord::Base.connection_pool.with_connection do
-       puts "updating section...".yellow
-       section.update_std_dev
-       puts "section updated".green
-     end
-   end
- end
+    sections = Section.all
+    Parallel.each(sections, :in_threads => 30) do |section|
+      ActiveRecord::Base.connection_pool.with_connection do
+        puts "updating section...".yellow
+        section.update_std_dev
+        puts "section updated".green
+      end
+    end
+  end
+  task :update_seat_view_urls => :environment do
+    begin
+      Parallel.each(Section.all, :in_threads => 30) do |section|
+        ActiveRecord::Base.connection_pool.with_connection do
+          puts "updating section...".yellow
+          section.update_seat_view_url
+          puts "section updated".green
+        end
+      end
+      rescue Exception => e
+        puts "#{e}".red   
+    end
+  end
 end
   
 namespace :redis do
   task :set_teams => :environment do
-    begin
       teams = Team.all
       Parallel.each(teams, :in_processes => 10) do |team| 
         ActiveRecord::Base.connection.reconnect!
@@ -77,9 +89,6 @@ namespace :redis do
           :last_5, team_stats[:last_5]
         $redis.sadd "teams", team[:id]  
       end
-      rescue Timeout::Error => e
-        puts "Timeout Error: #{e}".red
-    end
   end
     
   task :set_games => :environment do
@@ -95,7 +104,7 @@ namespace :redis do
         :team_id, game[:team_id]
       $redis.sadd "games_for_team:#{game[:team_id]}", id
       $redis.zadd "games_for_team:#{game[:team_id]}:by_date", game_date.to_datetime.to_i, id
-      puts "game added for #{game[:id]}".green
+      puts "game added for #{game[:id]}".green    
     end
      
   end
@@ -112,8 +121,10 @@ namespace :redis do
   end
   
   task :update_tickets => :environment do
+    begin
+    start_time = Time.now
     games = Game.all
-    Parallel.each(games, :in_threads=> 10) do |game|
+    Parallel.each(games, :in_threads=> 30) do |game|
       game_id = game[:id]
       team_id = game[:team_id]
       $redis.del "tickets_for_game:#{game_id}"
@@ -122,19 +133,34 @@ namespace :redis do
       StubHub::TicketFinder.redis_tickets(team_id, game_id)
       $redis.zadd "games:average_price", Game.average_price(game_id), game_id
     end
+    puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green
+    rescue Timeout::Error => e
+      puts "Timeout Error: #{e}".red
+    end
   end
   
 end
 
 
 namespace :app do
-  task :restart => :environment do
+  task :db_restart => :environment do
     Rake::Task['db:reset'].invoke
     Rake::Task['teams:set'].invoke
     Rake::Task['games:refresh'].invoke
     Rake::Task['sections:set'].invoke
-    Rake::Task['tickets:refresh'].invoke
+    Rake::Task['redis:set_teams'].invoke
+    Rake::Task['redis:set_games'].invoke
+    Rake::Task['redis:set_sections'].invoke
+    Rake::Task['redis:update_tickets'].invoke
     Rake::Task['sections:refresh'].invoke
-    Rake::Task['tickets:z_scores'].invoke
+    Rake::Task['sections:update_seat_view_urls'].invoke
+  end
+  
+  task :redis_restart => :environment do
+    $redis.flushdb
+    Rake::Task['redis:set_teams'].invoke
+    Rake::Task['redis:set_games'].invoke
+    Rake::Task['redis:set_sections'].invoke
+    Rake::Task['redis:update_tickets'].invoke
   end
 end

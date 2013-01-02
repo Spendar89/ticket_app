@@ -7,8 +7,16 @@ var flipper = function(){
 }
 
 var seatView = function(){
-	$('.popover-with-html').on('click', function(e) {e.preventDefault(); return true;});
-	$('.popover-with-html').popover({ html : true });
+	$('.seat_view_button').toggle(function(e) {
+		e.preventDefault();
+		parent = $(this).parents(); 
+		parent.siblings(".seat_view_image").fadeIn('fast');
+		},
+		function(e){
+			e.preventDefault();
+			parent = $(this).parents();
+			parent.siblings(".seat_view_image").fadeOut('fast')				
+		});
 }
 
 var colorBorders = function(){

@@ -1,2 +1,3 @@
-$('.popover-with-html').on('click', function(e) {e.preventDefault(); return true;});
-$('.popover-with-html').popover({ html : true });
+$(document).ready(function(){
+	$('#outer').css('background', 'url("/backgrounds/<%= @team[:name].split(' ')[-1] %>_background.jpg")');
+});

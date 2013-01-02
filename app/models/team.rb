@@ -95,22 +95,32 @@ class Team < ActiveRecord::Base
   def filtered_games(date_start, date_end)
     total_tickets = 0
     filtered = []
-    self.games.find_each do |game| 
+    self.games.order("date").each do |game| 
       filtered << game if date_range?(game, date_start, date_end)
       total_tickets += game.number_of_tickets
     end
     {:games => filtered, :total_tickets => total_tickets}
   end
   
-  def price_chart(price_data, rating_data)
+  def price_chart(price_data, rating_data, dates)
     LazyHighCharts::HighChart.new('graph') do |f|
         f.chart!(:backgroundColor => 'transparent')
         f.title(:style=>{:color => 'transparent'})
         f.credits!({:enabled => false})
-        f.options[:legend][:enabled] = false
-        f.series(:name => 'average ticket price', :type => 'line', :data=> price_data, :xAxis => 1, :yAxis => 0, :line => {:lineWidth => 8, :color => "black"})
-        f.series(:name => 'game score', :type => 'line', :data => rating_data, :xAxis => 1, :yAxis => 1, :line => {:lineWidth => 8, :color => "orange"})
-        f.xAxis!([{:labels => {:enabled => false }}, {:labels => {:enabled => false }}])
+        f.legend(:enabled => false, :floating => 'true', :y => -300, :x => 600, :itemStyle => {:fontSize => '20px'}, :layout => 'vertical')
+        
+        f.tooltip!(:formatter => 
+          "function() {
+            if (this.series.name == 'Average Ticket Price'){ 
+              return 'Average Ticket Price: ' + '<b>$' + this.y + '<b>';
+            }
+            else{
+              return 'Game Score: ' + '<b>' + this.y + '<b>';
+            }
+          }".js_code, :style => {:fontSize => '20px'})
+        f.series(:name => 'Average Ticket Price', :type => 'line', :data => price_data, :xAxis => 0, :yAxis => 0, :lineWidth => 4, :lineColor => "#DE3F41")
+        f.series(:name => 'Game Score', :type => 'line', :data => rating_data, :xAxis => 0, :yAxis => 1, :lineWidth => 4, :lineColor => "#3647CF")
+        f.xAxis!([{:labels => {:style => {:fontSize => '20px', :color => "#858585"}, :y => 20, :align => "center"}, :categories => dates, :lineWidth => 0}])
         f.yAxis!([{:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => false}}, 
                   {:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => false}}])
     end

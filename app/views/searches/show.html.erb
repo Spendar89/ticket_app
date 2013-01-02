@@ -1,11 +1,15 @@
+<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" %>
+<%=javascript_tag '$("#outer").css("background-image", "url(' + "'assets/backgrounds/#{@team[:name].split(" ")[-1]}_background.jpg'"')")' %>
+
+<div style="margin-bottom: 8%; margin-top: 1%">
+<%= form_for Search.new, :controller => "searches", :method => 'get', :html => {:class => "form-search span6 offset6"} do |f|%>
+	<%= f.text_field :team , :class => "search-query span10", :placeholder => "Enter Team Name", :style => "height: 40px; font-size: 30px; line-height: 36px"%>
+	<%= f.submit "search", :class => "btn btn-inverse update_team_button", :style => "margin-left: 5%" %>
+<% end %>
+</div>
+
 <div class="inner span10 offset1" style= "padding: 10px;">
 	<div class="span12">
-		<div class="row-fluid">
-			<%= form_for Search.new, :controller => "searches", :method => 'get', :html => {:class => "form-search span6 offset6"} do |f|%>
-				<%= f.text_field :team , :class => "search-query span10", :placeholder => "Enter Team Name", :style => "height: 40px; font-size: 30px; line-height: 36px"%>
-				<%= f.submit "search", :class => "btn btn-inverse update_team_button", :style => "margin-left: 5%" %>
-			<% end %>
-		</div>
 		<div class="row-fluid" style="margin-bottom: 3%">
 			<div class="span4 team_header">
 			 	<%= image_tag "team_logos/#{@team[:name].split(' ')[-1]}.png", :class => "img-rounded", :style=>"height: 300px; width: auto;" %>
@@ -15,8 +19,22 @@
 				<div class = "span12" >
 					<div class = "team_info span12">	
 						<h1 class="span6">Visual Overview</h1>
-						<div style="width: 99%">
-							<%= render :partial => 'team_info', :locals => {:team => @team } %>
+						<div class="span4 offset2 legend">
+							<div class="row">
+								<div class = "span2 offset2">
+									<div class="legend_red" style="color: red"></div>
+								</div>
+								<div class="span8"> Average Game Price</div>
+							</div>
+							<div class="row">
+								<div class = "span2 offset2">
+									<div class="legend_blue" style="color: blue"></div>
+								</div>
+								<div class="span8"> Game Score</div>
+							</div>
+						</div>
+						<div id="team_info_partial" style="width: 99%">
+							<%= render :partial => 'team_info', :locals => {:line => @line } %>
 						</div>
 					</div>			
 				</div>
@@ -26,8 +44,8 @@
 				<h1 class= "span5">Refine Your Search: </h1>
 				<div class="span12" style="margin-left: 0px">
 					    <%= form_for @search, :method => 'put', :remote => true, :html => {:class => "form-inline refine_search_form span12"} do |f| %>
-					      	<%= f.hidden_field :price_min, :id => "price_min" %>
-					      	<%= f.hidden_field :price_max, :id => "price_max" %>
+					      	<%= f.hidden_field :price_min, :id => "price_min", :value => 100 %>
+					      	<%= f.hidden_field :price_max, :id => "price_max", :value => 200 %>
 							<%= f.hidden_field :team, :value => @team[:name] %>
 					<div class="span2">
 						<div class="span5">

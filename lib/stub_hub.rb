@@ -79,20 +79,18 @@ module StubHub
               price = ticket["cp"].to_i
               row = ticket["rd"]
               ticket_id = ticket['id'].to_i
-              if section_id.nil?
-                puts "section_not found".red
-              else
-                seat_value = Ticket.seat_value(section_id.to_i, price, row)
+              seat_value = Ticket.seat_value(section_id.to_i, price, row)
+              unless seat_value.to_i < 0 || seat_value.nil? || section_id.nil?
                 $redis.hmset "ticket:#{ticket_id}", :price, price, :quantity, ticket["qt"], :row, row, 
                               :section_id, section_id.to_i, :stubhub_id, ticket_id, :url, 
                               "http://www.stubhub.com/#{team_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket_id}", 
-                              :game_id, game_id, :seat_value,  seat_value               
-                $redis.sadd "tickets_for_game:#{game_id}", ticket_id
+                              :game_id, game_id, :seat_value,  seat_value
+                $redis.expire "ticket:#{ticket_id}", 7200             
                 $redis.sadd "tickets_for_section:#{section_id.to_i}", ticket_id
                 $redis.zadd "tickets_for_game_by_seat_value:#{game_id}", seat_value, ticket_id
                 $redis.zadd "tickets_for_game_by_price:#{game_id}", price, ticket_id
-              end   
-            end
+              end        
+            end   
           end
         end
         puts "tickets added".green

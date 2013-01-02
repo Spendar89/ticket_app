@@ -1,10 +1,6 @@
 class Ticket < ActiveRecord::Base
   attr_accessible :game_id, :price, :quantity, :row, :section_id, :stubhub_id, :url, :z_score
   attr_accessor :redis_id
-  # belongs_to :game
-  # belongs_to :section, :inverse_of => :tickets
-  # validates :stubhub_id, :numericality => true, :presence => true
-  # validates :url, :section_id, :presence => true
   
   def initialize(redis_id)
     super()
