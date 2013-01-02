@@ -79,32 +79,34 @@ end
 namespace :redis do
   task :set_teams => :environment do
       teams = Team.all
-      Parallel.each(teams, :in_processes => 10) do |team| 
-        ActiveRecord::Base.connection.reconnect!
-        team_stats = team.get_team_stats
-        $redis.hmset "team:#{team[:id]}", 
-          :name, team[:name], :url, team[:url], :conference, team[:conference], 
-          :record, team_stats[:record], :venue_name, team[:venue_name], 
-          :venue_address, team[:venue_address], :division, team[:division], 
-          :last_5, team_stats[:last_5]
-        $redis.sadd "teams", team[:id]  
+      Parallel.each(teams, :in_threads => 10) do |team| 
+        ActiveRecord::Base.connection_pool.with_connection do
+          team_stats = team.get_team_stats
+          $redis.hmset "team:#{team[:id]}", 
+            :name, team[:name], :url, team[:url], :conference, team[:conference], 
+            :record, team_stats[:record], :venue_name, team[:venue_name], 
+            :venue_address, team[:venue_address], :division, team[:division], 
+            :last_5, team_stats[:last_5]
+          $redis.sadd "teams", team[:id]
+        end  
       end
   end
     
   task :set_games => :environment do
     games = Game.all
-    Parallel.each(games, :in_processes => 10) do |game|
+    Parallel.each(games, :in_threads => 10) do |game|
       $redis.del "games_for_team:#{game[:team_id]}" 
       $redis.del "games_by_date:#{game[:team_id]}"
-      ActiveRecord::Base.connection.reconnect!
-      game_date = game[:date]
-      id = game[:id]
-      $redis.hmset "game:#{id}", 
-        :date, game_date, :opponent, game[:opponent], 
-        :team_id, game[:team_id]
-      $redis.sadd "games_for_team:#{game[:team_id]}", id
-      $redis.zadd "games_for_team:#{game[:team_id]}:by_date", game_date.to_datetime.to_i, id
-      puts "game added for #{game[:id]}".green    
+      ActiveRecord::Base.connection_pool.with_connection do
+        game_date = game[:date]
+        id = game[:id]
+        $redis.hmset "game:#{id}", 
+          :date, game_date, :opponent, game[:opponent], 
+          :team_id, game[:team_id]
+        $redis.sadd "games_for_team:#{game[:team_id]}", id
+        $redis.zadd "games_for_team:#{game[:team_id]}:by_date", game_date.to_datetime.to_i, id
+        puts "game added for #{game[:id]}".green 
+      end   
     end
      
   end
@@ -124,14 +126,15 @@ namespace :redis do
     begin
     start_time = Time.now
     games = Game.all
-    Parallel.each(games, :in_threads=> 30) do |game|
-      game_id = game[:id]
-      team_id = game[:team_id]
-      $redis.del "tickets_for_game:#{game_id}"
-      $redis.del "tickets_for_game_by_seat_value:#{game_id}"
-      $redis.del "tickets_for_game_by_price:#{game_id}"
-      StubHub::TicketFinder.redis_tickets(team_id, game_id)
-      $redis.zadd "games:average_price", Game.average_price(game_id), game_id
+    Parallel.each(games, :in_threads=> 15) do |game|
+      ActiveRecord::Base.connection_pool.with_connection do
+        game_id = game[:id]
+        team_id = game[:team_id]
+        $redis.del "tickets_for_game_by_seat_value:#{game_id}"
+        $redis.del "tickets_for_game_by_price:#{game_id}"
+        StubHub::TicketFinder.redis_tickets(team_id, game_id)
+        $redis.zadd "games:average_price", Game.average_price(game_id), game_id
+      end
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green
     rescue Timeout::Error => e
