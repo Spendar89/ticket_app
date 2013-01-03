@@ -25,6 +25,7 @@ namespace :games do
   task :set => :environment do   
     teams = Team.all
     Parallel.each(teams, :in_threads => 5) do |team|
+      ActiveRecord::Base.connection_pool.with_connection do
         begin
           puts "finding games for #{team.name}...".yellow
           team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
@@ -36,6 +37,7 @@ namespace :games do
           team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
           puts "success".green     
         end
+      end
       end  
   end
 end
