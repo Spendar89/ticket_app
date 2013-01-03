@@ -128,10 +128,9 @@ namespace :redis do
   end
   
   task :update_tickets => :environment do
-    begin
     start_time = Time.now
     games = Game.all
-    Parallel.each(games, :in_threads => 10) do |game|
+    Parallel.each(games, :in_threads => 30) do |game|
         game_id = game[:id]
         team_id = game[:team_id]
         $redis.del "tickets_for_game_by_seat_value:#{game_id}"
@@ -139,10 +138,7 @@ namespace :redis do
         StubHub::TicketFinder.redis_tickets(team_id, game_id)
         $redis.zadd "games:average_price", Game.average_price(game_id), game_id
     end
-    puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green
-    rescue Timeout::Error => e
-      puts "Timeout Error: #{e}".red
-    end
+    puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green    
   end
   
 end
