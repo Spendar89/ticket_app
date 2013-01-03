@@ -24,8 +24,7 @@ end
 namespace :games do
   task :set => :environment do   
     teams = Team.all
-    Parallel.each(teams, :in_threads => 30) do |team|
-      ActiveRecord::Base.connection_pool.with_connection do
+    Parallel.each(teams, :in_threads => 15) do |team|
         begin
           puts "finding games for #{team.name}...".yellow
           team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
@@ -37,8 +36,7 @@ namespace :games do
           team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
           puts "success".green     
         end
-      end 
-    end   
+      end  
   end
 end
 
@@ -62,6 +60,7 @@ namespace :sections do
       end
     end
   end
+  
   task :update_seat_view_urls => :environment do
     begin
       Parallel.each(Section.all, :in_threads => 30) do |section|
@@ -97,7 +96,7 @@ namespace :redis do
     games = Game.all
     Parallel.each(games, :in_threads => 10) do |game|
       $redis.del "games_for_team:#{game[:team_id]}" 
-      $redis.del "games_by_date:#{game[:team_id]}"
+      $redis.del "games_for_team:#{game[:team_id]}:by_date"
       ActiveRecord::Base.connection_pool.with_connection do
         game_date = game[:date]
         id = game[:id]
@@ -119,7 +118,6 @@ namespace :redis do
           ActiveRecord::Base.connection_pool.with_connection do
             $redis.hmset "section:#{section[:id]}", :name, "#{section[:name]}", 
               :team_id, section[:team_id], :average_price, "#{section[:average_price]}", :std_dev, "#{section[:std_dev]}"
-            $redis.sadd "sections_for_team:#{section[:team_id]}", section[:id]
             $redis.zadd "sections_for_team_by_name:#{section[:team_id]}", section[:id], section[:name]
           end
         end
