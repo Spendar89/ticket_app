@@ -73,7 +73,7 @@ module StubHub
           puts "finding tickets for #{game_id}...".blue
           team_url = $redis.hget "team:#{team_id}", "url"
           game_data = self.json_data(game_id)
-          Parallel.each(game_data[:data], :in_threads=> 50) do |ticket|
+          game_data[:data].each do |ticket|
             if !ticket["va"].scan(/(\d{1,3}|A\d)/)[0].nil?
               section_id = $redis.zscore "sections_for_team_by_name:#{team_id}", ticket['va'].downcase
               price = ticket["cp"].to_i
@@ -86,9 +86,9 @@ module StubHub
                               "http://www.stubhub.com/#{team_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket_id}", 
                               :game_id, game_id, :seat_value,  seat_value
                 $redis.expire "ticket:#{ticket_id}", 7200             
-                $redis.zadd "tickets_for_game_by_seat_value:#{game_id}", seat_value, ticket_id
-                $redis.zadd "tickets_for_section_by_price:#{section_id}", price, ticket_id
+                $redis.zadd "tickets_for_game_by_seat_value:#{game_id}", seat_value, ticket_id      
                 $redis.zadd "tickets_for_game_by_price:#{game_id}", price, ticket_id
+                $redis.zadd "tickets_for_section_by_price:#{section_id}", price, ticket_id;
               end        
             end   
           end
