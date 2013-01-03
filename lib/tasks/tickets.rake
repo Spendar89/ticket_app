@@ -24,7 +24,7 @@ end
 namespace :games do
   task :set => :environment do   
     teams = Team.all
-    Parallel.each(teams, :in_threads => 15) do |team|
+    Parallel.each(teams, :in_threads => 5) do |team|
         begin
           puts "finding games for #{team.name}...".yellow
           team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
