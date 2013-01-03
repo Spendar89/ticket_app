@@ -31,7 +31,6 @@ class Ticket < ActiveRecord::Base
       price_difference = (price.to_f + row) - section_hash['average_price'].to_f
       section_std_dev = section_hash['std_dev'].to_f
       z_score = (price_difference/section_std_dev).to_f
-      # z_score > 3.5 ? destroy(ticket_has) : z_score
     end
   end
   
@@ -43,7 +42,6 @@ class Ticket < ActiveRecord::Base
       price_difference = (price.to_f + row) - section_hash['average_price'].to_f
       section_std_dev = section_hash['std_dev'].to_f
       z_score = (price_difference/section_std_dev).to_f
-      # z_score > 3.5 ? destroy(ticket_has) : z_score
     end
   end
   
