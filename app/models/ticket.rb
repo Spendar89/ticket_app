@@ -38,7 +38,7 @@ class Ticket < ActiveRecord::Base
     return if ticket_hash['section_id'].to_i.nil?
     price = ticket_hash['price']
     if !price.nil? && !section_hash['average_price'].nil? && section_hash['std_dev'].to_f > 0
-      row = Ticket.converted_row(ticket_hash['row']) * 2
+      row = self.converted_row(ticket_hash['row']) * 2
       price_difference = (price.to_f + row) - section_hash['average_price'].to_f
       section_std_dev = section_hash['std_dev'].to_f
       z_score = (price_difference/section_std_dev).to_f

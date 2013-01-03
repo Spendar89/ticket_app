@@ -129,14 +129,15 @@ namespace :redis do
   
   task :update_tickets => :environment do
     start_time = Time.now
-    games = Game.all
-    Parallel.each(games, :in_threads => 30) do |game|
-        game_id = game[:id]
-        team_id = game[:team_id]
-        $redis.del "tickets_for_game_by_seat_value:#{game_id}"
-        $redis.del "tickets_for_game_by_price:#{game_id}"
-        StubHub::TicketFinder.redis_tickets(team_id, game_id)
-        $redis.zadd "games:average_price", Game.average_price(game_id), game_id
+    teams = $redis.smembers "teams"
+    Parallel.each(teams, :in_threads => 10) do |team_id|
+        games = "games_for_team:#{team_id}"
+        Parallel.each(teams, :in_threads => 50) do |game_id| 
+          $redis.del "tickets_for_game_by_seat_value:#{game_id}"
+          $redis.del "tickets_for_game_by_price:#{game_id}"
+          StubHub::TicketFinder.redis_tickets(team_id, game_id)
+          $redis.zadd "games:average_price", Game.average_price(game_id), game_id
+        end
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green    
   end

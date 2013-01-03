@@ -38,6 +38,7 @@ gem 'heroku'
 gem 'lazy_high_charts'
 gem 'thin'
 gem 'parallel'
+gem 'sidekiq'
 
 
 # To use ActiveModel has_secure_password
