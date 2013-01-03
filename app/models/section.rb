@@ -6,7 +6,7 @@ class Section < ActiveRecord::Base
   validates :average_price, :std_dev, :presence => true, :numericality => true, :on => :update
 
   def tickets
-    $redis.zrange "tickets_for_section:#{self[:id]}:by_price", 0, -1
+    $redis.zrange "tickets_for_section_by_price:#{self[:id]}", 0, -1
   end
     
   def update_std_dev

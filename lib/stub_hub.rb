@@ -86,8 +86,8 @@ module StubHub
                               "http://www.stubhub.com/#{team_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket_id}", 
                               :game_id, game_id, :seat_value,  seat_value
                 $redis.expire "ticket:#{ticket_id}", 7200             
-                $redis.sadd "tickets_for_section:#{section_id.to_i}", ticket_id
                 $redis.zadd "tickets_for_game_by_seat_value:#{game_id}", seat_value, ticket_id
+                $redis.zadd "tickets_for_section_by_price:#{section_id}", price, ticket_id
                 $redis.zadd "tickets_for_game_by_price:#{game_id}", price, ticket_id
               end        
             end   
