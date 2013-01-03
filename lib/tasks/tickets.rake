@@ -108,8 +108,7 @@ namespace :redis do
         $redis.zadd "games_for_team:#{game[:team_id]}:by_date", game_date.to_datetime.to_i, id
         puts "game added for #{game[:id]}".green 
       end   
-    end
-     
+    end   
   end
   
   task :set_sections => :environment do
@@ -131,7 +130,8 @@ namespace :redis do
     begin
     start_time = Time.now
     games = Game.all
-    Parallel.each(games, :in_threads=> 10) do |game|
+    Parallel.each(games, :in_processes=> 10) do |game|
+      ActiveRecord::Base.connection.reconnect!
         game_id = game[:id]
         team_id = game[:team_id]
         $redis.del "tickets_for_game_by_seat_value:#{game_id}"
@@ -144,7 +144,7 @@ namespace :redis do
       puts "Timeout Error: #{e}".red
     end
   end
-  
+   
 end
 
 
