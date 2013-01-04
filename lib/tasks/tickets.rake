@@ -1,4 +1,4 @@
-require 'update_tickets'
+require 'stub_hub'
 
 namespace :teams do
   task :set => :environment do
@@ -91,10 +91,6 @@ namespace :redis do
           $redis.sadd "teams", team[:id]
         end  
       end
-  end
-  
-  task :sidekiq => :environment do
-    HardWorker.update
   end
     
   task :set_games => :environment do
