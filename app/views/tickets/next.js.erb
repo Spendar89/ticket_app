@@ -9,7 +9,7 @@
 		colorBorders();
 		flipper();
 		seatView();
-		$(this).animate({left: '-=100%'}, 300)	
+		$(this).animate({left: '-=100%'}, 200)	
 	  });
 <% else %>
 	$('#'+'<%= @game[:id] %>').parents('.ticket_partial_div').css('overflow-x', 'hidden');	
@@ -21,7 +21,7 @@
 		flipper();
 		seatView();
 		$(this).css('right', '100%');
-		$(this).animate({right: '-=100%'}, 300);
+		$(this).animate({right: '-=100%'}, 200);
 	  });
 	
 <% end %>
