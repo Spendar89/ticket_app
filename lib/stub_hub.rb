@@ -68,7 +68,6 @@ module StubHub
     end
     
     def self.redis_tickets(team_id, game_id)
-      begin
         if  /^\d{7}$/.match(game_id.to_s) 
           puts "finding tickets for #{game_id}...".blue
           team_url = $redis.hget "team:#{team_id}", "url"
@@ -95,10 +94,6 @@ module StubHub
         end
         puts "tickets added".green
       end
-      rescue Timeout::Error => e
-        puts "Timeout Error: #{e}".red
-    end
-      
   end
 end
 
