@@ -132,7 +132,7 @@ namespace :redis do
     teams = $redis.smembers "teams"
     Parallel.each(teams, :in_threads => 20) do |team_id|
         games = $redis.smembers "games_for_team:#{team_id}"
-        Parallel.each(games, :in_threads => 20) do |game_id| 
+        games.each do |game_id| 
           $redis.del "tickets_for_game_by_seat_value:#{game_id}"
           $redis.del "tickets_for_game_by_price:#{game_id}"
           StubHub::TicketFinder.redis_tickets(team_id.to_i, game_id.to_i)
