@@ -1,5 +1,3 @@
-require 'update_tickets'
-
 namespace :teams do
   task :set => :environment do
     nba_teams = ["Atlanta Hawks", "Boston Celtics", "Charlotte Bobcats", 
