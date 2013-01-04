@@ -72,7 +72,8 @@ module StubHub
           puts "finding tickets for #{game_id}...".blue
           team_url = $redis.hget "team:#{team_id}", "url"
           game_data = self.json_data(game_id)
-          Parallel.each(game_data[:data], :in_threads => 100) do |ticket|
+          game_data_array = game_data[:data]
+          Parallel.each(game_data_array, :in_threads => game_data_array.length) do |ticket|
             if !ticket["va"].scan(/(\d{1,3}|A\d)/)[0].nil?
               section_id = $redis.zscore "sections_for_team_by_name:#{team_id}", ticket['va'].downcase
               price = ticket["cp"].to_i
