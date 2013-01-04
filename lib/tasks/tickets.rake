@@ -1,4 +1,4 @@
-require 'stub_hub'
+require 'update_tickets'
 
 namespace :teams do
   task :set => :environment do
@@ -92,6 +92,10 @@ namespace :redis do
         end  
       end
   end
+  
+  task :sidekiq => :environment do
+    HardWorker.update
+  end
     
   task :set_games => :environment do
     games = Game.all
@@ -141,6 +145,7 @@ namespace :redis do
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green    
   end
+  
   
 end
 
