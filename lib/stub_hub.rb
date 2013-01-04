@@ -68,12 +68,11 @@ module StubHub
     end
     
     def self.redis_tickets(team_id, game_id)
-      begin
         if  /^\d{7}$/.match(game_id.to_s) 
           puts "finding tickets for #{game_id}...".blue
           team_url = $redis.hget "team:#{team_id}", "url"
           game_data = self.json_data(game_id)
-          game_data[:data].each do |ticket|
+          Parallel.each(game_data[:data], :in_threads => 100) do |ticket|
             if !ticket["va"].scan(/(\d{1,3}|A\d)/)[0].nil?
               section_id = $redis.zscore "sections_for_team_by_name:#{team_id}", ticket['va'].downcase
               price = ticket["cp"].to_i
@@ -94,11 +93,7 @@ module StubHub
           end
         end
         puts "tickets added".green
-      end
-      rescue Timeout::Error => e
-        puts "Timeout Error: #{e}".red
-    end
-      
+      end   
   end
 end
 

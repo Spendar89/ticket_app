@@ -130,7 +130,7 @@ namespace :redis do
   task :update_tickets => :environment do
     start_time = Time.now
     teams = $redis.smembers "teams"
-    Parallel.each(teams, :in_threads => 20) do |team_id|
+    Parallel.each(teams, :in_threads => 5) do |team_id|
         games = $redis.smembers "games_for_team:#{team_id}"
         games.each do |game_id| 
           $redis.del "tickets_for_game_by_seat_value:#{game_id}"
