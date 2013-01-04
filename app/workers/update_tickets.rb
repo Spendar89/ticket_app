@@ -1,6 +1,8 @@
 require 'stub_hub'
+require 'newrelic_rpm'
 
 class HardWorker
+  include NewRelic::Agent::Instrumentation::ControllerInstrumentation
   include Sidekiq::Worker
 
   def perform(game_id, team_id)
@@ -20,4 +22,10 @@ class HardWorker
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes"
   end
   
+  add_transaction_tracer :perform,
+                          :name => "update_tickets"
+                          :category => "OtherTransaction/nightly"
 end
+
+NewRelic::Agent.manual start :transaction_tracer => {:transaction_threshhold => 11.5}
+  
