@@ -1,0 +1,1 @@
+{"klass":"Taps::Push","database_url":"postgres://spendar89@127.0.0.1/ticket_app?encoding=utf8","remote_url":"http://heroku:osui59a24am79x@taps19.heroku.com","session_uri":"/sessions/3268182387","stream_state":{},"completed_tables":[],"table_filter":null,"local_tables_info":{"games":695,"searches":0,"sections":2559,"stars":0,"teams":30,"tickets":0,"schema_migrations":32}}
