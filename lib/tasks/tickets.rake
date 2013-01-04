@@ -1,3 +1,5 @@
+require 'update_tickets'
+
 namespace :teams do
   task :set => :environment do
     nba_teams = ["Atlanta Hawks", "Boston Celtics", "Charlotte Bobcats", 
@@ -131,15 +133,14 @@ namespace :redis do
   
   task :update_tickets => :environment do
     start_time = Time.now
-    teams = $redis.smembers "teams"
-    Parallel.each(teams, :in_threads => 5) do |team_id|
-        games = $redis.smembers "games_for_team:#{team_id}"
-        games.each do |game_id| 
-          $redis.del "tickets_for_game_by_seat_value:#{game_id}"
-          $redis.del "tickets_for_game_by_price:#{game_id}"
-          StubHub::TicketFinder.redis_tickets(team_id.to_i, game_id.to_i)
-          $redis.zadd "games:average_price", Game.average_price(game_id), game_id
-        end
+    games = Game.all
+    Parallel.each(games, :in_threads => 100) do |game|
+      game_id = game[:id]
+      team_id = game.team[:id]
+      $redis.del "tickets_for_game_by_seat_value:#{game_id}"
+      $redis.del "tickets_for_game_by_price:#{game_id}"
+      StubHub::TicketFinder.redis_tickets(team_id, game_id)
+      $redis.zadd "games:average_price", Game.average_price(game_id), game_id
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green    
   end
