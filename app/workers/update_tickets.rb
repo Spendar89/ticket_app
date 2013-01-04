@@ -1,5 +1,4 @@
 require 'stub_hub'
-require 'newrelic_rpm'
 
 class HardWorker
   include Sidekiq::Worker
@@ -20,6 +19,5 @@ class HardWorker
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes"
   end
-
+  
 end
-
