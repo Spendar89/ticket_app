@@ -26,10 +26,8 @@ module SearchesHelper
   def ticket_summary(game, section)
     game_id = game[:id]
     ticket = @game_data[:best_ticket]
-    team = game.team
+    team = @team
     team_id = team[:id]
-    date = game[:date].strftime("%A, %B %d")
-    day_of_week = date.split(',')[0]
     average_game_price = game.average_price.to_i
     min_game_price_array =  $redis.zrange "tickets_for_game_by_price:#{game_id}", 0, 0, withscores: true
     max_game_price_array =  $redis.zrange "tickets_for_game_by_price:#{game_id}", -1, -1, withscores: true
