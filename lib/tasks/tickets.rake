@@ -132,8 +132,7 @@ namespace :redis do
     begin
     start_time = Time.now
     games = Game.all
-    Parallel.each(games, :in_threads => 50) do |game|
-      ActiveRecord::Base.connection_pool.with_connection do
+    Parallel.each(games, :in_threads => 30) do |game|
         game_id = game[:id]
         team_id = game[:team_id]
         $redis.del "tickets_for_game_by_seat_value:#{game_id}"
@@ -142,7 +141,6 @@ namespace :redis do
         game_average_price = Game.average_price(game_id)
         $redis.zadd "games:average_price", game_average_price, game_id
         $redis.zadd "game:average_price_over_time:#{game_id}", game_average_price, DateTime.current
-      end
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes"
     return
