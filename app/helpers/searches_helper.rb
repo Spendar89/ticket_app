@@ -4,62 +4,81 @@ module SearchesHelper
     return ["game_tickets yellow span12", "badge badge-warning"] if overall_rating < 65 && overall_rating >= 50
     return ["game_tickets red span12", "badge badge-important"] if overall_rating < 50
   end
+
   
-  def ticket_summary(game, game_data, section)
-    ticket = game_data[:best_ticket]
+  def game_price_chart(game_id)
+    LazyHighCharts::HighChart.new('graph') do |f|
+        prices_array = $redis.zrange "game:average_price_over_time:#{game_id}", 0, -1, withscores: true
+        prices_array.map!{|prices| [prices[0].to_i, prices[1].to_f]}
+        f.chart!(:backgroundColor => 'transparent')
+        f.title(:style=>{:color => 'transparent'})
+        f.credits!({:enabled => false})
+        f.legend(:enabled => false, :floating => 'true', :y => -300, :x => 600, :itemStyle => {:fontSize => '20px'}, :layout => 'vertical')
+        
+        # f.tooltip!(:formatter => 
+        #   "function() {
+        #     if (this.series.name == 'Average Ticket Price'){ 
+        #       return 'Average Ticket Price: ' + '<b>$' + this.y + '<b>';
+        #     }
+        #     else{
+        #       return 'Game Score: ' + '<b>' + this.y + '<b>';
+        #     }
+        #   }".js_code, :style => {:fontSize => '20px'})
+        f.series(:name => 'Average Ticket Price', :type => 'line', :data => prices_array, :lineWidth => 4, :lineColor => "#DE3F41")
+        f.xAxis!({:labels => {:enabled => false}, :lineWidth => 0})
+        f.yAxis!({:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => false}})
+    end
+  end
+
+  
+  def ticket_summary(game, section)
+    game_id = game[:id]
+    ticket = @game_data[:best_ticket]
     team = game.team
+    team_id = team[:id]
     date = game[:date].strftime("%A, %B %d")
     day_of_week = date.split(',')[0]
     average_game_price = game.average_price
-    min_game_price = 10
+    min_game_price_array =  $redis.zrange "tickets_for_game_by_price:#{game_id}", 0, 0, withscores: true
+    max_game_price_array =  $redis.zrange "tickets_for_game_by_price:#{game_id}", -1, -1, withscores: true
+    min_game_price = min_game_price_array[0][1].to_i
+    max_game_price = max_game_price_array[0][1].to_i
     number_tickets = game.number_of_tickets
+    opponent_object = game.opponent_object
+    opp_stars_array = opponent_object.stars
     average_section_price = section[:average_price]
-    part_1 = "The #{team.record} #{team[:name]} take on the #{game[:opponent]} at 
-            #{team[:venue_name]} on #{date}.  
-            The #{team[:name].split(' ')[-1]} are #{team.last_5} over their last five games "
-    if team.last_5[0].to_i >= 3 
-      part_2 = "and they look to continue their winning ways against the #{game[:opponent].split(' ')[-1]}.  " 
-    else
-      part_2 = "so they hope to turn it around against the #{game[:opponent].split(' ')[-1]}.  "
+    number_of_sections = $redis.zcard "sections_for_team_by_average_price:#{section[:team_id]}"
+    section_rank = $redis.zrevrank "sections_for_team_by_average_price:#{section[:team_id]}", section[:id]
+    ticket_price_rank = $redis.zrank "tickets_for_game_by_price:#{game_id}", ticket['stub_hub_id']
+    
+    gen_stats_header = "General Stats: "
+    gen_stats_1 = "Number of Tickets Available: #{number_tickets}"
+    gen_stats_2 = "Min Price: #{min_game_price}"
+    gen_stats_3 = "Max Price: #{max_game_price}"
+    gen_stats_4 = "Average Price: #{average_game_price}"
+  
+    opp_score_header = "Game Score: #{@game_data[:game_rating]}"
+    opp_name_expl = "Opponent Name: #{opponent_object[:name]}"
+    opp_record_expl = "Record: #{opponent_object[:record]}"
+    opp_last_5_expl = "Last 5 Games: #{opponent_object[:last_5]}"
+    opp_stars_expl_1 = "Star Players: "
+    opp_stars_expl_1 += "none" if opp_stars_array.length == 0
+    overall_star_rating = 0
+    opp_stars_array.each do |star|
+      opp_stars_expl_1 += "#{star[:name]}, "
+      overall_star_rating += (star[:rating].to_f * 4)
+      overall_star_rating = 100 if overall_star_rating > 100
     end
-    part_3 = "The average ticket for this matchup costs $#{average_game_price.to_i}, 
-              yet tickets can be found for as low as $#{min_game_price}. This ticket was reccomended 
-              for a number of reasons.  On average, #{team[:name].split(' ')[-1]} tickets in this section cost 
-              $#{average_section_price.to_i}.  "
-    if average_section_price > ticket['price'].to_i
-      part_4 = "That's #{(average_section_price/ticket['price'].to_i).round(1)} times
-                more expensive than this ticket, "
-      if game_data[:seat_rating] >= 66
-        part_5 = "which makes it an especially great deal.  "
-      elsif game_data[:seat_rating] >= 50 && game_data[:seat_rating] < 66
-        part_5 = "which makes it a fairly good deal.  "
-      else
-        part_5 = ""
-      end   
-      if game[:game_rating] < 50
-          part_6 = "It is worth noting that this game is relatively less popular than other games on the schedule, "
-          if ["Friday", "Saturday", "Sunday"].include?(day_of_week)
-            part_7 = "despite it being played on a weekend, so ticket prices are lower across the board."
-          else
-            part_7 = "in part because it is being played on a weekday, so ticket prices are lower across the board."
-          end
-      else
-        part_6 = "This game is relatively more popular than other games on the schedule, "
-        if ["Friday", "Saturday", "Sunday"].include?(day_of_week)
-          part_7 = "in part because it is being played on a weekend, so ticket prices are higher across the board."
-        else
-          part_7 = "despite it being played on a weekday."
-        end     
-      end
-      
-    else
-       part_4 = "That is #{(average_section_price/ticket['price'].to_i).round(1)} times
-                 less expensive than this ticket, but unforunately less expensive tickets are
-                 no longer available."
-      part_5 = ""
-      part_6 = ""
-      part_7 = ""
-    end
-    return [part_1 + part_2 ,  part_3 + part_4  + part_5 , part_6 + part_7]
+    opp_stars_expl_1 = opp_stars_expl_1[0...-2]
+    opp_stars_expl_2 = "Overall Star Quality: #{overall_star_rating.to_i} "
+    
+    ticket_score_header = "Seat Score: #{@game_data[:seat]}"
+    ticket_score_1 = "Ticket Price: #{ticket['price']}"
+    ticket_score_2 = "Ticket Section Average Price: #{average_section_price}"
+    ticket_score_3 = "Section Rank(by price): #{section_rank}/#{number_of_sections}"
+    
+    
+   return [gen_stats_1 + gen_stats_2 + gen_stats_3 + gen_stats_4, opp_record_expl + opp_last_5_expl + opp_stars_expl_1 + opp_stars_expl_2, ticket_score_1 + ticket_score_2 + ticket_score_3]
+    
   end
 end

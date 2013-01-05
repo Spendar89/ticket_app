@@ -120,6 +120,7 @@ namespace :redis do
             $redis.hmset "section:#{section[:id]}", :name, "#{section[:name]}", 
               :team_id, section[:team_id], :average_price, "#{section[:average_price]}", :std_dev, "#{section[:std_dev]}"
             $redis.zadd "sections_for_team_by_name:#{section[:team_id]}", section[:id], section[:name]
+            $redis.zadd "sections_for_team_by_average_price:#{section[:team_id]}", section[:average_price], section[:id]
           end
         end
       rescue Timeout::Error => e
@@ -136,34 +137,12 @@ namespace :redis do
       $redis.del "tickets_for_game_by_seat_value:#{game_id}"
       $redis.del "tickets_for_game_by_price:#{game_id}"
       StubHub::TicketFinder.redis_tickets(team_id, game_id)
-      $redis.zadd "games:average_price", Game.average_price(game_id), game_id
+      game_average_price = Game.average_price(game_id)
+      $redis.zadd "games:average_price", game_average_price, game_id
+      $redis.zadd "game:average_price_over_time:#{game_id}", game_average_price, DateTime.current
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes".green    
   end
   
   
-end
-
-
-namespace :app do
-  task :db_restart => :environment do
-    Rake::Task['db:reset'].invoke
-    Rake::Task['teams:set'].invoke
-    Rake::Task['games:refresh'].invoke
-    Rake::Task['sections:set'].invoke
-    Rake::Task['redis:set_teams'].invoke
-    Rake::Task['redis:set_games'].invoke
-    Rake::Task['redis:set_sections'].invoke
-    Rake::Task['redis:update_tickets'].invoke
-    Rake::Task['sections:refresh'].invoke
-    Rake::Task['sections:update_seat_view_urls'].invoke
-  end
-  
-  task :redis_restart => :environment do
-    $redis.flushdb
-    Rake::Task['redis:set_teams'].invoke
-    Rake::Task['redis:set_games'].invoke
-    Rake::Task['redis:set_sections'].invoke
-    Rake::Task['redis:update_tickets'].invoke
-  end
 end

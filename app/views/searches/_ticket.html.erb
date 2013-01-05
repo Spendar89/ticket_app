@@ -75,10 +75,13 @@
 				</div>
 				<h3 class="span11"> Ticket Summary </h3>
 				<div class="span12" style="text-align: left; padding-right: 5%">
-					<% ticket_summary = ticket_summary(@game, @game_data, section ) %>
+					<% ticket_summary = ticket_summary(@game, section ) %>
 					<p><%= ticket_summary[0] %></p>
 					<p><%= ticket_summary[1] %></p>
 					<p><%= ticket_summary[2] %></p>
+					<div id="average_price_time<%=@game[:id]%>">
+					</div>
+					<%= high_chart("average_price_time#{@game[:id]}", game_price_chart(@game[:id])) %>
 				</div>
 			</div>
 		</div>

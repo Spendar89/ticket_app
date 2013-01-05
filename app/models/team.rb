@@ -13,8 +13,7 @@ class Team < ActiveRecord::Base
       end
     end
     array
-  end
-  
+  end  
 
   def get_url
     StubHub::TicketFinder.team_url(self.name)

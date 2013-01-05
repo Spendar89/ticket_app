@@ -51,7 +51,7 @@ class Game < ActiveRecord::Base
     end
       
     def opponent_object
-      Team.find_by_name(self.opponent)
+      Team.find_by_name(self[:opponent])
     end
   
     def set_opponent

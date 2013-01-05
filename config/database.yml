@@ -11,6 +11,7 @@ development:
   username: spendar89
   password:
   allow_concurrency: true
+  host: localhost
   
 production:
   adapter: postgresql
