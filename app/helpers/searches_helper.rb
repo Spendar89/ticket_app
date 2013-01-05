@@ -30,7 +30,7 @@ module SearchesHelper
     team_id = team[:id]
     date = game[:date].strftime("%A, %B %d")
     day_of_week = date.split(',')[0]
-    average_game_price = game.average_price
+    average_game_price = game.average_price.to_i
     min_game_price_array =  $redis.zrange "tickets_for_game_by_price:#{game_id}", 0, 0, withscores: true
     max_game_price_array =  $redis.zrange "tickets_for_game_by_price:#{game_id}", -1, -1, withscores: true
     min_game_price = min_game_price_array[0][1].to_i
@@ -44,37 +44,43 @@ module SearchesHelper
     section_rank = $redis.zrevrank "sections_for_team_by_average_price:#{team_id}", section[:id]
     ticket_price_rank = $redis.zrank "tickets_for_game_by_price:#{game_id}", ticket['stub_hub_id']
     
-    gen_stats_header = "General Stats: "
-    gen_stats_1 = "Number of Tickets Available: #{number_tickets}"
-    gen_stats_2 = "Min Price: #{min_game_price}"
-    gen_stats_3 = "Max Price: #{max_game_price}"
-    gen_stats_4 = "Average Price: #{average_game_price}"
+    # gen_stats_header = "General Stats: "
+    gen_stats_0 = raw("<td><b>Tickets Available: </b></td><td>#{number_tickets}</td>")
+    gen_stats_1 = raw("<td><b>Min Price: </b></td><td>$#{min_game_price}</td>")
+    gen_stats_2 = raw("<td><b>Max Price: </b></td><td>$#{max_game_price}</td>")
+    gen_stats_3 = raw("<td><b>Average Price: </b></td><td>$#{average_game_price}</td>")
   
-    opp_score_header = "Game Score: #{@game_data[:game_rating]}"
-    opp_name_expl = "Opponent Name: #{opponent_object[:name]}"
-    opp_record_expl = "Record: #{opponent_object[:record]}"
-    opp_last_5_expl = "Last 5 Games: #{opponent_object[:last_5]}"
-    opp_stars_expl_1 = "Star Players: "
-    opp_stars_expl_1 += "none" if opp_stars_array.length == 0
+    # opp_score_header = "Game Score: #{@game_data[:game_rating]}"
+    game_score_0 = raw("<td><b>Opponent Name: </b></td><td>#{opponent_object[:name]}</td>")
+    game_score_1 = raw("<td><b>Record: </b></td><td>#{opponent_object[:record]}</td>")
     overall_star_rating = 0
-    opp_stars_array.each do |star|
-      opp_stars_expl_1 += "#{star[:name]}, "
-      overall_star_rating += (star[:rating].to_f * 4)
-      overall_star_rating = 100 if overall_star_rating > 100
+    game_score_3 = raw("<td><b>Star Players: </b></td>")
+    stars_list = ""
+    if opp_stars_array.length == 0
+      stars_list += "<td>none</td>"
+    else   
+      stars_list += "<td>"
+      opp_stars_array.each do |star|
+        stars_list += "#{star[:name]}, "
+        overall_star_rating += (star[:rating].to_f * 4)
+        overall_star_rating = 100 if overall_star_rating > 100
+      end 
+      stars_list = stars_list[0...-2]
+      stars_list += "</td>"
     end
-    opp_stars_expl_1 = opp_stars_expl_1[0...-2]
-    opp_stars_expl_2 = "Overall Star Quality: #{overall_star_rating.to_i} "
+    game_score_3 = game_score_3 + raw(stars_list)
+    game_score_4 = raw("<td><b>Star Rating: </b></td><td>#{overall_star_rating.to_i}</td>")
     
-    ticket_score_header = "Seat Score: #{@game_data[:seat]}"
-    ticket_score_1 = "Ticket Price: #{ticket['price']}"
-    ticket_score_2 = "Expected Price: #{average_section_price}"
-    ticket_score_3 = "Section: #{section_name}"
-    ticket_score_4 = "Section Rank: #{section_rank}/#{number_of_sections}"
+    # ticket_score_header = "Seat Score: #{@game_data[:seat_rating]}"
+    ticket_score_0 = raw("<td><b>Expected Ticket Price: </b></td><td>$#{average_section_price}</td>")
+    ticket_score_1 = raw("<td><b>Actual Ticket Price: </b></td><td>$#{ticket['price']}</td>")
+    ticket_score_2 = raw("<td><b>Section: </b></td><td>#{section_name}</td>")
+    ticket_score_3 = raw("<td><b>Section Rank: </b></td><td>#{section_rank}/#{number_of_sections}</td>")
     
     
-   return [gen_stats_1 + gen_stats_2 + gen_stats_3 + gen_stats_4, 
-          opp_record_expl + opp_last_5_expl + opp_stars_expl_1 + opp_stars_expl_2, 
-          ticket_score_1 + ticket_score_2 + ticket_score_3 + ticket_score_4]
+   return [gen_stats_0, gen_stats_1, gen_stats_2, gen_stats_3, 
+          game_score_0, game_score_1, game_score_3, game_score_4,
+          ticket_score_0, ticket_score_1, ticket_score_2, ticket_score_3]
     
   end
 end

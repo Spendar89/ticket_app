@@ -136,7 +136,6 @@ namespace :redis do
         $redis.zadd "game:average_price_over_time:#{game_id}", game_average_price, DateTime.current
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes"
-    return
     rescue Exception => e
       puts "Error: #{e}"
     end    

@@ -69,16 +69,46 @@
 				</li>
 
 			</div>
-			<div class="<%= check_overall_rating(@game_data[:overall_rating])[0] %> back">
-				<div class="flip_button_div span2">
-					<a class="flip_button" href="#"><%=image_tag "ticket_icon/info_icon.png", :width => "75%" %></a>
-				</div>
-				<h3 class="span11"> Ticket Summary </h3>
-				<div class="span12" style="text-align: left; padding-right: 5%">
+			<div class="<%= check_overall_rating(@game_data[:overall_rating])[0] %> back" style="overflow: scroll; padding-left: 0%; padding-right: 5%; text-align: center">
+				<div class="flip_button_div span12">
+					<a class="flip_button span2" href="#" style="margin-left: 4%;"><%=image_tag "ticket_icon/info_icon.png", :width => "75%" %></a>
+					<h2 class="span9" style="color: grey; margin-top: 0px; font-size: 28pt;"> Ticket Details </h2>
+				</div>			
+				<div class="span12">
 					<% ticket_summary = ticket_summary(@game, section ) %>
-					<p><%= ticket_summary[0] %></p>
-					<p><%= ticket_summary[1] %></p>
-					<p><%= ticket_summary[2] %></p>
+					<table class="table" style="font-size: 14pt">
+						<thead>
+							<h2 style="font-size: 20pt; text-align: left">Game Stats</h2>
+						</thead>
+						<tbody>
+							<tr><%= ticket_summary[0] %></tr>
+							<tr><%= ticket_summary[1] %></tr>
+							<tr><%= ticket_summary[2] %></tr>
+							<tr><%= ticket_summary[3] %></tr>
+						</tbody>
+					</table>
+					<table class="table" style="font-size: 14pt">
+						<thead>
+							<h2 style="font-size: 20pt; text-align: left">Game Score: <%= @game_data[:game_rating] %></h2>
+						</thead>
+						<tbody>
+							<tr><%= ticket_summary[4] %></tr>
+							<tr><%= ticket_summary[5] %></tr>
+							<tr><%= ticket_summary[6] %></tr>
+							<tr><%= ticket_summary[7] %></tr>
+						</tbody>
+					</table>
+					<table class="table" style="font-size: 14pt">
+						<thead>
+							<h2 style="font-size: 20pt; text-align: left">Seat Score: <%= @game_data[:seat_rating] %></h2
+						</thead>
+						<tbody>
+							<tr><%= ticket_summary[8] %></tr>
+							<tr><%= ticket_summary[9] %></tr>
+							<tr><%= ticket_summary[10] %></tr>
+							<tr><%= ticket_summary[11] %></tr>
+						</tbody>
+					</table>
 					<div id="average_price_time<%=@game[:id]%>">
 					</div>
 					<%= high_chart("average_price_time#{@game[:id]}", game_price_chart(@game[:id])) %>
