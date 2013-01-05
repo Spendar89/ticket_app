@@ -17,7 +17,7 @@ module SearchesHelper
         
         f.tooltip!(:enabled => true)
         f.series(:name => 'Average Ticket Price', :type => 'line', :data => prices_array, :lineWidth => 4, :lineColor => "#DE3F41")
-        f.xAxis!({:labels => {:enabled => true}, :lineWidth => 0, :categories => prices_array.map{|prices| Date.parse(prices[0]).strftime("%-m/%d")}})
+        f.xAxis!({:labels => {:enabled => true}, :minorTickInterval => "auto", :lineWidth => 0, :categories => prices_array.map{|prices| Date.parse(prices[0]).strftime("%-m/%d")}})
         f.yAxis!({:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => true}})
     end
   end
