@@ -24,19 +24,12 @@ end
 namespace :games do
   task :set => :environment do   
     teams = Team.all
-    Parallel.each(teams, :in_processes => 10) do |team|
+    Parallel.each(teams, :in_processes => 20) do |team|
       ActiveRecord::Base.connection.reconnect!
-        begin
           puts "finding games for #{team.name}...".yellow
           team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
           team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
           puts "games added #{team.name}...".green
-        rescue Exception => e
-          puts "Error: #{e} trying again...".red
-          team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
-          team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
-          puts "success".green     
-        end
       end  
   end
 end
