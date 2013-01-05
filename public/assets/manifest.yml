@@ -63,8 +63,8 @@ backgrounds/Timberwolves_background.jpg: backgrounds/Timberwolves_background-063
 backgrounds/Timberwolves_background/index.jpg: backgrounds/Timberwolves_background-063f9ab67a0a3f54be0710cc0347ac03.jpg
 backgrounds/Trail Blazers_backgroun.jpg: backgrounds/Trail Blazers_backgroun-8b448b344743f995fb1ef657e40f2697.jpg
 backgrounds/Trail Blazers_backgroun/index.jpg: backgrounds/Trail Blazers_backgroun-8b448b344743f995fb1ef657e40f2697.jpg
-backgrounds/Warriors_background.jpg: backgrounds/Warriors_background-72174edfb23d529431934e62b55e8d00.jpg
-backgrounds/Warriors_background/index.jpg: backgrounds/Warriors_background-72174edfb23d529431934e62b55e8d00.jpg
+backgrounds/Warriors_background.jpg: backgrounds/Warriors_background-d8c4824ea532ef490b16dce7c72b7a9f.jpg
+backgrounds/Warriors_background/index.jpg: backgrounds/Warriors_background-d8c4824ea532ef490b16dce7c72b7a9f.jpg
 backgrounds/Wizards_background.jpg: backgrounds/Wizards_background-e89bee5e11d338b0a149cb63d95b6cd8.jpg
 backgrounds/Wizards_background/index.jpg: backgrounds/Wizards_background-e89bee5e11d338b0a149cb63d95b6cd8.jpg
 bedge_grunge.png: bedge_grunge-c0f66e66513422114efe95eb81c67cd8.png
@@ -243,8 +243,8 @@ wild_oliva/wild_oliva_@2X.png: wild_oliva/wild_oliva_@2X-60f0820da2616c361e071c9
 wild_oliva/wild_oliva_@2X/index.png: wild_oliva/wild_oliva_@2X-60f0820da2616c361e071c908843857a.png
 application.js: application-7256c0a025f977d7bc7a7a67029bcef4.js
 application/index.js: application-7256c0a025f977d7bc7a7a67029bcef4.js
-application.css: application-4af48b0e29f660c945eca3c83c4fccd8.css
-application/index.css: application-4af48b0e29f660c945eca3c83c4fccd8.css
+application.css: application-fece74b821b63adb7af00d4b156f9bdc.css
+application/index.css: application-fece74b821b63adb7af00d4b156f9bdc.css
 flot/API.txt: flot/API-12097781cbe3af02a708e9f5c77952f5.txt
 flot/API/index.txt: flot/API-12097781cbe3af02a708e9f5c77952f5.txt
 flot/Makefile: flot/Makefile

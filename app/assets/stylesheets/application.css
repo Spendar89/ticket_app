@@ -154,7 +154,7 @@
 .next_button{
 	margin-top: 50%;
 	border: none;
-	background: url('ticket_icon/arrow-left.png');
+	background: url('ticket_icon/arrow-right.png');
 	background-size: 70% 100%;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -163,7 +163,7 @@
 .previous_button{
 	margin-top: 50%;
 	border: none;
-	background: url('ticket_icon/arrow-right.png');
+	background: url('ticket_icon/arrow-left.png');
 	background-size: 70% 100%;
 	background-position: center;
 	background-repeat: no-repeat;
