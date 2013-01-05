@@ -94,7 +94,7 @@ module StubHub
             end   
           end
         end
-        puts "tickets added".green
+        puts "tickets added"
       end
   end
 end
