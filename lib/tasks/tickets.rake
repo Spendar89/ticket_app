@@ -132,7 +132,7 @@ namespace :redis do
     begin
     start_time = Time.now
     games = Game.all
-    Parallel.each(games, :in_threads => 30) do |game|
+    Parallel.each(games, :in_threads => 20) do |game|
       game_id = game[:id]
       team_id = game[:team_id]
       $redis.del "tickets_for_game_by_seat_value:#{game_id}"
@@ -143,8 +143,9 @@ namespace :redis do
       $redis.zadd "game:average_price_over_time:#{game_id}", game_average_price, DateTime.current
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes"
-    rescue Timeout::Error => e
-      puts "Timeout Error: #{e}"
+    return
+    rescue Exception => e
+      puts "Error: #{e}"
     end    
   end
   

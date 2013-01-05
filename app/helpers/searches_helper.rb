@@ -67,7 +67,7 @@ module SearchesHelper
     
     ticket_score_header = "Seat Score: #{@game_data[:seat]}"
     ticket_score_1 = "Ticket Price: #{ticket['price']}"
-    ticket_score_2 = "Normal Price: #{average_section_price}"
+    ticket_score_2 = "Expected Price: #{average_section_price}"
     ticket_score_3 = "Section: #{section_name}"
     ticket_score_4 = "Section Rank: #{section_rank}/#{number_of_sections}"
     
