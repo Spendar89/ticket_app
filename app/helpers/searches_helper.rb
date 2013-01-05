@@ -9,24 +9,16 @@ module SearchesHelper
   def game_price_chart(game_id)
     LazyHighCharts::HighChart.new('graph') do |f|
         prices_array = $redis.zrange "game:average_price_over_time:#{game_id}", 0, -1, withscores: true
-        prices_array.map!{|prices| [prices[0].to_i, prices[1].to_f]}
+        graph_data = prices_array.map{|prices| [DateTime.parse(prices[0]).to_f, prices[1].to_f]}
         f.chart!(:backgroundColor => 'transparent')
         f.title(:style=>{:color => 'transparent'})
         f.credits!({:enabled => false})
         f.legend(:enabled => false, :floating => 'true', :y => -300, :x => 600, :itemStyle => {:fontSize => '20px'}, :layout => 'vertical')
         
-        # f.tooltip!(:formatter => 
-        #   "function() {
-        #     if (this.series.name == 'Average Ticket Price'){ 
-        #       return 'Average Ticket Price: ' + '<b>$' + this.y + '<b>';
-        #     }
-        #     else{
-        #       return 'Game Score: ' + '<b>' + this.y + '<b>';
-        #     }
-        #   }".js_code, :style => {:fontSize => '20px'})
+        f.tooltip!(:enabled => true)
         f.series(:name => 'Average Ticket Price', :type => 'line', :data => prices_array, :lineWidth => 4, :lineColor => "#DE3F41")
-        f.xAxis!({:labels => {:enabled => false}, :lineWidth => 0})
-        f.yAxis!({:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => false}})
+        f.xAxis!({:labels => {:enabled => true}, :lineWidth => 0, :categories => prices_array.map{|prices| Date.parse(prices[0]).strftime("%-m/%d")}})
+        f.yAxis!({:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => true}})
     end
   end
 
@@ -46,9 +38,10 @@ module SearchesHelper
     number_tickets = game.number_of_tickets
     opponent_object = game.opponent_object
     opp_stars_array = opponent_object.stars
+    section_name = section[:name].split(' ').map!{|word| word[0].upcase + word[1..-1]}.join(" ")
     average_section_price = section[:average_price]
-    number_of_sections = $redis.zcard "sections_for_team_by_average_price:#{section[:team_id]}"
-    section_rank = $redis.zrevrank "sections_for_team_by_average_price:#{section[:team_id]}", section[:id]
+    number_of_sections = $redis.zcard "sections_for_team_by_average_price:#{team_id}"
+    section_rank = $redis.zrevrank "sections_for_team_by_average_price:#{team_id}", section[:id]
     ticket_price_rank = $redis.zrank "tickets_for_game_by_price:#{game_id}", ticket['stub_hub_id']
     
     gen_stats_header = "General Stats: "
@@ -74,11 +67,14 @@ module SearchesHelper
     
     ticket_score_header = "Seat Score: #{@game_data[:seat]}"
     ticket_score_1 = "Ticket Price: #{ticket['price']}"
-    ticket_score_2 = "Ticket Section Average Price: #{average_section_price}"
-    ticket_score_3 = "Section Rank(by price): #{section_rank}/#{number_of_sections}"
+    ticket_score_2 = "Normal Price: #{average_section_price}"
+    ticket_score_3 = "Section: #{section_name}"
+    ticket_score_4 = "Section Rank: #{section_rank}/#{number_of_sections}"
     
     
-   return [gen_stats_1 + gen_stats_2 + gen_stats_3 + gen_stats_4, opp_record_expl + opp_last_5_expl + opp_stars_expl_1 + opp_stars_expl_2, ticket_score_1 + ticket_score_2 + ticket_score_3]
+   return [gen_stats_1 + gen_stats_2 + gen_stats_3 + gen_stats_4, 
+          opp_record_expl + opp_last_5_expl + opp_stars_expl_1 + opp_stars_expl_2, 
+          ticket_score_1 + ticket_score_2 + ticket_score_3 + ticket_score_4]
     
   end
 end
