@@ -10,15 +10,22 @@ module SearchesHelper
     LazyHighCharts::HighChart.new('graph') do |f|
         prices_array = $redis.zrange "game:average_price_over_time:#{game_id}", 0, -1, withscores: true
         graph_data = prices_array.map{|prices| [DateTime.parse(prices[0]).to_f, prices[1].to_f]}
+        categories = []
+        prices_array.each_with_index do |prices, i|
+          if i % 10 == 0 
+            categories << Date.parse(prices[0]).strftime("%-m/%d")
+          else
+            categories << " "
+          end
+        end
         f.chart!(:backgroundColor => 'transparent')
         f.title(:style=>{:color => 'transparent'})
         f.credits!({:enabled => false})
-        f.legend(:enabled => false, :floating => 'true', :y => -300, :x => 600, :itemStyle => {:fontSize => '20px'}, :layout => 'vertical')
-        
+        f.legend(:enabled => false)
         f.tooltip!(:enabled => true)
-        f.series(:name => 'Average Ticket Price', :type => 'line', :data => prices_array, :lineWidth => 4, :lineColor => "#DE3F41")
-        f.xAxis!({:labels => {:enabled => true}, :minorTickInterval => "auto", :lineWidth => 0, :categories => prices_array.map{|prices| Date.parse(prices[0]).strftime("%-m/%d")}})
-        f.yAxis!({:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => true}})
+        f.series(:name => 'Average Ticket Price', :type => 'line', :data => prices_array, :marker => {:enabled => false}, :lineWidth => 4, :lineColor => "#8197B0")
+        f.xAxis!({:labels => {:style => {:fontSize => 16, :fontWeight => 'bold'}}, :offset => 10, :lineWidth => 0, :categories => categories})
+        f.yAxis!({:labels => {:style => {:fontSize => 16, :fontWeight => 'bold'}, :formatter => "function(){return '$' + this.value}".js_code}, :title => {:text => false}, })
     end
   end
 
@@ -68,8 +75,7 @@ module SearchesHelper
     end
     game_score_3 = game_score_3 + raw(stars_list)
     game_score_4 = raw("<td><b>Star Rating: </b></td><td>#{overall_star_rating.to_i}</td>")
-    
-    # ticket_score_header = "Seat Score: #{@game_data[:seat_rating]}"
+
     ticket_score_0 = raw("<td><b>Expected Ticket Price: </b></td><td>$#{average_section_price}</td>")
     ticket_score_1 = raw("<td><b>Actual Ticket Price: </b></td><td>$#{ticket['price']}</td>")
     ticket_score_2 = raw("<td><b>Section: </b></td><td>#{section_name}</td>")
