@@ -1,7 +1,5 @@
-<% unless @game_data[:best_ticket].nil? %>
 	<% section = Section.find(@game_data[:best_ticket]['section_id'])%>
 	<% seat_view_url = section[:seat_view_url] %>
-
 	<div class="span12">
 		<div class="flip-container">
 			<div class="flipper">

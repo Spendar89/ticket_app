@@ -11,7 +11,7 @@
 	<% @games.each_with_index do |game, i|  %>
 		<% @game = game %>
 		<% @game_data = @game.view_game_data(@price_min, @price_max, @number) %>
-		<% if @game_data %>
+		<% unless @game_data[:best_ticket]['section_id'].nil? %>
 			<% counter += 1 %>
 			<% if i == 0 %>		
 				<div class ="row" style="margin-top: -2%; margin-left: 0%;">
