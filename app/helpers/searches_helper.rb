@@ -50,16 +50,16 @@ module SearchesHelper
     ticket_price_rank = $redis.zrank "tickets_for_game_by_price:#{game_id}", ticket['stub_hub_id']
     
     # gen_stats_header = "General Stats: "
-    gen_stats_0 = raw("<td><b>Tickets Available: </b></td><td>#{number_tickets}</td>")
-    gen_stats_1 = raw("<td><b>Min Price: </b></td><td>$#{min_game_price}</td>")
-    gen_stats_2 = raw("<td><b>Max Price: </b></td><td>$#{max_game_price}</td>")
-    gen_stats_3 = raw("<td><b>Average Price: </b></td><td>$#{average_game_price}</td>")
+    gen_stats_0 = raw("<td>Tickets Available: </td><td>#{number_tickets}</td>")
+    gen_stats_1 = raw("<td>Min Price: </td><td>$#{min_game_price}</td>")
+    gen_stats_2 = raw("<td>Max Price: </td><td>$#{max_game_price}</td>")
+    gen_stats_3 = raw("<td>Average Price: </td><td>$#{average_game_price}</td>")
   
     # opp_score_header = "Game Score: #{@game_data[:game_rating]}"
-    game_score_0 = raw("<td><b>Opponent Name: </b></td><td>#{opponent_object[:name]}</td>")
-    game_score_1 = raw("<td><b>Record: </b></td><td>#{opponent_object[:record]}</td>")
+    game_score_0 = raw("<td>Opponent Name: </td><td>#{opponent_object[:name]}</td>")
+    game_score_1 = raw("<td>Record: </td><td>#{opponent_object[:record]}</td>")
     overall_star_rating = 0
-    game_score_3 = raw("<td><b>Star Players: </b></td>")
+    game_score_3 = raw("<td>Star Players: </td>")
     stars_list = ""
     if opp_stars_array.length == 0
       stars_list += "<td>none</td>"
@@ -74,12 +74,12 @@ module SearchesHelper
       stars_list += "</td>"
     end
     game_score_3 = game_score_3 + raw(stars_list)
-    game_score_4 = raw("<td><b>Star Rating: </b></td><td>#{overall_star_rating.to_i}</td>")
+    game_score_4 = raw("<td>Star Rating: </td><td>#{overall_star_rating.to_i}</td>")
 
-    ticket_score_0 = raw("<td><b>Expected Ticket Price: </b></td><td>$#{average_section_price}</td>")
-    ticket_score_1 = raw("<td><b>Actual Ticket Price: </b></td><td>$#{ticket['price']}</td>")
-    ticket_score_2 = raw("<td><b>Section: </b></td><td>#{section_name}</td>")
-    ticket_score_3 = raw("<td><b>Section Rank: </b></td><td>#{section_rank}/#{number_of_sections}</td>")
+    ticket_score_0 = raw("<td>Expected Ticket Price: </td><td>$#{average_section_price}</td>")
+    ticket_score_1 = raw("<td>Actual Ticket Price: </td><td>$#{ticket['price']}</td>")
+    ticket_score_2 = raw("<td>Section: </td><td>#{section_name}</td>")
+    ticket_score_3 = raw("<td>Section Rank: </td><td>#{section_rank}/#{number_of_sections}</td>")
     
     
    return [gen_stats_0, gen_stats_1, gen_stats_2, gen_stats_3, 

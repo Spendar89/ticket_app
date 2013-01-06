@@ -36,7 +36,7 @@ class SearchesController < ApplicationController
       @price_min = params[:search][:price_min].to_i
       @price_max = params[:search][:price_max].to_i      
       @team = Team.find_by_name(params[:search][:team])
-      @number = 1
+      @number = 12
       filtered_games = @team.filtered_games(@date_start, @date_end)
       @games = filtered_games[:games]
       @total_tickets = filtered_games[:total_tickets]
