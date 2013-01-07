@@ -53,10 +53,10 @@
 	background: #D0D6CE url('ricepaper.png');
 	padding-left: 2%;
 	padding-right: 2%;	
-	max-width: 270px;
+	max-width: 280px;
 	min-width: 270px;
-	min-height: 430px;
-	max-height: 430px;
+	min-height: 450px;
+	max-height: 450px;
 }
 
 .seat_view_div{
@@ -152,11 +152,17 @@
 .next_button{
 	border: none;
 	background: transparent;
+	position: relative;
+	margin-top: -200%;
+	width: 100%;
 }
 
 .previous_button{
 	border: none;
 	background: transparent;
+	position: relative;
+	margin-top: -200%;
+	width: 100%;
 }
 
 #new_team_loader_div{	
@@ -253,4 +259,10 @@
 .card-icon:hover{
   color: #353535;
   text-decoration: none;
+}
+
+.card-score{
+	font-size: 150%;
+	font-weight: bold;
+	color: #353535
 }

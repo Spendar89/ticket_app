@@ -50,7 +50,7 @@ module SearchesHelper
     ticket_price_rank = $redis.zrank "tickets_for_game_by_price:#{game_id}", ticket['stub_hub_id']
     
     # gen_stats_header = "General Stats: "
-    gen_stats_0 = raw("<td>Tickets Available: </td><td>#{number_tickets}</td>")
+    gen_stats_0 = raw("<td>Listings: </td><td>#{number_tickets}</td>")
     gen_stats_1 = raw("<td>Min Price: </td><td>$#{min_game_price}</td>")
     gen_stats_2 = raw("<td>Max Price: </td><td>$#{max_game_price}</td>")
     gen_stats_3 = raw("<td>Average Price: </td><td>$#{average_game_price}</td>")

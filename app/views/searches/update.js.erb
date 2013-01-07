@@ -1,3 +1,10 @@
 $('.results_tickets').html("<%= j(render :partial => 'update', :locals => {:team => @team, :total_tickets => @total_tickets, :date_start => @date_start, :date_end => @date_end, :price_min => @price_min, :price_max => @price_max, :games => @games, :number => @number}) %>");
 $('#team_info_partial').html("<%= j(render :partial => 'team_info', :locals => {:line => @line }) %>");
-
+ticketFadeIn();
+colorBorders();
+flipper();
+seatView();
+changeSpan();
+$(window).resize(function(){
+	changeSpan();
+});

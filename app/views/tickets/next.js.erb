@@ -6,6 +6,7 @@
 	$('#'+'<%= @game[:id] %>').animate({left: '-=100%'}, 300, function() {
 	    $(this).css('left', '100%');
 		$(this).html("<%=j render :partial => 'searches/ticket', :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>")
+		$(".flip-container").show();
 		colorBorders();
 		flipper();
 		seatView();
@@ -17,6 +18,7 @@
 	$('#'+'<%= @game[:id] %>').css('position', 'relative');
 	$('#'+'<%= @game[:id] %>').animate({right: '-=100%'}, 300, function() {
 		$(this).html("<%=j render :partial => 'searches/ticket', :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>")
+		$(".flip-container").show();
 		colorBorders();
 		flipper();
 		seatView();

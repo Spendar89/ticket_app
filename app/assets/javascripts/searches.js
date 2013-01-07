@@ -6,6 +6,12 @@ var flipper = function(){
 	});
 }
 
+var ticketFadeIn = function(){
+	$('.flip-container').each(function(){
+		$(this).delay('slow').fadeIn('slow');
+	});
+}
+
 var changeSpan = function(){
 	var windowWidth = $(window).width();
 	$('#outer').height($(window).height());
@@ -19,7 +25,7 @@ var changeSpan = function(){
 		$('.ticket_partial_div').each(function(){
 			$(this).removeClass('span4');
 			$(this).addClass('span3');
-			$(this).css('max-width', '280px');		
+			$(this).css('max-width', '285px');		
 		});
 	}
 }
@@ -44,6 +50,7 @@ var colorBorders = function(){
 }
 
 $(document).ready(function(){
+	ticketFadeIn();
 		
 	$(".update_team_button" ).click(function(){
 		$('#new_team_loader_div').fadeIn('slow');
