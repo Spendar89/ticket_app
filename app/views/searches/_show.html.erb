@@ -4,7 +4,7 @@
 			<h1 style="font-size: 50px; padding: 10px;"><%= @team[:name] %></h1>
 		</div>
 
-		<div class="row-fluid">
+		<div class="row">
 			<div class = "team_info span6">
 				<%= render :partial => 'team_info', :locals => {:team => @team } %>
 			</div>
@@ -44,7 +44,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row">
 			<%= render :partial => 'update', :locals => {:team => @team, :total_tickets => @total_tickets, :date_start => @date_start, :date_end => @date_end, :price_min => @price_min, :price_max => @price_max, :games => @games} %>
 		</div>
 	</div>

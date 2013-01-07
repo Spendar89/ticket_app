@@ -8,16 +8,13 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require_self
+ 
  *= require jquery.ui.slider
+ *= require 'font-awesome'
+ *= require_self  
  *= require jquery.ui.datepicker
  *= require_tree .
  */
-
-.ui-slider{
-    width: 100%;
-}
-
 
 #slider_div{
   width: 100%;
@@ -30,6 +27,7 @@
   position: relative;
   top: -20px;
   margin-left: 5px;
+  font-size: 12pt;
 }
 
 #amount_max{
@@ -38,6 +36,7 @@
   position: relative;
   top: -20px;
   margin-right: 5px;
+  font-size: 12pt;
 }
 
 .team_info_div{
@@ -50,10 +49,14 @@
 	background-position: left;
 	background-repeat: no-repeat;
 	box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);
-	padding: 10px;
 	border-radius: 4px;
 	background: #D0D6CE url('ricepaper.png');
-	margin-left: 0px;
+	padding-left: 2%;
+	padding-right: 2%;	
+	max-width: 270px;
+	min-width: 270px;
+	min-height: 430px;
+	max-height: 430px;
 }
 
 .seat_view_div{
@@ -68,9 +71,10 @@
 #outer{
 	background: url('background.jpg');
 	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	height: 1000px;
+	background-position: center;
+	background-size: 100%;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	position: relative;
 }
 
@@ -102,13 +106,6 @@
   float: right;
 }
 
-.progress{
-  width: 38%;
-  display: none;
-  float: left;
-  margin-left: 10px;
-}
-
 .search_form_div{
 	background: transparent;
 	color: #202020;
@@ -132,6 +129,7 @@
 }
 
 .results_tickets{
+	margin: 0%;
 }
 
 .team_info{
@@ -152,21 +150,13 @@
 }
 
 .next_button{
-	margin-top: 50%;
 	border: none;
-	background: url('ticket_icon/arrow-right.png');
-	background-size: 70% 100%;
-	background-position: center;
-	background-repeat: no-repeat;
+	background: transparent;
 }
 
 .previous_button{
-	margin-top: 50%;
 	border: none;
-	background: url('ticket_icon/arrow-left.png');
-	background-size: 70% 100%;
-	background-position: center;
-	background-repeat: no-repeat;
+	background: transparent;
 }
 
 #new_team_loader_div{	
@@ -216,4 +206,51 @@
 	width: 20px;
  	background: #3647CF;
 	height: 10px;
+}
+
+.ui-slider-horizontal{
+	height: 25px;
+}
+
+.ui-slider .ui-slider-handle{
+  height: 2em;
+
+}
+
+.ui-slider-range{
+	background: #666464;
+}
+
+.green_score{
+	color: #76996B;
+	font-weight: bold;
+}
+
+.yellow_score{
+	color: #CDDE7D;
+	font-weight: bold;
+}
+
+.red_score{
+	color: #E66360;
+	font-weight: bold;
+}
+
+.ticket_header{
+	background: rgba(0,0,0,0.1); 
+	padding: 6%;
+	padding-bottom: 2%;
+	margin-left: -6%; 
+	font-weight: bold;
+}
+
+.card-icon{
+  color: #666464;
+  text-decoration: none;
+
+}
+
+.card-icon:hover{
+  color: #353535;
+  text-decoration: none;
 }

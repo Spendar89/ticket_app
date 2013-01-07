@@ -6,6 +6,24 @@ var flipper = function(){
 	});
 }
 
+var changeSpan = function(){
+	var windowWidth = $(window).width();
+	$('#outer').height($(window).height());
+	if (windowWidth <= 1400){
+		$('.ticket_partial_div').each(function(){
+			$(this).removeClass('span3');
+			$(this).addClass('span4');
+			$(this).css('max-width', '400px');			
+		});
+	}else {
+		$('.ticket_partial_div').each(function(){
+			$(this).removeClass('span4');
+			$(this).addClass('span3');
+			$(this).css('max-width', '280px');		
+		});
+	}
+}
+
 var seatView = function(){
 	$('.seat_view_button').toggle(function(e) {
 		e.preventDefault();
@@ -52,7 +70,14 @@ $(document).ready(function(){
 	//price-range slider
 	$( "#amount_min" ).html( "$" + $( ".slider" ).slider( "values", 0 ));
 	$( "#amount_max" ).html( "$" + $( ".slider" ).slider( "values", 1 ));
+	
+	changeSpan();
+	
+	$(window).resize(function(){
+		changeSpan();
+	});
 
+	
 	colorBorders();
 	flipper();
 	seatView();

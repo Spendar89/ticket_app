@@ -11,6 +11,8 @@ background_domo.png: background_domo-d26623918cf6778a0f8089ec59d6c3ad.png
 background_domo/index.png: background_domo-d26623918cf6778a0f8089ec59d6c3ad.png
 backgrounds/76ers_background.jpg: backgrounds/76ers_background-8b080ce5cfe652a47343afefd2fc28bb.jpg
 backgrounds/76ers_background/index.jpg: backgrounds/76ers_background-8b080ce5cfe652a47343afefd2fc28bb.jpg
+backgrounds/Blazers_backgroun.jpg: backgrounds/Blazers_backgroun-8b448b344743f995fb1ef657e40f2697.jpg
+backgrounds/Blazers_backgroun/index.jpg: backgrounds/Blazers_backgroun-8b448b344743f995fb1ef657e40f2697.jpg
 backgrounds/Bobcats_background.jpg: backgrounds/Bobcats_background-fef65346efe01c9a5c3f5a2e962162fa.jpg
 backgrounds/Bobcats_background/index.jpg: backgrounds/Bobcats_background-fef65346efe01c9a5c3f5a2e962162fa.jpg
 backgrounds/Bucks_background.jpg: backgrounds/Bucks_background-e1b8137194a78e00084374978f22335b.jpg
@@ -61,12 +63,10 @@ backgrounds/Suns_background.jpg: backgrounds/Suns_background-8a7f85ff46db0a8b12d
 backgrounds/Suns_background/index.jpg: backgrounds/Suns_background-8a7f85ff46db0a8b12ddfff355dc1b89.jpg
 backgrounds/Timberwolves_background.jpg: backgrounds/Timberwolves_background-063f9ab67a0a3f54be0710cc0347ac03.jpg
 backgrounds/Timberwolves_background/index.jpg: backgrounds/Timberwolves_background-063f9ab67a0a3f54be0710cc0347ac03.jpg
-backgrounds/Trail Blazers_backgroun.jpg: backgrounds/Trail Blazers_backgroun-8b448b344743f995fb1ef657e40f2697.jpg
-backgrounds/Trail Blazers_backgroun/index.jpg: backgrounds/Trail Blazers_backgroun-8b448b344743f995fb1ef657e40f2697.jpg
 backgrounds/Warriors_background.jpg: backgrounds/Warriors_background-d8c4824ea532ef490b16dce7c72b7a9f.jpg
 backgrounds/Warriors_background/index.jpg: backgrounds/Warriors_background-d8c4824ea532ef490b16dce7c72b7a9f.jpg
-backgrounds/Wizards_background.jpg: backgrounds/Wizards_background-e89bee5e11d338b0a149cb63d95b6cd8.jpg
-backgrounds/Wizards_background/index.jpg: backgrounds/Wizards_background-e89bee5e11d338b0a149cb63d95b6cd8.jpg
+backgrounds/Wizards_background.jpg: backgrounds/Wizards_background-a839fb7aa370fdb0ec4ed20873cedb8f.jpg
+backgrounds/Wizards_background/index.jpg: backgrounds/Wizards_background-a839fb7aa370fdb0ec4ed20873cedb8f.jpg
 bedge_grunge.png: bedge_grunge-c0f66e66513422114efe95eb81c67cd8.png
 bedge_grunge/index.png: bedge_grunge-c0f66e66513422114efe95eb81c67cd8.png
 binoculars.png: binoculars-9e231e26d07b5b15ea6298bbd68d45ad.png
@@ -241,13 +241,10 @@ wild_oliva/readme.txt: wild_oliva/readme-506611365eec3cc35eb6a6046911e58b.txt
 wild_oliva/readme/index.txt: wild_oliva/readme-506611365eec3cc35eb6a6046911e58b.txt
 wild_oliva/wild_oliva_@2X.png: wild_oliva/wild_oliva_@2X-60f0820da2616c361e071c908843857a.png
 wild_oliva/wild_oliva_@2X/index.png: wild_oliva/wild_oliva_@2X-60f0820da2616c361e071c908843857a.png
-application.js: application-7256c0a025f977d7bc7a7a67029bcef4.js
-application/index.js: application-7256c0a025f977d7bc7a7a67029bcef4.js
-application.css: application-fece74b821b63adb7af00d4b156f9bdc.css
-application/index.css: application-fece74b821b63adb7af00d4b156f9bdc.css
-flot/API.txt: flot/API-12097781cbe3af02a708e9f5c77952f5.txt
-flot/API/index.txt: flot/API-12097781cbe3af02a708e9f5c77952f5.txt
-flot/Makefile: flot/Makefile
+application.js: application-d7687a5468bb352e39056959d4ba8a78.js
+application/index.js: application-d7687a5468bb352e39056959d4ba8a78.js
+application.css: application-ddbf45ebddbcc7d6728ac1a3fee2af90.css
+application/index.css: application-ddbf45ebddbcc7d6728ac1a3fee2af90.css
 fontawesome-webfont.eot: fontawesome-webfont-86a6da438b901860c3a54e21f9098bf8.eot
 fontawesome-webfont/index.eot: fontawesome-webfont-86a6da438b901860c3a54e21f9098bf8.eot
 fontawesome-webfont.svg: fontawesome-webfont-c3f3594758768fbb43eae746d18b3b50.svg

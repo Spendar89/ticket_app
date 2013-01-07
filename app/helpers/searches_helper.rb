@@ -1,8 +1,8 @@
 module SearchesHelper    
   def check_overall_rating(overall_rating)
-    return ["game_tickets green span12", "badge badge-success"] if overall_rating >= 65 
-    return ["game_tickets yellow span12", "badge badge-warning"] if overall_rating < 65 && overall_rating >= 50
-    return ["game_tickets red span12", "badge badge-important"] if overall_rating < 50
+    return ["game_tickets green span11", "green_score"] if overall_rating >= 65 
+    return ["game_tickets yellow span11", "yellow_score"] if overall_rating < 65 && overall_rating >= 50
+    return ["game_tickets red span11", "red_score"] if overall_rating < 50
   end
 
   
