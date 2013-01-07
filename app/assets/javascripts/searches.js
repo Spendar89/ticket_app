@@ -32,7 +32,7 @@ var changeSpan = function(){
 		});
 	}else if (windowWidth >= 1350 & windowWidth < 1800) {
 		$('.ticket_partial_div').each(function(){
-			$('.header_logo').css('font-size','500%');
+			$('.header_logo').css('font-size','400%');
 			$(this).removeClass('span4').addClass('span3');
 			$(this).css('min-width', '278px').css('max-width', '23%');		
 		});
