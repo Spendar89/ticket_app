@@ -14,21 +14,35 @@ var ticketFadeIn = function(){
 
 var changeSpan = function(){
 	var windowWidth = $(window).width();
-	$('#outer').height($(window).height());
-	if (windowWidth <= 1400){
+	var windowHeight = $(window).height()
+	$('#outer').height(windowHeight);
+	$('#line_chart_div').height(windowWidth/6);
+	if (windowWidth <= 1420){
 		$('.ticket_partial_div').each(function(){
+			$('.header_logo').css('font-size','350%');
 			$(this).removeClass('span3');
 			$(this).addClass('span4');
 			$(this).css('max-width', '400px');			
 		});
-	}else {
+	}else if (windowWidth > 1400 & windowWidth < 1850) {
 		$('.ticket_partial_div').each(function(){
+			$('.header_logo').css('font-size','500%');
 			$(this).removeClass('span4');
 			$(this).addClass('span3');
-			$(this).css('max-width', '285px');		
+			$(this).css('min-width', '285px');
+			$(this).css('max-width', '23%');		
 		});
+	}else{
+		$('.ticket_partial_div').each(function(){
+			$('.header_logo').css('font-size','500%');
+			$(this).removeClass('span4');
+			$(this).addClass('span3');
+			$(this).css('min-width', '285px');
+			$(this).css('max-width', '19%');		
+			});
 	}
 }
+
 
 var seatView = function(){
 	$('.seat_view_button').toggle(function(e) {

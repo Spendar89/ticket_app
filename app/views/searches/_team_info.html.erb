@@ -1,16 +1,16 @@
 <% number_of_games = @games.length %>
 <% if number_of_games >= 10 && number_of_games < 15 %>
 	<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" %>
-	<%=javascript_tag "$('#line_chart').css('width', '150%')" %>
+	<%=javascript_tag "$('#line_chart').css('min-width', '1500px')" %>
 <% elsif number_of_games >= 15 %>
 	<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" %>		
-	<%=javascript_tag "$('#line_chart').css('width', '250%')" %>
+	<%=javascript_tag "$('#line_chart').css('min-width', '2000px')" %>
 <% end %>
 
 
 <div id="price_chart" class="span12">
-	<div id="line_chart_div" class="span12" style="height: 375px; overflow-x:scroll; overflow-y: hidden; position: relative;">
-		<div id="line_chart" style="position: relative; top: -10%; height: 420px; width: 100%;" >
+	<div id="line_chart_div" class="row-fluid span12" style="overflow-x:scroll; overflow-y: hidden; position: relative;">
+		<div id="line_chart" style="position: relative; top: -18%; height: 120%; min-width: 1000px;" >
 			<%= high_chart("line_chart", @line) %>
 		</div>
 	</div>

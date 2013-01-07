@@ -53,9 +53,7 @@
 	background: #D0D6CE url('ricepaper.png');
 	padding-left: 2%;
 	padding-right: 2%;	
-	max-width: 280px;
-	min-width: 270px;
-	min-height: 450px;
+	max-width: 261px;
 	max-height: 450px;
 }
 
@@ -70,9 +68,8 @@
 
 #outer{
 	background: url('background.jpg');
-	background-repeat: no-repeat;
 	background-position: center;
-	background-size: 100%;
+	background-size: 100% 100%;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	position: relative;

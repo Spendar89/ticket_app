@@ -38,11 +38,9 @@
 h1{
 	color: #666464;
 	font-family: 'Bowlby One SC', cursive;
-	margin-right: auto;
-	margin-left: auto;
-	text-align: center;
 	background: rgba(0, 0, 0, 0.1);;
-	padding: 10px;
-	margin: 0px;
+	padding: 1%;
+	margin: 0%;
+	font-size: 200%;
 	
 }
