@@ -30,7 +30,7 @@ var changeSpan = function(){
 			$(this).removeClass('span4');
 			$(this).addClass('span3');
 			$(this).css('min-width', '285px');
-			$(this).css('max-width', '23%');		
+			$(this).css('max-width', '19%');		
 		});
 	}else{
 		$('.ticket_partial_div').each(function(){
