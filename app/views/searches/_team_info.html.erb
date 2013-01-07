@@ -1,7 +1,9 @@
 <% number_of_games = @games.length %>
+<%=javascript_tag "changeSpan()" %>
 <% if number_of_games >= 10 && number_of_games < 15 %>
 	<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" %>
 	<%=javascript_tag "$('#line_chart').css('min-width', '1500px')" %>
+	
 <% elsif number_of_games >= 15 %>
 	<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" %>		
 	<%=javascript_tag "$('#line_chart').css('min-width', '2000px')" %>
@@ -10,7 +12,7 @@
 
 <div id="price_chart" class="span12">
 	<div id="line_chart_div" class="row-fluid span12" style="overflow-x:scroll; overflow-y: hidden; position: relative;">
-		<div id="line_chart" style="position: relative; top: -5%; height: 100%; min-width: 1000px;" >
+		<div id="line_chart" style="position: relative; top: -10%; height: 110%; min-width: 100%; max-width: 100%;" >
 			<%= high_chart("line_chart", @line) %>
 		</div>
 	</div>

@@ -17,28 +17,30 @@ var changeSpan = function(){
 	var windowHeight = $(window).height()
 	$('#outer').height(windowHeight);
 	$('#line_chart_div').height(windowWidth/6);
-	if (windowWidth <= 1420){
+	if (windowWidth <= 1110){
+		$('.header_logo').css('font-size','320%');
 		$('.ticket_partial_div').each(function(){
-			$('.header_logo').css('font-size','350%');
-			$(this).removeClass('span3');
-			$(this).addClass('span4');
+			$(this).removeClass('span4').addClass('span6');
 			$(this).css('max-width', '400px');			
 		});
-	}else if (windowWidth > 1400 & windowWidth < 1850) {
+	
+	}else if (windowWidth > 1110 && windowWidth < 1350){
+		$('.ticket_partial_div').each(function(){
+			$('.header_logo').css('font-size','350%');
+			$(this).removeClass('span6').removeClass('span3').addClass('span4');
+			$(this).css('max-width', '400px');			
+		});
+	}else if (windowWidth >= 1350 & windowWidth < 1800) {
 		$('.ticket_partial_div').each(function(){
 			$('.header_logo').css('font-size','500%');
-			$(this).removeClass('span4');
-			$(this).addClass('span3');
-			$(this).css('min-width', '285px');
-			$(this).css('max-width', '19%');		
+			$(this).removeClass('span4').addClass('span3');
+			$(this).css('min-width', '282').css('max-width', '23%');		
 		});
 	}else{
 		$('.ticket_partial_div').each(function(){
 			$('.header_logo').css('font-size','500%');
-			$(this).removeClass('span4');
-			$(this).addClass('span3');
-			$(this).css('min-width', '285px');
-			$(this).css('max-width', '19%');		
+			$(this).removeClass('span4').addClass('span3');
+			$(this).css('min-width', '278px').css('max-width', '19%');
 			});
 	}
 }
