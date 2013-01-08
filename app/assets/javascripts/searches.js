@@ -18,7 +18,7 @@ var changeSpan = function(){
 	var windowHeight = $(window).height();
 	$('#outer').height(windowHeight);
 	$('#line_chart_div').height(windowWidth/6);
-	if (windowWidth <= 1110){
+	if (windowWidth < 800){
 		$('.ticket_partial_div').each(function(){
 			$('.header_logo').css('font-size','320%');
 			$(this).removeClass('span3').addClass('span6');
@@ -26,7 +26,7 @@ var changeSpan = function(){
 			$(this).css('max-width', '50%')					
 		});
 	
-	}else if (windowWidth > 1110 && windowWidth < 1350){
+	}else if (windowWidth > 800 && windowWidth < 1350){
 		$('.ticket_partial_div').each(function(){
 			$('.header_logo').css('font-size','350%');
 			$(this).removeClass('span6').removeClass('span3').addClass('span4');
