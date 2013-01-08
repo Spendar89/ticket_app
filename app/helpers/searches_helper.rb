@@ -1,19 +1,18 @@
 module SearchesHelper    
   def check_overall_rating(overall_rating)
-    return ["game_tickets green span11", "green_score"] if overall_rating >= 65 
-    return ["game_tickets yellow span11", "yellow_score"] if overall_rating < 65 && overall_rating >= 50
-    return ["game_tickets red span11", "red_score"] if overall_rating < 50
+    return ["game_tickets green span12", "green_score"] if overall_rating >= 65 
+    return ["game_tickets yellow span12", "yellow_score"] if overall_rating < 65 && overall_rating >= 50
+    return ["game_tickets red span12", "red_score"] if overall_rating < 50
   end
 
   
   def game_price_chart(game_id)
     LazyHighCharts::HighChart.new('graph') do |f|
         prices_array = $redis.zrange "game:average_price_over_time:#{game_id}", 0, -1, withscores: true
-        graph_data = prices_array.map{|prices| [DateTime.parse(prices[0]).to_f, prices[1].to_f]}
+        graph_data = prices_array.sort {|x,y| DateTime.parse(y[0]) <=> DateTime.parse(x[0]) }
         categories = []
         interval = prices_array.length/3
-        
-        prices_array.each_with_index do |prices, i|
+        graph_data.each_with_index do |prices, i|
           if i % interval == 0 
             categories << Date.parse(prices[0]).strftime("%-m/%d")
           else

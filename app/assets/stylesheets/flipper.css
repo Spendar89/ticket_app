@@ -3,7 +3,7 @@
 	-webkit-perspective: 1000;
 	-moz-perspective: 1000;
 	perspective: 1000;
-	padding-bottom: 10%;
+	padding-bottom: 7%;
 }
 
 	
@@ -16,6 +16,7 @@
 
 .flip-container, .front, .back {
 	height: 450px;
+	width: 270px;
 	
 }
 
@@ -46,5 +47,4 @@
 	-webkit-transform: rotateY(180deg);
 	-moz-transform: rotateY(180deg);
 	transform: rotateY(180deg);
-	left: 6%;
 }
