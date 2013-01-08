@@ -85,6 +85,8 @@ namespace :redis do
         end  
       end
   end
+  
+
     
   task :set_games => :environment do
     games = Game.all
@@ -139,6 +141,22 @@ namespace :redis do
       puts "Error: #{e}"
     end
     puts "completed in #{((Time.now - start_time)/60).to_f} minutes" 
+  end
+  
+  task :update_tickets_for_team => :environment  do
+    team = Team.find_by_name(ENV['spec_team'])
+    games = team.games
+    Parallel.each(games, :in_threads => 5) do |game|
+        game_id = game[:id]
+        team_id = game[:team_id]
+        $redis.del "tickets_for_game_by_seat_value:#{game_id}"
+        $redis.del "tickets_for_game_by_price:#{game_id}"
+        StubHub::TicketFinder.redis_tickets(team_id, game_id)
+        game_average_price = Game.average_price(game_id)
+        $redis.zadd "games:average_price", game_average_price, game_id
+        $redis.zadd "game:average_price_over_time:#{game_id}", game_average_price, DateTime.current
+    end
+    puts "Tickets updated".green
   end
   
   

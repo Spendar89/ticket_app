@@ -24,7 +24,7 @@ class SearchesController < ApplicationController
     @games.each do |game|
       total_tickets = game.number_of_tickets
       if total_tickets < 100 
-        game.destroy
+        @games.delete(game)
       else
         dates << game[:date].strftime("%b %-d")    
         price_data << {y: game.average_price.to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
@@ -53,7 +53,7 @@ class SearchesController < ApplicationController
       @games.each do |game|
         total_tickets = game.number_of_tickets
         if total_tickets < 100 
-          game.destroy
+          @games.delete(game)
         else
           dates << game[:date].strftime("%b %-d")    
           price_data << {y: game.average_price.to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
