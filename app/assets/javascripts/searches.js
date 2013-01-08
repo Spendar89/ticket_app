@@ -36,7 +36,7 @@ var changeSpan = function(){
 		$('.ticket_partial_div').each(function(){
 			$('.header_logo').css('font-size','400%');
 			$(this).removeClass('span4').addClass('span3');
-			$(this).css('min-width', '270px').css('max-width', '23%');		
+			$(this).css('min-width', '265px').css('max-width', '23%');		
 		});
 	}else{
 		$('.ticket_partial_div').each(function(){
