@@ -40,6 +40,7 @@ gem 'thin'
 gem 'parallel'
 gem 'sidekiq'
 gem 'font-awesome-rails'
+gem 'jquery-tokeninput-rails'
 
 
 # To use ActiveModel has_secure_password

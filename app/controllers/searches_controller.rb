@@ -3,9 +3,16 @@ class SearchesController < ApplicationController
     @search = Search.new
   end
   
+  def token_input
+    @teams = Team.where("teams.name LIKE ?", "%#{params[:q]}%" )
+    respond_to do |format|
+      format.json { render :json => @teams.collect{ |team| {:id => team[:id], :name => team[:name] }}.to_json }
+    end
+  end
+  
   def show
     @search = Search.new
-    @team = Team.find_by_name(params[:search][:team])
+    @team = Team.find(params[:search][:team])
     @price_min = 1
     @total_tickets = 0
     @games = @team.games.order("date").limit(8)

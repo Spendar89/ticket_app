@@ -5,11 +5,9 @@ TicketSearch::Application.routes.draw do
     resources :games
   end
   resources :searches, :only => [:new, :show, :update]
+  get '/token_input', :to => "searches#token_input"
   get '/searches', :to => 'searches#show'
   match "/tickets/next", :to => 'tickets#next'
-
-
-
   root :to => 'searches#new'
 
 

@@ -1,3 +1,4 @@
+
 var flipper = function(){
 	$('.flip_button').click(function(e){
 		e.preventDefault();
@@ -14,14 +15,15 @@ var ticketFadeIn = function(){
 
 var changeSpan = function(){
 	var windowWidth = $(window).width();
-	var windowHeight = $(window).height()
+	var windowHeight = $(window).height();
 	$('#outer').height(windowHeight);
 	$('#line_chart_div').height(windowWidth/6);
 	if (windowWidth <= 1110){
-		$('.header_logo').css('font-size','320%');
 		$('.ticket_partial_div').each(function(){
-			$(this).removeClass('span4').addClass('span6');
-			$(this).css('max-width', '400px');			
+			$('.header_logo').css('font-size','320%');
+			$(this).removeClass('span3').addClass('span6');
+			$(this).removeClass('span4');
+			$(this).css('max-width', '50%')					
 		});
 	
 	}else if (windowWidth > 1110 && windowWidth < 1350){
@@ -65,9 +67,22 @@ var colorBorders = function(){
 	$('.red').css('border', '4pt solid #E66360');
 }
 
+var tokenInput = function(){
+	$("#tokeninput_search").tokenInput("/token_input", {
+		tokenLimit: 1,
+		onAdd: function(){
+			$('.update_team_button').trigger();
+		}});
+}
+
 $(document).ready(function(){
-	ticketFadeIn();
-		
+	$('.search').click(function(e){
+		$(this).attr('id', 'tokeninput_search');
+		tokenInput();
+		$(this).trigger('focus');
+	});
+	
+	ticketFadeIn();	
 	$(".update_team_button" ).click(function(){
 		$('#new_team_loader_div').fadeIn('slow');
 		$('#new_team_loader_div').height($(document).height());

@@ -17,4 +17,5 @@
 //= require jquery.ui.slider
 //= require twitter/bootstrap
 //= require highcharts
+//= require jquery.tokeninput
 //= require_tree .

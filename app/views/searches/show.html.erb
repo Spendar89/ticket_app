@@ -4,10 +4,10 @@
 	<h1 class="span6 header_logo" style="font-size: 500%; margin-left: -12%; text-align: left; color: #FF4A56; background: transparent; text-shadow: 2px 2px black;">
 		TICKETBRAINS<small style= "color: #9CB6CB" >beta</small>
 	</h1>
-	<div class="span6" style="margin-bottom: 2%; margin-left: 6%">
+	<div class="span6" style="margin-bottom: 2%; margin-left: 11%">
 	<%= form_for Search.new, :controller => "searches", :method => 'get', :html => {:class => "form-search"} do |f|%>
-		<%= f.text_field :team , :class => "search-query span10", :placeholder => "Enter Team Name", :style => "height: 40px; font-size: 30px; line-height: 36px"%>
-		<%= f.submit "search", :class => "btn btn-inverse update_team_button", :style => "margin-left: 2%" %>
+		<%= f.text_field :team , :class => "search span10", :placeholder => "Enter Team Name", :style => "height: 31pt; margin-bottom: 30px; font-size: 30px; line-height: 36px"%>
+		<%= f.submit "search", :class => "btn btn-inverse update_team_button", :style => "visibility:hidden" %>
 	<% end %>
 	</div>
 </div>

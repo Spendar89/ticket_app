@@ -11,7 +11,8 @@
  
  *= require jquery.ui.slider
  *= require 'font-awesome'
- *= require_self  
+ *= require token-input
+ *= require_self   
  *= require jquery.ui.datepicker
  *= require_tree .
  */
@@ -262,4 +263,63 @@
 	font-size: 150%;
 	font-weight: bold;
 	color: #353535
+}
+
+ul.token-input-list{
+	width: 83%;
+	font-size: 28px;
+	font-weight: normal;
+	font-family: sans-serif;
+	border-radius: 5px;
+}
+
+.token-input-input-token{
+	width: 100%;
+}
+
+li.token-input-token{
+	background: transparent;
+	font-weight: normal;
+	color: grey;
+}
+
+#token-input-tokeninput_search{
+	font-size: 100%;
+	height: 100%;
+}
+
+div.token-input-dropdown{
+	font-size: 150%;
+	padding-bottom: 1%;
+	border-radius: 5px;
+	font-weight: normal;
+	color: #333;
+	font-family: sans-serif;
+}
+
+div.token-input-dropdown ul li {
+    background-color: #B0BCFF;
+    padding: 10px;
+    list-style-type: none;
+}
+
+div.token-input-dropdown p {
+    margin: 0;
+    padding: 5px;
+    color: #777;
+
+}
+
+div.token-input-dropdown ul li.token-input-selected-dropdown-item {
+    background-color: #B0BCFF;
+}
+
+li.token-input-selected-token{
+    background-color: transparent;
+	font-weight: normal;
+    color: grey;
+}
+
+li.token-input-token p {
+    margin: 2px;
 }
