@@ -11,6 +11,8 @@
 		-webkit-transform: rotateY(180deg);
 		-moz-transform: rotateY(180deg);
 		transform: rotateY(180deg);
+		left: -6%;
+		
 	}
 
 .flip-container, .front, .back {

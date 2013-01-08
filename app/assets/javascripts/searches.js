@@ -4,11 +4,6 @@ var flipper = function(){
 		e.preventDefault();
 		$(this).parents('.ticket_partial_div').css('overflow', 'visible');
 		$(this).parents('.flip-container').toggleClass('flip-container-clicked');
-		$(this).parents('.ticket_partial_div').toggle(function(){
-			$(this).css('margin-left', '-1.5%')},
-			function(){
-				$(this).css('margin-left', '0%');
-			});	
 	});
 }
 
