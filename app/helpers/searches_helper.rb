@@ -9,7 +9,7 @@ module SearchesHelper
   def game_price_chart(game_id)
     LazyHighCharts::HighChart.new('graph') do |f|
         prices_array = $redis.zrange "game:average_price_over_time:#{game_id}", 0, -1, withscores: true
-        graph_data = prices_array.sort {|x,y| DateTime.parse(y[0]) <=> DateTime.parse(x[0]) }
+        graph_data = prices_array.sort {|x,y| DateTime.parse(x[0]).to_f <=> DateTime.parse(y[0]).to_f }
         categories = []
         interval = prices_array.length/3
         graph_data.each_with_index do |prices, i|
