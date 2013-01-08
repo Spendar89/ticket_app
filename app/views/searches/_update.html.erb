@@ -12,15 +12,17 @@
 	<% @games.each do |game|  %>
 		<% @game = game %>
 		<% @game_data = @game.view_game_data(@price_min, @price_max, @number) %>
-		<% unless @game_data[:best_ticket]['section_id'].nil? %>
-			<% counter += 1 %>
-			<div class="ticket_spacer span3" style="margin-left: 0%; margin-right: 0%;">			
-				<div class="ticket_partial_div span11">
-					<div id="<%= @game[:id] %>">
-						<%= render :partial => "ticket", :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>
-					</div>
+		<% if @game_data %>
+			<% unless @game_data[:best_ticket]['section_id'].nil? %>
+				<% counter += 1 %>
+				<div class="ticket_spacer span3" style="margin-left: 0%; margin-right: 0%;">			
+					<div class="ticket_partial_div span11">
+						<div id="<%= @game[:id] %>">
+							<%= render :partial => "ticket", :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>
+						</div>
+					</div>	
 				</div>	
-			</div>	
+			<% end %>
 		<% end %>
 	<% end %>
 	</div>

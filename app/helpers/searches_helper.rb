@@ -11,7 +11,7 @@ module SearchesHelper
         prices_array = $redis.zrange "game:average_price_over_time:#{game_id}", 0, -1, withscores: true
         graph_data = prices_array.sort {|x,y| DateTime.parse(x[0]).to_f <=> DateTime.parse(y[0]).to_f }
         categories = []
-        interval = prices_array.length/3
+        interval = prices_array.length/3 + 1
         graph_data.each_with_index do |prices, i|
           if i % interval == 0 
             categories << Date.parse(prices[0]).strftime("%-m/%d")
