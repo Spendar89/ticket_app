@@ -17,6 +17,9 @@
  *= require_tree .
  */
 
+.primary_logo{
+	font-family: 'Bowlby One SC', cursive;
+}
 #slider_div{
   width: 100%;
   height: 15px;
@@ -266,7 +269,7 @@
 }
 
 ul.token-input-list{
-	width: 83%;
+	width: 100%;
 	font-size: 28px;
 	font-weight: normal;
 	font-family: sans-serif;
@@ -275,6 +278,8 @@ ul.token-input-list{
 
 .token-input-input-token{
 	width: 100%;
+	height: 100%;
+
 }
 
 li.token-input-token{

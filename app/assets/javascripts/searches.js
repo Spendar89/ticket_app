@@ -19,40 +19,41 @@ var changeSpan = function(){
 	$('#outer').height(windowHeight);
 	$('#line_chart_div').height(windowWidth/6);
 	if (windowWidth < 920){
+		$('.header_logo').css('font-size', '30px');
 		$('h1').each(function(){
 			$(this).css('font-size', '15px');
+			
 		});
 		$('.ticket_spacer').each(function(){
-			$('.header_logo').css('font-size','320%');
 			$(this).removeClass('span3').addClass('span6');
 			$(this).removeClass('span4');
 			$(this).css('max-width', '50%')					
 		});
 	
 	}else if (windowWidth > 920 && windowWidth < 1350){
+		$('.header_logo').css('font-size', '40px');
 		$('h1').each(function(){
 			$(this).css('font-size', '20px');
 		});
 		$('.ticket_spacer').each(function(){
-			$('.header_logo').css('font-size','350%');
 			$(this).removeClass('span6').removeClass('span3').addClass('span4');
 			$(this).css('max-width', '400px');			
 		});
 	}else if (windowWidth >= 1350 & windowWidth < 1800) {
+		$('.header_logo').css('font-size', '45px');
 		$('h1').each(function(){
 			$(this).css('font-size', '25px');
 		});
 		$('.ticket_spacer').each(function(){
-			$('.header_logo').css('font-size','400%');
 			$(this).removeClass('span4').addClass('span3');
 			$(this).css('min-width', '270px').css('max-width', '23%');		
 		});
 	}else{
+		$('.header_logo').css('font-size', '50px');
 		$('h1').each(function(){
 			$(this).css('font-size', '30px');
 		});
 		$('.ticket_spacer').each(function(){
-			$('.header_logo').css('font-size','500%');
 			$(this).removeClass('span4').addClass('span3');
 			$(this).css('min-width', '278px').css('max-width', '19%');
 			});
