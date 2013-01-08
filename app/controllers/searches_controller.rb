@@ -4,7 +4,7 @@ class SearchesController < ApplicationController
   end
   
   def token_input
-    @teams = Team.where("teams.name LIKE ?", "%#{params[:q]}%" )
+    @teams = Team.where("teams.name LIKE ?", "%#{params[:q].split(' ').map{|word| word[0].upcase + word[1..-1]}.join(' ')}%" )
     respond_to do |format|
       format.json { render :json => @teams.collect{ |team| {:id => team[:id], :name => team[:name] }}.to_json }
     end
