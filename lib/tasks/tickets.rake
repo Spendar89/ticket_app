@@ -48,7 +48,7 @@ namespace :sections do
     sections = Section.all
     Parallel.each(sections, :in_threads => 5) do |section|
       ActiveRecord::Base.connection_pool.with_connection do
-        old_std_dev = section[:std_dev] "current std_dev: #{section[:std_dev]}...".yellow
+        old_std_dev = section[:std_dev]
         section.update_std_dev
         new_std_dev = section[:std_dev]
         puts "old std_dev: #{old_std_dev}...new std_dev: #{new_std_dev}".green
