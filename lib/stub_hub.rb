@@ -94,7 +94,7 @@ module StubHub
             end   
           end
         end
-        puts "tickets added"
+        puts "tickets added for #{game_id}"
       end
   end
 end

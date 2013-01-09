@@ -117,6 +117,7 @@ namespace :redis do
               :team_id, section[:team_id], :average_price, "#{section[:average_price]}", :std_dev, "#{section[:std_dev]}"
             $redis.zadd "sections_for_team_by_name:#{section[:team_id]}", section[:id], section[:name]
             $redis.zadd "sections_for_team_by_average_price:#{section[:team_id]}", section[:average_price], section[:id]
+            puts "section #{section[:id]} update".green
           end
         end
       rescue Timeout::Error => e
