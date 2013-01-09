@@ -8,7 +8,7 @@
 			<%= form_for @search, :method => 'get', :html => {:class => "form-search", :ready => 'false'} do |f| %>
 				<div class="span9">
 					<%= f.text_field :team, :placeholder => "Enter a Team Name to Begin", :class => "span12 search", :style => "height: 40px; font-size: 30px; line-height: 40px;" %>
-					<%= f.submit "Find Tickets!", :class => "btn-large btn-inverse update_team_button", :style => "margin-top: 2%" %>
+					<%= f.submit "Find Tickets!", :class => "btn-large btn-inverse update_team_button", :style => "visibility: hidden; margin-top: 2%" %>
 				<% end %>
 				</div>
 			</div>		
