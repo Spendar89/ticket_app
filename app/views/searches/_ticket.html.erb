@@ -14,7 +14,7 @@
 				<div class= "seat_view_div span2">
 					<%= link_to "", '#', :class => "seat_view_button icon-eye-open card-icon", :style => "font-size: 240%" unless seat_view_url == "f" %>
 				</div>
-				<div class ="seat_view_image" style="display: none; width: auto; height: 430px; text-align: center; position: absolute; top: 10%; left: 0%; margin-right: 3%; margin-left: 3%">
+				<div class ="seat_view_image" style="display: none; width: 700px; height: 430px; text-align: center; position: absolute; top: 10%; left: 0%; margin-right: 3%; margin-left: 3%; z-index: 1000">
 					<%=image_tag(seat_view_url, :class => 'img-rounded', :style => 'height: 100%; width: 100%;') %>	
 				</div>
 			</div>

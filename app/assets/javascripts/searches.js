@@ -65,12 +65,12 @@ var seatView = function(){
 	$('.seat_view_button').toggle(function(e) {
 		e.preventDefault();
 		parent = $(this).parents(); 
-		parent.siblings(".seat_view_image").fadeIn('fast');
+		parent.siblings(".seat_view_image").css('z-index', '1000').fadeIn('fast');
 		},
 		function(e){
 			e.preventDefault();
 			parent = $(this).parents();
-			parent.siblings(".seat_view_image").fadeOut('fast')				
+			parent.siblings(".seat_view_image").fadeOut('fast');				
 		});
 }
 
