@@ -11,25 +11,26 @@ class SearchesController < ApplicationController
   end
   
   def show
+    if params[:search][:team].empty?
+      redirect_to :back
+      flash[:error] = "Sorry, we couldn't find that team..."
+      return
+    end
     @search = Search.new
-    @team = Team.find(params[:search][:team])
+    @team = Team.find(params[:search][:team])  
     @price_min = 1
     @total_tickets = 0
-    @games = @team.games.order("date").limit(8)
+    @games = []
+    @team.games.order("date").limit(8).each{|game| @games << game if game.number_of_tickets > 100 }
     @price_max = 5000  
     @number = 1
     price_data = []
     dates = []
     rating_data = []
     @games.each do |game|
-      total_tickets = game.number_of_tickets
-      if total_tickets < 100 
-        @games.delete(game)
-      else
         dates << game[:date].strftime("%b %-d")    
         price_data << {y: game.average_price.to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
         rating_data << { y: game[:game_rating].to_i, marker: {symbol: "url(assets/small_icons/#{game[:opponent].split(' ')[-1]}_40x40.png)"}}
-      end
     end
     @line = @team.price_chart(price_data, rating_data, dates)
     respond_to do |format|

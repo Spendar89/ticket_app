@@ -1,7 +1,7 @@
 
 var flipper = function(){
 	$('.flip_button').click(function(e){
-		e.preventDefault();
+	
 		$(this).parents('.ticket_partial_div').css('overflow', 'visible');
 		$(this).parents('.flip-container').toggleClass('flip-container-clicked');
 	});
