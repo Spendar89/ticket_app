@@ -64,13 +64,15 @@ var changeSpan = function(){
 var seatView = function(){
 	$('.seat_view_button').toggle(function(e) {
 		e.preventDefault();
-		parent = $(this).parents(); 
-		parent.siblings(".seat_view_image").css('z-index', '1000').fadeIn('fast');
+		thisId=$(this).attr('id')
+		seatViewPhoto = $('#'+thisId+'_photo'); 
+		seatViewPhoto.fadeIn();
+		seatViewPhoto.offset({ top: e.pageY - seatViewPhoto.height() , left: e.pageX  }).offset({ top: e.pageY - seatViewPhoto.height() - 60, left: e.pageX - 26});	
 		},
 		function(e){
-			e.preventDefault();
-			parent = $(this).parents();
-			parent.siblings(".seat_view_image").fadeOut('fast');				
+			thisId=$(this).attr('id')
+			seatViewPhoto = $('#'+thisId+'_photo'); 
+			seatViewPhoto.fadeOut();		
 		});
 }
 

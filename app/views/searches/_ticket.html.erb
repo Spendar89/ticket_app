@@ -1,6 +1,11 @@
 <% section = Section.find(@game_data[:best_ticket]['section_id'])%>
 <% seat_view_url = section[:seat_view_url] %>
 
+<div class ="seat_view_image" id="<%= @game[:id]%>_seat_view_button_photo" style="display: none; width: 300px; height: 168px; position: absolute; z-index: 1000">
+	<%=image_tag(seat_view_url, :class => 'img', :style => 'height: 100%; width: 100%') %>	
+	<div class="arrow-down"></div>
+</div>
+
 <div class="flip-container" style="display:none">
 	<div class="flipper">
 		<div class="<%= check_overall_rating(@game_data[:overall_rating])[0] %> front">
@@ -12,11 +17,9 @@
 					<%= @game[:date].strftime("%-m-%-d-%Y") %>
 				</div>
 				<div class= "seat_view_div span2">
-					<%= link_to "", '#', :class => "seat_view_button icon-eye-open card-icon", :style => "font-size: 240%" unless seat_view_url == "f" %>
+					<%= link_to "", '#', :class => "seat_view_button icon-eye-open card-icon", :id => "#{@game[:id]}_seat_view_button", :style => "font-size: 240%" unless seat_view_url == "f" %>
 				</div>
-				<div class ="seat_view_image" style="display: none; width: 700px; height: 430px; text-align: center; position: absolute; top: 10%; left: 0%; margin-right: 3%; margin-left: 3%; z-index: 1000">
-					<%=image_tag(seat_view_url, :class => 'img-rounded', :style => 'height: 100%; width: 100%;') %>	
-				</div>
+				
 			</div>
 			<div class="opponent_logo row-fluid" style=" margin-top: 10%; text-align: center">
 				<%= image_tag "team_logos/#{@game[:opponent].split(' ')[-1]}.png", :class => "img-rounded", :style=>"height: 25%; width: auto;" %>
