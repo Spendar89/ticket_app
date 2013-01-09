@@ -46,7 +46,7 @@ namespace :sections do
 
   task :refresh => :environment do
     sections = Section.all
-    Parallel.each(sections, :in_threads => 5) do |section|
+    Parallel.each(sections, :in_threads => 30) do |section|
       ActiveRecord::Base.connection_pool.with_connection do
         old_std_dev = section[:std_dev]
         section.update_std_dev
