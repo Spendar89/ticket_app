@@ -67,7 +67,7 @@ var seatView = function(){
 		thisId=$(this).attr('id')
 		seatViewPhoto = $('#'+thisId+'_photo'); 
 		seatViewPhoto.fadeIn();
-		seatViewPhoto.offset({ top: e.pageY - seatViewPhoto.height() , left: e.pageX  }).offset({ top: e.pageY - seatViewPhoto.height() - 60, left: e.pageX - 26});	
+		seatViewPhoto.offset({ top: e.pageY - seatViewPhoto.height() , left: e.pageX  }).offset({ top: e.pageY - seatViewPhoto.height() - 40, left: e.pageX - 10});	
 		},
 		function(e){
 			thisId=$(this).attr('id')

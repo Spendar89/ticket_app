@@ -330,16 +330,17 @@ li.token-input-token p {
 }
 
 .seat_view_image{
-	background: #202020;
-	border: 8pt solid #202020;
-	box-shadow: 0px 0px 9px rgba(50, 50, 50, 1);
+	background: #EBE5CE;
+	padding: 2pt;
+	box-shadow: 0px 0px 9px black;
+	border-radius: 2px;
 }
 .arrow-down {
 	width: 0; 
 	height: 0; 
-	border-left: 30px solid transparent;
-	border-right: 30px solid transparent;
-	border-top: 30px solid #202020;
-	margin-left: -8pt;
-	margin-top: 7pt;
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;
+	border-top: 20px solid #EBE5CE;
+	margin-left: -3pt;
+	margin-top: 1pt;
 }
