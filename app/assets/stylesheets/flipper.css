@@ -16,7 +16,7 @@
 
 .flip-container, .front, .back {
 	height: 450px;
-	width: 98%;
+	width: 100%;
 }
 
 .flipper {
