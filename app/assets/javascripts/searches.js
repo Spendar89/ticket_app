@@ -86,11 +86,18 @@ var tokenInput = function(){
 	$("#tokeninput_search").tokenInput("/token_input", {
 		tokenLimit: 1,
 		onAdd: function(){
+			$(".form-search").attr('ready', 'true');
 			$('.update_team_button').trigger();
 		}});
 }
 
 $(document).ready(function(){
+	$(function() {
+	    $(".form-search").bind("keypress", function(e) {
+	            if (e.keyCode == 13 && $(this).attr('ready') == 'false') return false;
+	      });
+	});
+	
 	$('.search').click(function(e){
 		$(this).attr('id', 'tokeninput_search');
 		tokenInput();

@@ -5,7 +5,7 @@
 		TICKETBRAINS<small style= "color: #9CB6CB" >beta</small>
 	</div>
 	<div class="span5" style="margin-left: 11%">
-	<%= form_for Search.new, :controller => "searches", :method => 'get', :html => {:class => "form-search"} do |f|%>
+	<%= form_for Search.new, :controller => "searches", :method => 'get', :html => {:class => "form-search", :ready => 'false'} do |f|%>
 		<%= f.text_field :team , :class => "search span12", :placeholder => "Enter Team Name", :style => "height: 30pt; margin-bottom: 2px; font-size: 30px; line-height: 36px"%>
 		<%= f.submit "search", :class => "btn btn-inverse update_team_button", :style => "visibility:hidden" %>
 	<% end %>
