@@ -16,7 +16,7 @@ module SearchesHelper
           if i % interval == 0 
             categories << Date.parse(prices[0]).strftime("%-m/%d")
           else
-            categories << " "
+            categories << ""
           end
         end
         f.chart!(:backgroundColor => 'transparent')
@@ -24,7 +24,7 @@ module SearchesHelper
         f.credits!({:enabled => false})
         f.legend(:enabled => false)
         f.tooltip!(:enabled => true)
-        f.series(:name => 'Average Ticket Price', :type => 'line', :data => prices_array, :marker => {:enabled => false}, :lineWidth => 4, :lineColor => "#8197B0")
+        f.series(:name => 'Average Ticket Price', :type => 'line', :data => graph_data, :marker => {:enabled => false}, :lineWidth => 4, :lineColor => "#8197B0")
         f.xAxis!({:labels => {:style => {:fontSize => 16, :fontWeight => 'bold'}}, :offset => 10, :lineWidth => 0, :categories => categories})
         f.yAxis!({:labels => {:style => {:fontSize => 16, :fontWeight => 'bold'}, :formatter => "function(){return '$' + this.value}".js_code}, :title => {:text => false}, })
     end

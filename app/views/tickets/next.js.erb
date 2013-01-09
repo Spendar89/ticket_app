@@ -4,14 +4,14 @@
 	$('#'+'<%= @game[:id] %>').removeAttr('style');
 	$('#'+'<%= @game[:id] %>').css('position', 'relative');
 	$('#'+'<%= @game[:id] %>').css('left', '0px');
-	$('#'+'<%= @game[:id] %>').animate({left: '-=100%'}, 500, function() {
+	$('#'+'<%= @game[:id] %>').animate({left: '-=100%'}, 400, function() {
 	    $(this).css('left', '100%');
 		$(this).html("<%=j render :partial => 'searches/ticket', :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>")
 		$(".flip-container").show();
 		colorBorders();
 		flipper();
 		seatView();
-		$(this).animate({left: '-=100%'}, 500);
+		$(this).animate({left: '-=100%'}, 400);
 		
 	  });
 <% else %>
@@ -20,14 +20,14 @@
 	$('#'+'<%= @game[:id] %>').removeAttr('style');
 	$('#'+'<%= @game[:id] %>').css('position', 'relative');
 	$('#'+'<%= @game[:id] %>').css('right', '0px');
-	$('#'+'<%= @game[:id] %>').animate({right: '-=100%'}, 400, function() {
+	$('#'+'<%= @game[:id] %>').animate({right: '-=100%'}, 300, function() {
 		$(this).css('right', '100%');
 		$(this).html("<%=j render :partial => 'searches/ticket', :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>")
 		$(".flip-container").show();
 		colorBorders();
 		flipper();
 		seatView();
-		$(this).animate({right: '-=100%'}, 400);	
+		$(this).animate({right: '-=100%'}, 300);	
 	  });
 	
 <% end %>
