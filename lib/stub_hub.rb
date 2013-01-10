@@ -79,7 +79,7 @@ module StubHub
               row = ticket["rd"]
               ticket_id = ticket['id'].to_i
               seat_value = Ticket.seat_value(section_id.to_i, price, row)
-              unless seat_value.to_i < 0 || seat_value.nil? || section_id.nil?
+              unless seat_value.nil? || section_id.nil?
                 $redis.pipelined do
                   $redis.hmset "ticket:#{ticket_id}", :price, price, :quantity, ticket["qt"], :row, row, 
                                 :section_id, section_id.to_i, :stubhub_id, ticket_id, :url, 
