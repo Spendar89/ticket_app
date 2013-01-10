@@ -1,14 +1,24 @@
-<div class="primary_logo" style="font-size: 500%; margin-top: 5%; margin-bottom: 20%; text-align: center; color: #FF4A56; background: transparent; text-shadow: 2px 2px black;">
+<div class="primary_logo" style="font-size: 500%; margin-top: 5%; margin-bottom: 5%; text-align: center; color: #FF4A56; background: transparent; text-shadow: 2px 2px black;">
 	TICKETBRAINS<small style= "color: #9CB6CB" >beta</small>
+</div>
+<div class="row-fluid span9">
+	<div class="explanation_div span9 offset3" style="margin-bottom: 4%">
+		<div class="explanation_text">	
+			<p>Buying tickets for sporting events sucks.  Everyone wants a good deal, but none of the major ticket marketplaces share any pricing data with their users. That's where Ticketbrains comes in.  We analyze thousands of tickets per event, do all the math we know you don't want to do, and provide you with the best deals.</p>
+		</div>
+		<!-- <div class="explanation_disclaimer">
+					<p>NOTE: Ticketbrains currently only provides listings for NBA games, but other leagues and events will be supported in the near future.</p> -->
+		</div>
+	</div>
 </div>
 <div class="new_search">
 	<div class="row-fluid">
 		<div class="new_search_div">
-			<div class="span10 offset2">
+			<div class="span7 offset3">
 			<%= form_for @search, :method => 'get', :html => {:class => "form-search", :ready => 'false'} do |f| %>
 				<div class="span9">
-					<%= f.text_field :team, :placeholder => "Enter a Team Name to Begin", :class => "span12 search", :style => "height: 40px; font-size: 30px; line-height: 40px;" %>
-					<%= f.submit "Find Tickets!", :class => "btn-large btn-inverse update_team_button", :style => "visibility: hidden; margin-top: 2%" %>
+					<%= f.text_field :team, :placeholder => "Enter a Team Name to Begin", :class => "span12 search", :style => "height: 42px; font-size: 30px; line-height: 42px;" %>
+					<%= f.submit "Find Tickets!", :class => "btn-large btn-inverse update_team_button", :style => "visibility: block; margin-top: 2%" %>
 				<% end %>
 				</div>
 			</div>		

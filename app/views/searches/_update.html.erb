@@ -16,10 +16,8 @@
 			<% unless @game_data[:best_ticket]['section_id'].nil? %>
 				<% counter += 1 %>
 				<div class="ticket_spacer span3" style="margin-left: 0%; margin-right: 0%;">			
-					<div class="ticket_partial_div span11">
-						<div id="<%= @game[:id] %>">
-							<%= render :partial => "ticket", :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>
-						</div>
+					<div id="<%= @game[:id]%>" class="ticket_partial_div span10">
+							<%= render :partial => "ticket", :locals => {:game => @game, :game_data => @game_data, :price_min => @price_min, :price_max => @price_max, :number => @number} %>				
 					</div>	
 				</div>	
 			<% end %>

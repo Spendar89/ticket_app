@@ -1,7 +1,6 @@
 
 var flipper = function(){
-	$('.flip_button').click(function(e){
-	
+	$('.flip_button').click(function(){
 		$(this).parents('.ticket_partial_div').css('overflow', 'visible');
 		$(this).parents('.flip-container').toggleClass('flip-container-clicked');
 	});
@@ -142,3 +141,10 @@ $(document).ready(function(){
 	flipper();
 	seatView();
 });
+
+$(document).ajaxComplete(function(){
+	changeSpan();
+	colorBorders();
+	flipper();
+	seatView();
+})
