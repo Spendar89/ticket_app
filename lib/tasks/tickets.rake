@@ -87,6 +87,13 @@ namespace :redis do
       end
   end
   
+  task :clear_sections => :environment do
+    sections = Section.all
+    Parallel.each(sections, :in_threads => 30) do |section|
+       $redis.del "tickets_for_section_by_price:#{section[:id].to_f}"
+    end
+  end
+  
 
     
   task :set_games => :environment do

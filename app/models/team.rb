@@ -124,10 +124,4 @@ class Team < ActiveRecord::Base
                   {:title => {:text => false}, :gridLineColor => 'transparent', :labels => {:enabled => false}}])
     end
   end
-  
-
-  
-
-
-
-end
+  end
