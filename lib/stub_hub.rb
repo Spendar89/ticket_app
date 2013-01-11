@@ -80,7 +80,7 @@ module StubHub
             ticket_id = ticket['id'].to_i
             seat_value = Ticket.seat_value(section_id.to_i, price, row)
             unless seat_value.nil? || section_id.nil?
-              section_hash = $redis.hgetall "section:#{section_id}"
+              section_hash = $redis.hgetall "section:#{section_id.to_i}"
               section_hash['average_price'].to_i < section_hash['std_dev'].to_i ?  threshhold = 15 : threshhold = 0
               unless seat_value < threshhold
                 $redis.pipelined do
