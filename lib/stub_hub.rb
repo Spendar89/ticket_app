@@ -96,9 +96,11 @@ module StubHub
               end
             end         
           end
+        end
+        puts "tickets added for #{game_id}"
       end
-      puts "tickets added for #{game_id}"
     end
+    
   end
 end
 
