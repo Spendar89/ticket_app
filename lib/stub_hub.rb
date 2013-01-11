@@ -43,7 +43,7 @@ module StubHub
       team_url = Nokogiri::HTML(open(team_url))
       all_game_urls = []
       team_url.css('td[class="eventName"]').each do |node|
-      all_game_urls << node.elements.css("a").attr("href")
+        all_game_urls << node.elements.css("a").attr("href")
       end
       all_game_urls.each{ |url| return url.to_s.split("-")[-1][0...-1] if /#{game_date}/.match(url) }
     end
@@ -66,36 +66,39 @@ module StubHub
       end
       tickets_array
     end
-    
+
     def self.redis_tickets(team_id, game_id)
-        if  /^\d{7}$/.match(game_id.to_s) 
-          puts "finding tickets for #{game_id}...".blue
-          team_url = $redis.hget "team:#{team_id}", "url"
-          game_data = self.json_data(game_id)
-          game_data[:data].each do |ticket|
-            if !ticket["va"].scan(/(\d{1,3}|A\d)/)[0].nil?
-              section_id = $redis.zscore "sections_for_team_by_name:#{team_id}", ticket['va'].downcase
-              price = ticket["cp"].to_i
-              row = ticket["rd"]
-              ticket_id = ticket['id'].to_i
-              seat_value = Ticket.seat_value(section_id.to_i, price, row)
-              unless seat_value.to_i < 0 || seat_value.nil? || section_id.nil?
+      if  /^\d{7}$/.match(game_id.to_s) 
+        puts "finding tickets for #{game_id}...".blue
+        team_url = $redis.hget "team:#{team_id}", "url"
+        game_data = self.json_data(game_id)
+        game_data[:data].each do |ticket|
+          if !ticket["va"].scan(/(\d{1,3}|A\d)/)[0].nil?
+            section_id = $redis.zscore "sections_for_team_by_name:#{team_id}", ticket['va'].downcase
+            price = ticket["cp"].to_i
+            row = ticket["rd"]
+            ticket_id = ticket['id'].to_i
+            seat_value = Ticket.seat_value(section_id.to_i, price, row)
+            unless seat_value.nil? || section_id.nil?
+              section_hash = $redis.hgetall "section:#{section_id}"
+              section_hash['average_price'].to_i < section_hash['std_dev'].to_i ?  threshhold = 15 : threshhold = 0
+              unless seat_value < threshhold
                 $redis.pipelined do
                   $redis.hmset "ticket:#{ticket_id}", :price, price, :quantity, ticket["qt"], :row, row, 
-                                :section_id, section_id.to_i, :stubhub_id, ticket_id, :url, 
-                                "http://www.stubhub.com/#{team_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket_id}", 
-                                :game_id, game_id, :seat_value,  seat_value
+                  :section_id, section_id.to_i, :stubhub_id, ticket_id, :url, 
+                  "http://www.stubhub.com/#{team_url}-tickets/#{game_data[:url]}?ticket_id=#{ticket_id}", 
+                  :game_id, game_id, :seat_value,  seat_value
                   $redis.expire "ticket:#{ticket_id}", 7200             
                   $redis.zadd "tickets_for_game_by_seat_value:#{game_id}", seat_value, ticket_id      
                   $redis.zadd "tickets_for_game_by_price:#{game_id}", price, ticket_id
                   $redis.zadd "tickets_for_section_by_price:#{section_id}", price, ticket_id
                 end
-              end        
-            end   
+              end
+            end         
           end
-        end
-        puts "tickets added for #{game_id}"
       end
+      puts "tickets added for #{game_id}"
+    end
   end
 end
 
