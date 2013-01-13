@@ -1,25 +1,5 @@
 class Ticket < ActiveRecord::Base
-  attr_accessible :game_id, :price, :quantity, :row, :section_id, :stubhub_id, :url, :z_score
-  attr_accessor :redis_id
-  
-  def initialize(redis_id)
-    super()
-    @redis_id = redis_id.to_i
-    redis_hash = $redis.hgetall "ticket:#{@redis_id}"
-    @section_hash = $redis.hgetall "section:#{redis_hash['section_id']}"
-    self.game_id = redis_hash["game_id"]
-    self.price = redis_hash["price"]
-    self.quantity = redis_hash["quantity"]
-    self.row = redis_hash["row"]
-    self.section_id = redis_hash["section_id"]
-    self.stubhub_id = redis_hash["stubhub_id"]
-    self.url = redis_hash["url"] 
-  end
-  
-  def game
-    Game.find(self.game_id)
-  end
-  
+    
   def self.find(id)
     $redis.hgetall "ticket:#{id}"  
   end
@@ -33,39 +13,18 @@ class Ticket < ActiveRecord::Base
       z_score = (price_difference/section_std_dev).to_f
     end
   end
-  
-  def calculated_z_score
-    return if ticket_hash['section_id'].to_i.nil?
-    price = ticket_hash['price']
-    if !price.nil? && !section_hash['average_price'].nil? && section_hash['std_dev'].to_f > 0
-      row = self.converted_row(ticket_hash['row']) * 2
-      price_difference = (price.to_f + row) - section_hash['average_price'].to_f
-      section_std_dev = section_hash['std_dev'].to_f
-      z_score = (price_difference/section_std_dev).to_f
-    end
-  end
-  
-  def destroy
-    $redis.del "ticket:#{@redis_id}"
+    
+  def self.destroy(redis_id)
+    $redis.del "ticket:#{redis_id}"
     nil
   end
-  
-  def section
-    Section.find(self.section_id)
-  end
-  
+
   def self.seat_value(section_id, price, row)
     section_hash = $redis.hgetall "section:#{section_id}"
     z_score = self.calculated_z_score(section_id, price, row, section_hash)
     z_score * -16.5 + 50 unless z_score.nil?
   end
   
-  def seat_value(ticket_hash)
-    section_hash = $redis.hgetall "section:#{ticket_hash['section_id']}"
-    z_score = calculated_z_score(ticket_hash, section_hash)
-    z_score * -16.5 + 50 unless z_score.nil?
-  end
-
   def self.converted_row(row)
     letters = ('A'..'Z').to_a
     if letters.include?(row)
