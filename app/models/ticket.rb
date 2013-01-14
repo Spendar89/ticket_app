@@ -22,7 +22,8 @@ class Ticket < ActiveRecord::Base
   def self.seat_value(section_id, price, row)
     section_hash = $redis.hgetall "section:#{section_id}"
     z_score = self.calculated_z_score(section_id, price, row, section_hash)
-    z_score * -16.5 + 50 unless z_score.nil?
+    z_score * -12.5 + 50 unless z_score.nil?
+    
   end
   
   def self.converted_row(row)
