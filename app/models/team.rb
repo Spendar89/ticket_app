@@ -1,5 +1,5 @@
 class Team < ActiveRecord::Base
-  attr_accessible :get_stubhub_id, :name, :games, :url, :venue_name, :venue_address, :division, :last_5, :conference, :record
+  attr_accessible :name, :games, :url, :venue_name, :venue_address, :division, :last_5, :conference, :record
   has_many :sections
   has_many :stars
   has_many :games, :inverse_of => :team
@@ -84,7 +84,7 @@ class Team < ActiveRecord::Base
   
   def date_range?(game, date_start, date_end)
     game_date = game.date
-    true if  game_date >= converted_date(date_start) &&  game_date <= converted_date(date_end)
+    game_date >= converted_date(date_start) &&  game_date <= converted_date(date_end)
   end
   
   def converted_date(date)

@@ -2,7 +2,8 @@ require 'open-uri'
 require 'seatgeek'
 require 'nokogiri'
 require 'json'
-require_relative 'oracle_arena_sections'
+require 'date'
+# require_relative 'oracle_arena_sections'
 module TicketHelper
 
   class Game
@@ -42,6 +43,8 @@ module TicketHelper
     def date
       Date.parse(@game_info["datetime_local"]).strftime("%-m-%-d-%Y")
     end
+    
+    
 
     def popularity
        @game_info["score"]*100
@@ -276,4 +279,5 @@ module TicketHelper
 end
 
 warriors = TicketHelper::Team.new("Golden State Warriors")
-puts warriors.best_game.date
+best_game =  warriors.best_game
+puts "date: #{best_game.date}, opponent: #{best_game.opponent}, average ticket price: #{best_game.average_price}"

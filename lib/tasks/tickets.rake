@@ -87,10 +87,6 @@ namespace :redis do
       end
   end
   
-
-  
-
-    
   task :set_games => :environment do
     games = Game.all
     Parallel.each(games, :in_threads => 15) do |game|
