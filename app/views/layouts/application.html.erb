@@ -17,9 +17,13 @@
     <%= stylesheet_link_tag "application", :media => "all" %>
   </head>
 	<div id="outer">
-		<div id="new_team_loader_div">
-			<h1 style="color: #F3F3F3; font-size: 50px; margin-bottom: 10%; margin-top: 5%; background: transparent; text-align: center">Finding Tickets...</h1>
-			<%= image_tag "ajax-loader.gif", :style=> "margin-left: -10%" %>
+		<div id="new_team_loader_div" class="row-fluid" style="margin-top: 0%">
+			<div class="span12 loader_div">
+				Finding Tickets...
+			</div>
+			<div class="span11">
+				<%= image_tag "ajax-loader.gif"%>
+			</div>
 		</div>
 	  	<body>	
 		    <div class="container-fluid main_content">

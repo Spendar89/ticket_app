@@ -180,8 +180,8 @@
 .update_tickets_loader_div{
 	position: absolute;
 	margin-top: -5%;
-	background: rgba(1, 1, 1, 0.7);
 	display: none;
+	background: rgba(1, 1, 1, 0.7);
 	text-align: center;
 	z-index: 1000;
 	width: 80%;
@@ -357,4 +357,13 @@ li.token-input-token p {
 
 .explanation_div h4{
 	font-size: 14pt;
+}
+
+.loader_div{
+	color: #F3F3F3; 
+	font-size: 60px; 
+	font-weight: bold; 
+	margin-bottom: 10%; 
+	margin-top: 10%; 
+	text-align: center;
 }

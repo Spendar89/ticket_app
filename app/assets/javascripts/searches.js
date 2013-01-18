@@ -1,4 +1,3 @@
-
 var flipper = function(){
 	$('.flip_button').click(function(){
 		$(this).parents('.ticket_partial_div').css('overflow', 'visible');
@@ -57,6 +56,7 @@ var changeSpan = function(){
 			$(this).css('min-width', '278px').css('max-width', '19%');
 			});
 	}
+	$('.highchart_div').css('width', $('.ticket_partial_div').width()*(0.90));
 }
 
 
@@ -140,7 +140,15 @@ $(document).ready(function(){
 	colorBorders();
 	flipper();
 	seatView();
+	
+	$('.update_button').click(function(){
+		$('.update_tickets_loader_div').fadeIn();
+	});
+	
+
+
 });
+
 
 $(document).ajaxComplete(function(){
 	changeSpan();

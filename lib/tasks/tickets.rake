@@ -158,7 +158,7 @@ namespace :redis do
         team_id = game[:team_id]
         $redis.del "tickets_for_game_by_seat_value:#{game_id}"
         $redis.del "tickets_for_game_by_price:#{game_id}"
-        StubHub::TicketFinder.redis_tickets(team_id, game_id)
+        Ticket.update_redis(team_id, game_id)
         game_average_price = Game.average_price(game_id)
         $redis.zadd "games:average_price", game_average_price, game_id
         $redis.zadd "game:average_price_over_time:#{game_id}", game_average_price, DateTime.current

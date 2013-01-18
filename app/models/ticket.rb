@@ -38,4 +38,32 @@ class Ticket < ActiveRecord::Base
       return row.to_i
     end
   end
+  
+  
+  def self.redis_pipeline(ticket, game_id)
+    seat_value = self.seat_value(ticket[:section_id].to_i, ticket[:price], ticket[:row])
+    ticket_id = ticket[:ticket_id]
+    unless seat_value.to_i < 0 || seat_value.nil? || ticket[:section_id].nil?
+        $redis.pipelined do
+          $redis.hmset "ticket:#{ticket[:ticket_id]}", :price, ticket[:price], :quantity, ticket[:quantity], :row, ticket[:row], 
+          :section_id, ticket[:section_id].to_i, :stubhub_id, ticket_id, :url, ticket[:url], 
+          :game_id, game_id, :seat_value,  seat_value
+          $redis.expire "ticket:#{ticket_id}", 7200             
+          $redis.zadd "tickets_for_game_by_seat_value:#{game_id}", seat_value, ticket_id
+          $redis.zadd "tickets_for_game_by_price:#{game_id}", ticket[:price], ticket_id
+          $redis.zadd "tickets_for_section_by_price:#{ticket[:section_id]}", ticket[:price], ticket_id
+      end
+    end
+  end
+  
+  
+  def self.update_redis(team_id, game_id)
+    if  /^\d{7}$/.match(game_id.to_s) 
+      puts "finding tickets for #{game_id}...".blue
+      all_tickets = StubHub::TicketFinder.tickets(team_id, game_id)
+      all_tickets.each { |ticket| self.redis_pipeline(ticket, game_id) }
+      puts "tickets added for #{game_id}"
+    end
+  end
+  
 end

@@ -69,13 +69,12 @@
 				      </label>
 					</div>
 					<div class="span1">
-						<%= f.submit "Find Tickets", :class => 'btn btn-inverse' %>
+						<%= f.submit "Find Tickets", :class => 'update_button btn btn-inverse' %>
 						<% end %>
 					</div>
 				</div>
 		</div>
 	</div>
-
 		<div class = "span12 results_tickets" style="margin-left: 0%; ">
 			<%= render :partial => 'update', :locals => {:team => @team, :total_tickets => @total_tickets, :date_start => @date_start, :date_end => @date_end, :price_min => @price_min, :price_max => @price_max, :games => @games, :number => @number} %>
 		</div>
