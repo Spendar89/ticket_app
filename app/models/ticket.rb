@@ -1,4 +1,4 @@
-class Ticket < ActiveRecord::Base
+class Ticket
     
   def self.find(id)
     $redis.hgetall "ticket:#{id}"  

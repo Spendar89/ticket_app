@@ -21,7 +21,7 @@ class SearchesController < ApplicationController
     @price_min = 1
     @total_tickets = 0
     @games = []
-    @team.games.order("date").limit(8).each{|game| @games << game if game.number_of_tickets > 20 }
+    @team.games.order("date").limit(8).each{|game| @games << game if game.number_of_tickets > 5 }
     @price_max = 5000  
     @number = 1
     price_data = []
