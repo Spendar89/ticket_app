@@ -17,7 +17,7 @@ production:
   adapter: postgresql
   encoding: unicode
   database: ticket_app
-  pool: 20
+  pool: 5
   username: spendar89
   password:
   allow_concurrency: true
