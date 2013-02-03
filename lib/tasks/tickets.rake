@@ -24,7 +24,7 @@ end
 namespace :games do
   task :set => :environment do   
     teams = Team.all
-    Parallel.each(teams, :in_processes => 20) do |team|
+    Parallel.each(teams, :in_processes => 5) do |team|
       ActiveRecord::Base.connection.reconnect!
           puts "finding games for #{team.name}...".yellow
           team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
@@ -37,7 +37,7 @@ end
 namespace :sections do
   task :set => :environment do
     teams = Team.all
-    Parallel.each(teams, :in_threads => 20) do |team|
+    Parallel.each(teams, :in_threads => 5) do |team|
       ActiveRecord::Base.connection_pool.with_connection do
         team.get_sections
       end
@@ -46,7 +46,7 @@ namespace :sections do
 
   task :refresh => :environment do
     sections = Section.all
-    Parallel.each(sections, :in_threads => 30) do |section|
+    Parallel.each(sections, :in_threads => 5) do |section|
       ActiveRecord::Base.connection_pool.with_connection do
         old_std_dev = section[:std_dev]
         section.update_std_dev
@@ -58,7 +58,7 @@ namespace :sections do
   
   task :update_seat_view_urls => :environment do
     begin
-      Parallel.each(Section.all, :in_threads => 30) do |section|
+      Parallel.each(Section.all, :in_threads => 5) do |section|
         ActiveRecord::Base.connection_pool.with_connection do
           puts "updating section...".yellow
           section.update_seat_view_url
