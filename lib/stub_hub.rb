@@ -53,6 +53,12 @@ module StubHub
       json_data = JSON.parse(url)['eventTicketListing']
       return {:game_info => json_data['event']['seoTitle'], :url => json_data['eventUrlPath'], :data => json_data['eventTicket']}
     end
+    
+    def json_data
+      url = open("http://www.stubhub.com/ticketAPI/restSvc/event/#{set_game[:id]}").read
+      json_data = JSON.parse(url)['eventTicketListing']
+      return {:game_info => json_data['event']['seoTitle'], :url => json_data['eventUrlPath'], :data => json_data['eventTicket']}
+    end
 
     def all_available
       game_data = json_data
