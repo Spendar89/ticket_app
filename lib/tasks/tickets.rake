@@ -24,10 +24,10 @@ end
 namespace :games do
   task :set => :environment do   
     teams = Team.all
-    Parallel.each(teams, :in_threads => 5) do |team|
+    Parallel.each(teams, :in_threads => 4) do |team|
      ActiveRecord::Base.connection_pool.with_connection do
           puts "finding games for #{team.name}...".yellow
-          team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
+          team.games.each{ |game| game.destroy if game[:date] < Date.current }
           team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
           puts "games added #{team.name}...".green
       end
@@ -38,7 +38,7 @@ end
 namespace :sections do
   task :set => :environment do
     teams = Team.all
-    Parallel.each(teams, :in_threads => 5) do |team|
+    Parallel.each(teams, :in_threads => 4) do |team|
       ActiveRecord::Base.connection_pool.with_connection do
         team.get_sections
       end
@@ -47,7 +47,7 @@ namespace :sections do
 
   task :refresh => :environment do
     sections = Section.all
-    Parallel.each(sections, :in_threads => 5) do |section|
+    Parallel.each(sections, :in_threads => 4) do |section|
       ActiveRecord::Base.connection_pool.with_connection do
         old_std_dev = section[:std_dev]
         section.update_std_dev
@@ -59,7 +59,7 @@ namespace :sections do
   
   task :update_seat_view_urls => :environment do
     begin
-      Parallel.each(Section.all, :in_threads => 5) do |section|
+      Parallel.each(Section.all, :in_threads => 4) do |section|
         ActiveRecord::Base.connection_pool.with_connection do
           puts "updating section...".yellow
           section.update_seat_view_url
@@ -75,7 +75,7 @@ end
 namespace :redis do
   task :set_teams => :environment do
       teams = Team.all
-      Parallel.each(teams, :in_threads => 5) do |team| 
+      Parallel.each(teams, :in_threads => 4) do |team| 
         ActiveRecord::Base.connection_pool.with_connection do
           team_stats = team.get_team_stats
           $redis.hmset "team:#{team[:id]}", 
@@ -90,7 +90,7 @@ namespace :redis do
   
   task :set_games => :environment do
     games = Game.all
-    Parallel.each(games, :in_threads => 5) do |game|
+    Parallel.each(games, :in_threads => 4) do |game|
       $redis.del "games_for_team:#{game[:team_id]}" 
       $redis.del "games_for_team:#{game[:team_id]}:by_date"
       ActiveRecord::Base.connection_pool.with_connection do
@@ -110,7 +110,7 @@ namespace :redis do
   task :set_sections => :environment do
       begin
       sections = Section.all
-        Parallel.each(sections, :in_threads => 5) do |section|
+        Parallel.each(sections, :in_threads => 4) do |section|
           ActiveRecord::Base.connection_pool.with_connection do
             $redis.hmset "section:#{section[:id]}", :name, "#{section[:name]}", 
               :team_id, section[:team_id], :average_price, "#{section[:average_price]}", :std_dev, "#{section[:std_dev]}"
