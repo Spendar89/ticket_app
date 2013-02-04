@@ -72,7 +72,7 @@ class Team < ActiveRecord::Base
     puts "setting sections for #{self[:name]}...".blue
     tickets_array = []
     self.games.find_each do |game|
-      tickets_array << StubHub::TicketFinder.new(self[:name], game, 1, 5000).all_available
+      tickets_array << StubHub::TicketFinder.new(self, game, 1, 10000).all_available
     end
     tickets_array.each do |all_tickets|
       all_tickets.each do |ticket|
