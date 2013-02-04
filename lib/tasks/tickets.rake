@@ -24,14 +24,13 @@ end
 namespace :games do
   task :set => :environment do   
     teams = Team.all
-    Parallel.each(teams, :in_threads => 4) do |team|
-     ActiveRecord::Base.connection_pool.with_connection do
+    Parallel.each(teams, :in_processes => 5) do |team|
+      ActiveRecord::Base.connection.reconnect!
           puts "finding games for #{team.name}...".yellow
-          team.games.each{ |game| game.destroy if game[:date] < Date.current }
+          team.games.find_each{ |game| game.destroy if game[:date] < Date.current }
           team.make_games.each{ |game_info| team.games.build.set_attributes(game_info) }
           puts "games added #{team.name}...".green
-      end
-    end  
+      end  
   end
 end
 
