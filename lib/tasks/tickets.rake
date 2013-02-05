@@ -37,10 +37,9 @@ end
 namespace :sections do
   task :set => :environment do
     teams = Team.all
-    Parallel.each(teams, :in_threads => 4) do |team|
-      ActiveRecord::Base.connection_pool.with_connection do
+    Parallel.each(teams, :in_processes => 5) do |team|
+      ActiveRecord::Base.connection.reconnect!
         team.get_sections
-      end
     end    
   end
 
