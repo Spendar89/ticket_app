@@ -43,7 +43,7 @@ class Ticket
   def self.redis_pipeline(ticket, game_id)
     seat_value = self.seat_value(ticket[:section_id].to_i, ticket[:price], ticket[:row])
     ticket_id = ticket[:ticket_id]
-    unless seat_value.to_i < 0 || seat_value.nil? || ticket[:section_id].nil?
+    unless ticket[:section_id].nil?
         $redis.pipelined do
           $redis.hmset "ticket:#{ticket[:ticket_id]}", :price, ticket[:price], :quantity, ticket[:quantity], :row, ticket[:row], 
           :section_id, ticket[:section_id].to_i, :stubhub_id, ticket_id, :url, ticket[:url], 
