@@ -22,8 +22,12 @@ class Ticket
   def self.seat_value(section_id, price, row)
     section_hash = $redis.hgetall "section:#{section_id}"
     z_score = self.calculated_z_score(section_id, price, row, section_hash)
-    z_score * -12.5 + 50 unless z_score.nil?
-    
+    unless z_score.nil?
+      adjusted_z_score = z_score * -16.6 + 50
+      return 100 if adjusted_z_score > 100
+      return 0 if adjusted_z_score < 0
+      return adjusted_z_score
+    end
   end
   
   def self.converted_row(row)
